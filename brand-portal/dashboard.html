@@ -206,6 +206,64 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
                         <input type="text" id="editHeadquarters" placeholder="e.g. Milan, Italy">
                     </div>
                 </div>
+
+                <hr style="border:none;border-top:1px solid #eee;margin:28px 0;">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:#333;"><i class="fas fa-image" style="margin-right:8px;color:#C8A96E;"></i>Brand Visuals</h3>
+                <p style="font-size:0.8rem;color:#999;margin-bottom:16px;">Add image URLs to make your brand page stand out. You can use links from your website or image hosting services.</p>
+
+                <div class="field">
+                    <label>Logo Image URL</label>
+                    <input type="url" id="editLogoUrl" placeholder="https://yourbrand.com/logo.png">
+                </div>
+                <div class="field">
+                    <label>Hero / Banner Image URL</label>
+                    <input type="url" id="editHeroImage" placeholder="https://yourbrand.com/hero-banner.jpg">
+                </div>
+                <div class="field">
+                    <label>Gallery Image 1 URL</label>
+                    <input type="url" id="editGallery1" placeholder="https://yourbrand.com/gallery1.jpg">
+                </div>
+                <div class="field">
+                    <label>Gallery Image 2 URL</label>
+                    <input type="url" id="editGallery2" placeholder="https://yourbrand.com/gallery2.jpg">
+                </div>
+                <div class="field">
+                    <label>Gallery Image 3 URL</label>
+                    <input type="url" id="editGallery3" placeholder="https://yourbrand.com/gallery3.jpg">
+                </div>
+
+                <hr style="border:none;border-top:1px solid #eee;margin:28px 0;">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:#333;"><i class="fas fa-pen-fancy" style="margin-right:8px;color:#C8A96E;"></i>Brand Story</h3>
+
+                <div class="field">
+                    <label>Brand Story (detailed)</label>
+                    <textarea id="editBrandStory" rows="8" placeholder="Tell the full story of your brand — history, philosophy, craftsmanship, vision for the future..."></textarea>
+                </div>
+
+                <hr style="border:none;border-top:1px solid #eee;margin:28px 0;">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:#333;"><i class="fab fa-instagram" style="margin-right:8px;color:#C8A96E;"></i>Social Media</h3>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label>Instagram URL</label>
+                        <input type="url" id="editInstagram" placeholder="https://instagram.com/yourbrand">
+                    </div>
+                    <div class="field">
+                        <label>LinkedIn URL</label>
+                        <input type="url" id="editLinkedin" placeholder="https://linkedin.com/company/yourbrand">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Pinterest URL</label>
+                        <input type="url" id="editPinterest" placeholder="https://pinterest.com/yourbrand">
+                    </div>
+                    <div class="field">
+                        <label>YouTube URL</label>
+                        <input type="url" id="editYoutube" placeholder="https://youtube.com/@yourbrand">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Save Changes</button>
                 <span class="save-msg" id="brandSaveMsg"><i class="fas fa-check"></i> Saved!</span>
             </form>
@@ -438,6 +496,16 @@ function populateDashboard() {
     document.getElementById('editTagline').value = brandData.tagline || '';
     document.getElementById('editFounded').value = brandData.founded || '';
     document.getElementById('editHeadquarters').value = brandData.headquarters || '';
+    document.getElementById('editLogoUrl').value = brandData.logoUrl || '';
+    document.getElementById('editHeroImage').value = brandData.heroImage || '';
+    document.getElementById('editGallery1').value = brandData.gallery1 || '';
+    document.getElementById('editGallery2').value = brandData.gallery2 || '';
+    document.getElementById('editGallery3').value = brandData.gallery3 || '';
+    document.getElementById('editBrandStory').value = brandData.brandStory || '';
+    document.getElementById('editInstagram').value = brandData.instagram || '';
+    document.getElementById('editLinkedin').value = brandData.linkedin || '';
+    document.getElementById('editPinterest').value = brandData.pinterest || '';
+    document.getElementById('editYoutube').value = brandData.youtube || '';
 
     // Contact info
     document.getElementById('editContactName').value = brandData.contactName || '';
@@ -471,6 +539,16 @@ document.getElementById('brandInfoForm').addEventListener('submit', async (e) =>
         tagline: document.getElementById('editTagline').value,
         founded: document.getElementById('editFounded').value,
         headquarters: document.getElementById('editHeadquarters').value,
+        logoUrl: document.getElementById('editLogoUrl').value,
+        heroImage: document.getElementById('editHeroImage').value,
+        gallery1: document.getElementById('editGallery1').value,
+        gallery2: document.getElementById('editGallery2').value,
+        gallery3: document.getElementById('editGallery3').value,
+        brandStory: document.getElementById('editBrandStory').value,
+        instagram: document.getElementById('editInstagram').value,
+        linkedin: document.getElementById('editLinkedin').value,
+        pinterest: document.getElementById('editPinterest').value,
+        youtube: document.getElementById('editYoutube').value,
     });
     showSaveMsg('brandSaveMsg');
 });

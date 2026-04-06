@@ -175,6 +175,40 @@
 }
 .bp-cta-button:hover { background: var(--gray-800); }
 
+/* Brand Story Section */
+.bp-story-section { padding: 80px 0; border-top: 1px solid var(--gray-200); }
+.bp-story-content p {
+  font-size: 1rem; color: var(--gray-600); line-height: 2;
+  margin-bottom: 20px; max-width: 800px;
+}
+.bp-story-content p:last-child { margin-bottom: 0; }
+
+/* Gallery Section */
+.bp-gallery-section { padding: 80px 0; border-top: 1px solid var(--gray-200); }
+.bp-gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+@media (max-width: 768px) { .bp-gallery-grid { grid-template-columns: 1fr; } }
+.bp-gallery-item {
+  aspect-ratio: 4/3; overflow: hidden; border-radius: 4px; background: var(--gray-100);
+}
+.bp-gallery-item img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s;
+}
+.bp-gallery-item:hover img { transform: scale(1.05); }
+
+/* Social Links */
+.bp-social-links {
+  display: flex; gap: 16px; margin-top: 20px;
+}
+.bp-social-links a {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--gray-100); color: var(--gray-600);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.2s; text-decoration: none;
+}
+.bp-social-links a:hover { background: var(--black); color: var(--white); }
+
 .fade-in { opacity: 1; animation: fadeIn 0.6s ease-in; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
@@ -348,17 +382,55 @@ async function loadBrand() {
 
 // ── 브랜드 페이지 렌더링 ──
 function renderBrand(brand, products) {
-    const logoHtml = brand.logoUrl
-        ? `<img src="${brand.logoUrl}" alt="${brand.brandName}">`
-        : `<span class="placeholder-logo">${brand.brandName.charAt(0)}</span>`;
-
     const categoryLabel = brand.category || 'Brand';
     const description = brand.description || '';
     const tagline = brand.tagline || '';
     const country = brand.country || '';
     const founded = brand.founded || '';
+    const headquarters = brand.headquarters || '';
     const website = brand.website || '';
-    const contactEmail = brand.contactEmail || brand.email || '';
+    const brandStory = brand.brandStory || '';
+    const heroImage = brand.heroImage || '';
+    const logoUrl = brand.logoUrl || '';
+    const gallery1 = brand.gallery1 || '';
+    const gallery2 = brand.gallery2 || '';
+    const gallery3 = brand.gallery3 || '';
+    const instagram = brand.instagram || '';
+    const linkedin = brand.linkedin || '';
+    const pinterest = brand.pinterest || '';
+    const youtube = brand.youtube || '';
+    const wsUrl = website.startsWith('http') ? website : 'https://' + website;
+
+    // Hero image or logo or placeholder
+    const heroHtml = heroImage
+        ? `<img src="${heroImage}" alt="${brand.brandName}">`
+        : logoUrl
+            ? `<img src="${logoUrl}" alt="${brand.brandName}" style="object-fit:contain;padding:40px;">`
+            : `<span class="placeholder-logo">${brand.brandName.charAt(0)}</span>`;
+
+    // SNS links
+    const snsLinks = [
+        instagram ? `<a href="${instagram}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>` : '',
+        linkedin ? `<a href="${linkedin}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : '',
+        pinterest ? `<a href="${pinterest}" target="_blank" title="Pinterest"><i class="fab fa-pinterest-p"></i></a>` : '',
+        youtube ? `<a href="${youtube}" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>` : '',
+    ].filter(Boolean).join('');
+
+    // Gallery HTML
+    const galleryImages = [gallery1, gallery2, gallery3].filter(Boolean);
+    let galleryHtml = '';
+    if (galleryImages.length > 0) {
+        galleryHtml = `
+        <section class="bp-gallery-section">
+            <div class="bp-section-header fade-in">
+                <h2 class="bp-section-title">Gallery</h2>
+                <p class="bp-section-desc">${brand.brandName}의 브랜드 이미지</p>
+            </div>
+            <div class="bp-gallery-grid">
+                ${galleryImages.map(img => `<div class="bp-gallery-item fade-in"><img src="${img}" alt="${brand.brandName}"></div>`).join('')}
+            </div>
+        </section>`;
+    }
 
     // Products HTML
     let productsHtml = '';
@@ -385,16 +457,18 @@ function renderBrand(brand, products) {
             </div>
             <div class="products-grid">${productCards}</div>
         </section>`;
-    } else {
-        productsHtml = `
-        <section class="bp-products-section">
+    }
+
+    // Brand Story HTML
+    let storyHtml = '';
+    if (brandStory) {
+        storyHtml = `
+        <section class="bp-story-section">
             <div class="bp-section-header fade-in">
-                <h2 class="bp-section-title">Products</h2>
-                <p class="bp-section-desc">${brand.brandName}의 제품 라인업</p>
+                <h2 class="bp-section-title">Brand Story</h2>
             </div>
-            <div class="bp-empty">
-                <i class="fas fa-box-open"></i>
-                <p>아직 등록된 제품이 없습니다. 곧 업데이트될 예정입니다.</p>
+            <div class="bp-story-content fade-in">
+                ${brandStory.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('')}
             </div>
         </section>`;
     }
@@ -404,22 +478,25 @@ function renderBrand(brand, products) {
     <section class="bp-hero">
         <div class="container" style="display: contents;">
             <div class="bp-hero-image fade-in">
-                ${logoHtml}
+                ${heroHtml}
             </div>
             <div class="bp-hero-content fade-in">
                 <span class="bp-hero-badge">${categoryLabel}</span>
+                ${logoUrl && heroImage ? `<img src="${logoUrl}" alt="${brand.brandName}" style="height:48px;object-fit:contain;margin-bottom:12px;">` : ''}
                 <h1>${brand.brandName}</h1>
-                ${tagline ? `<p class="bp-hero-subtitle">${tagline}</p>` : ''}
-                ${description && !tagline ? `<p class="bp-hero-subtitle">${description.substring(0, 200)}${description.length > 200 ? '...' : ''}</p>` : ''}
+                ${tagline ? `<p class="bp-hero-subtitle" style="font-style:italic;color:var(--gray-500);">"${tagline}"</p>` : ''}
+                ${description ? `<p class="bp-hero-subtitle">${description.substring(0, 250)}${description.length > 250 ? '...' : ''}</p>` : ''}
                 <div class="bp-hero-meta">
                     ${country ? `<strong>Country:</strong> ${country}<br>` : ''}
                     ${founded ? `<strong>Founded:</strong> ${founded}<br>` : ''}
-                    ${website ? `<strong>Website:</strong> <a href="${website.startsWith('http') ? website : 'https://' + website}" target="_blank" style="color:var(--gray-700);">${website}</a>` : ''}
+                    ${headquarters ? `<strong>HQ:</strong> ${headquarters}<br>` : ''}
+                    ${website ? `<strong>Website:</strong> <a href="${wsUrl}" target="_blank" style="color:var(--gray-700);">${website}</a>` : ''}
                 </div>
                 <div class="bp-cta-group">
-                    ${website ? `<a href="${website.startsWith('http') ? website : 'https://' + website}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>` : ''}
+                    ${website ? `<a href="${wsUrl}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>` : ''}
                     <a href="../contact.html" class="btn btn-secondary"><i class="fas fa-envelope"></i> Contact</a>
                 </div>
+                ${snsLinks ? `<div class="bp-social-links">${snsLinks}</div>` : ''}
             </div>
         </div>
     </section>
@@ -440,17 +517,23 @@ function renderBrand(brand, products) {
                 <span class="bp-info-value">${categoryLabel}</span>
             </div>
             <div class="bp-info-item">
-                <span class="bp-info-label">Products</span>
-                <span class="bp-info-value">${products.length} items</span>
+                <span class="bp-info-label">${founded ? 'Since' : 'Products'}</span>
+                <span class="bp-info-value">${founded || products.length + ' items'}</span>
             </div>
         </section>
 
-        <!-- DESCRIPTION -->
-        ${description ? `
+        <!-- BRAND STORY -->
+        ${storyHtml}
+
+        <!-- DESCRIPTION (if no story) -->
+        ${!brandStory && description ? `
         <section class="bp-description">
             <h2>About ${brand.brandName}</h2>
             <p>${description}</p>
         </section>` : ''}
+
+        <!-- GALLERY -->
+        ${galleryHtml}
 
         <!-- PRODUCTS -->
         ${productsHtml}
