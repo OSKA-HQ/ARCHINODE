@@ -27,7 +27,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
-const storage = firebase.storage();
+// Storage SDK는 일부 페이지에서만 로드되므로 조건부 초기화
+const storage = (typeof firebase.storage === 'function') ? firebase.storage() : null;
 
 // ── 관리자 이메일 목록 (어드민 접근 가능한 이메일) ──
 const ADMIN_EMAILS = [
