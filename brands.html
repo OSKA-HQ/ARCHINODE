@@ -621,22 +621,42 @@ const fadeObs = new IntersectionObserver(entries => {
 fadeEls.forEach(el => fadeObs.observe(el));
 </script>
 <script>
-// Brand search
+// Brand search (카테고리 목록 + 등록 브랜드 모두 검색)
 function filterBrands() {
   const q = document.getElementById('brandSearch').value.toLowerCase();
-  const tiles = document.querySelectorAll('.brand-tile[data-brand]');
   let count = 0;
+
+  // 1. 카테고리 브랜드 검색
+  const tiles = document.querySelectorAll('.brand-tile[data-brand]');
   tiles.forEach(t => {
     const match = t.dataset.brand.includes(q);
     t.style.display = match ? '' : 'none';
     if (match) count++;
   });
+
+  // 2. 등록 브랜드(ARCHINODE Partners) 검색
+  const regCards = document.querySelectorAll('.reg-brand-card');
+  regCards.forEach(card => {
+    const name = (card.querySelector('.reg-name')?.textContent || '').toLowerCase();
+    const match = name.includes(q);
+    card.style.display = match ? '' : 'none';
+    if (match) count++;
+  });
+
   document.getElementById('brandCount').textContent = count + ' brand' + (count !== 1 ? 's' : '');
+
   // Show/hide category blocks if no brands visible
   document.querySelectorAll('.brand-category-block').forEach(block => {
     const visible = block.querySelectorAll('.brand-tile[data-brand]:not([style*="display: none"])');
     block.style.display = visible.length ? '' : 'none';
   });
+
+  // Show/hide registered brands section
+  const regSection = document.querySelector('.registered-brands-section');
+  if (regSection) {
+    const visibleReg = regSection.querySelectorAll('.reg-brand-card:not([style*="display: none"])');
+    regSection.style.display = visibleReg.length ? '' : 'none';
+  }
 }
 
 // Alphabet nav
