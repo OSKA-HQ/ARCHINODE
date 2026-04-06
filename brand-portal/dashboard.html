@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Dashboard | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; color: #333; }
+
+/* TOPBAR */
+.topbar { background: #0a0a0a; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar .logo { color: #fff; font-size: 1.1rem; font-weight: 800; text-decoration: none; }
+.topbar .logo span { color: #C8A96E; font-size: 0.7rem; font-weight: 400; margin-left: 8px; }
+.topbar .user-info { display: flex; align-items: center; gap: 16px; }
+.topbar .user-email { color: #888; font-size: 0.8rem; }
+.topbar .logout-btn { background: none; border: 1px solid #444; color: #aaa; padding: 6px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
+.topbar .logout-btn:hover { border-color: #C8A96E; color: #C8A96E; }
+
+/* STATUS BADGE */
+.status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-approved { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+
+/* LAYOUT */
+.dashboard { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+.welcome { margin-bottom: 32px; }
+.welcome h1 { font-family: 'Georgia', serif; font-size: 1.8rem; color: #111; margin-bottom: 4px; }
+.welcome p { font-size: 0.9rem; color: #888; }
+
+/* CARDS */
+.section-card {
+    background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    padding: 32px; margin-bottom: 24px;
+}
+.section-card h2 {
+    font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
+}
+.section-card h2 i { color: #C8A96E; margin-right: 8px; }
+
+/* FORM FIELDS */
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 0.82rem; font-weight: 600; color: #555; margin-bottom: 4px; }
+.field input, .field select, .field textarea {
+    width: 100%; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 6px;
+    font-size: 0.9rem; font-family: inherit; background: #fafafa;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #C8A96E; background: #fff; }
+.field textarea { resize: vertical; min-height: 80px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.readonly { background: #f0f0f0 !important; color: #999; }
+
+/* BUTTONS */
+.btn { padding: 10px 24px; border: none; border-radius: 6px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.3s; }
+.btn-primary { background: #111; color: #fff; }
+.btn-primary:hover { background: #C8A96E; }
+.btn-secondary { background: #f0f0f0; color: #555; }
+.btn-secondary:hover { background: #e0e0e0; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.save-msg { display: inline-block; margin-left: 12px; font-size: 0.82rem; color: #16a34a; opacity: 0; transition: opacity 0.3s; }
+.save-msg.show { opacity: 1; }
+
+/* PRODUCT LIST */
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 16px; }
+.product-card {
+    border: 1px solid #eee; border-radius: 8px; overflow: hidden; background: #fafafa;
+}
+.product-card .img-area {
+    height: 160px; background: #e5e5e5; display: flex; align-items: center; justify-content: center;
+    color: #aaa; font-size: 0.8rem; overflow: hidden;
+}
+.product-card .img-area img { width: 100%; height: 100%; object-fit: cover; }
+.product-card .info { padding: 12px; }
+.product-card .info h4 { font-size: 0.88rem; color: #111; margin-bottom: 4px; }
+.product-card .info p { font-size: 0.78rem; color: #888; }
+
+/* UPLOAD AREA */
+.upload-area {
+    border: 2px dashed #ddd; border-radius: 8px; padding: 32px; text-align: center;
+    cursor: pointer; transition: border-color 0.3s; margin-bottom: 16px;
+}
+.upload-area:hover { border-color: #C8A96E; }
+.upload-area i { font-size: 2rem; color: #ccc; margin-bottom: 8px; }
+.upload-area p { font-size: 0.85rem; color: #999; }
+
+/* TABS */
+.tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #eee; }
+.tab { padding: 10px 20px; font-size: 0.88rem; font-weight: 600; color: #999; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; }
+.tab:hover { color: #666; }
+.tab.active { color: #111; border-bottom-color: #C8A96E; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* LOADING */
+.loading { text-align: center; padding: 60px; color: #999; }
+.loading i { font-size: 2rem; margin-bottom: 12px; color: #C8A96E; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px; color: #bbb; }
+.empty-state i { font-size: 2.5rem; margin-bottom: 12px; }
+
+@media (max-width: 768px) {
+    .field-row { grid-template-columns: 1fr; }
+    .product-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <a href="../index.html" class="logo">ARCHINODE <span>Brand Portal</span></a>
+    <div class="user-info">
+        <span class="user-email" id="userEmail"></span>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+    </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loadingScreen">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Loading your dashboard...</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboardContent" style="display:none;">
+
+    <div class="welcome">
+        <h1>Welcome, <span id="brandNameDisplay"></span></h1>
+        <p>Manage your brand presence on ARCHINODE. <span class="status-badge" id="statusBadge"></span></p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" data-tab="brand">Brand Info</div>
+        <div class="tab" data-tab="products">Products</div>
+        <div class="tab" data-tab="magazine">Magazine</div>
+        <div class="tab" data-tab="settings">Settings</div>
+    </div>
+
+    <!-- TAB: BRAND INFO -->
+    <div class="tab-content active" id="tab-brand">
+        <div class="section-card">
+            <h2><i class="fas fa-building"></i> Brand Profile</h2>
+            <form id="brandInfoForm">
+                <div class="field-row">
+                    <div class="field">
+                        <label>Brand Name</label>
+                        <input type="text" id="editBrandName" readonly class="readonly">
+                    </div>
+                    <div class="field">
+                        <label>Country</label>
+                        <input type="text" id="editCountry">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Category</label>
+                        <select id="editCategory">
+                            <option value="Bathroom">Bathroom</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Decor">Decor</option>
+                            <option value="Finishes">Finishes</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Kitchen">Kitchen</option>
+                            <option value="Lighting">Lighting</option>
+                            <option value="Office">Office</option>
+                            <option value="Outdoor">Outdoor</option>
+                            <option value="Wellness">Wellness</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Website</label>
+                        <input type="url" id="editWebsite">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Brand Description / Philosophy</label>
+                    <textarea id="editDescription" rows="4" placeholder="Share your brand's story, philosophy, and heritage..."></textarea>
+                </div>
+                <div class="field">
+                    <label>Tagline / Slogan</label>
+                    <input type="text" id="editTagline" placeholder="e.g. 'Designed for life'">
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Founded Year</label>
+                        <input type="text" id="editFounded" placeholder="e.g. 1962">
+                    </div>
+                    <div class="field">
+                        <label>Headquarters</label>
+                        <input type="text" id="editHeadquarters" placeholder="e.g. Milan, Italy">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <span class="save-msg" id="brandSaveMsg"><i class="fas fa-check"></i> Saved!</span>
+            </form>
+        </div>
+    </div>
+
+    <!-- TAB: PRODUCTS -->
+    <div class="tab-content" id="tab-products">
+        <div class="section-card">
+            <h2><i class="fas fa-box-open"></i> Your Products</h2>
+            <p style="font-size:0.88rem;color:#888;margin-bottom:20px;">Upload products to showcase on your ARCHINODE brand page. Products are reviewed before publishing.</p>
+
+            <button class="btn btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add Product</button>
+
+            <!-- Add Product Form (hidden) -->
+            <div id="productForm" style="display:none;margin-top:24px;padding:24px;background:#f9f9f9;border-radius:8px;">
+                <h3 style="font-size:1rem;margin-bottom:16px;">New Product</h3>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Product Name *</label>
+                        <input type="text" id="prodName" required placeholder="e.g. IC Lights T1">
+                    </div>
+                    <div class="field">
+                        <label>Collection / Series</label>
+                        <input type="text" id="prodCollection" placeholder="e.g. IC Lights">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <textarea id="prodDesc" placeholder="Product description, features, and design story..."></textarea>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Materials</label>
+                        <input type="text" id="prodMaterials" placeholder="e.g. Brass, Opal glass">
+                    </div>
+                    <div class="field">
+                        <label>Dimensions</label>
+                        <input type="text" id="prodDimensions" placeholder="e.g. W20 × D20 × H53 cm">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Designer</label>
+                        <input type="text" id="prodDesigner" placeholder="e.g. Michael Anastassiades">
+                    </div>
+                    <div class="field">
+                        <label>Price Range</label>
+                        <select id="prodPrice">
+                            <option value="">Select</option>
+                            <option value="$">$ (Under $500)</option>
+                            <option value="$$">$$ ($500–$2,000)</option>
+                            <option value="$$$">$$$ ($2,000–$5,000)</option>
+                            <option value="$$$$">$$$$ ($5,000+)</option>
+                            <option value="Contact">Contact for price</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Product Image</label>
+                    <div class="upload-area" id="prodUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click or drag to upload image (JPG, PNG, max 5MB)</p>
+                        <input type="file" id="prodImage" accept="image/*" style="display:none;">
+                    </div>
+                    <div id="prodImagePreview" style="display:none;margin-top:8px;">
+                        <img id="prodPreviewImg" style="max-height:200px;border-radius:6px;">
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;">
+                    <button type="button" class="btn btn-primary" id="submitProduct">Submit for Review</button>
+                    <button type="button" class="btn btn-secondary" id="cancelProduct">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="productGrid"></div>
+            <div class="empty-state" id="emptyProducts">
+                <i class="fas fa-box-open"></i>
+                <p>No products yet. Click "Add Product" to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: MAGAZINE -->
+    <div class="tab-content" id="tab-magazine">
+        <div class="section-card">
+            <h2><i class="fas fa-newspaper"></i> Magazine Articles</h2>
+            <p style="font-size:0.88rem;color:#888;margin-bottom:20px;">Write articles about your brand, products, or industry insights. Articles are reviewed before publishing.</p>
+
+            <button class="btn btn-primary" id="addArticleBtn"><i class="fas fa-plus"></i> Write Article</button>
+
+            <!-- Article Form (hidden) -->
+            <div id="articleForm" style="display:none;margin-top:24px;padding:24px;background:#f9f9f9;border-radius:8px;">
+                <h3 style="font-size:1rem;margin-bottom:16px;">New Article</h3>
+                <div class="field">
+                    <label>Article Title *</label>
+                    <input type="text" id="artTitle" required placeholder="e.g. How Italian Design Shapes Modern Korean Interiors">
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Tag</label>
+                        <select id="artTag">
+                            <option value="Brand Spotlight">Brand Spotlight</option>
+                            <option value="Trend">Trend</option>
+                            <option value="Project">Project</option>
+                            <option value="Interview">Interview</option>
+                            <option value="Guide">Guide</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Cover Image</label>
+                        <input type="file" id="artImage" accept="image/*">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Article Content *</label>
+                    <textarea id="artContent" rows="10" placeholder="Write your article here. You can use basic formatting."></textarea>
+                </div>
+                <div style="display:flex;gap:12px;">
+                    <button type="button" class="btn btn-primary" id="submitArticle">Submit for Review</button>
+                    <button type="button" class="btn btn-secondary" id="cancelArticle">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Article List -->
+            <div id="articleList" style="margin-top:16px;"></div>
+            <div class="empty-state" id="emptyArticles">
+                <i class="fas fa-newspaper"></i>
+                <p>No articles yet. Share your brand story with Korean professionals.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: SETTINGS -->
+    <div class="tab-content" id="tab-settings">
+        <div class="section-card">
+            <h2><i class="fas fa-cog"></i> Account Settings</h2>
+            <form id="passwordForm">
+                <div class="field">
+                    <label>New Password</label>
+                    <input type="password" id="newPassword" required placeholder="Enter new password (min 6 characters)">
+                </div>
+                <div class="field">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmPassword" required placeholder="Confirm new password">
+                </div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+                <span class="save-msg" id="pwSaveMsg"></span>
+            </form>
+        </div>
+        <div class="section-card">
+            <h2><i class="fas fa-user"></i> Contact Info</h2>
+            <form id="contactForm">
+                <div class="field-row">
+                    <div class="field">
+                        <label>Contact Person</label>
+                        <input type="text" id="editContactName">
+                    </div>
+                    <div class="field">
+                        <label>Position</label>
+                        <input type="text" id="editPosition">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="email" id="editEmail" readonly class="readonly">
+                    </div>
+                    <div class="field">
+                        <label>Phone</label>
+                        <input type="tel" id="editPhone">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Contact Info</button>
+                <span class="save-msg" id="contactSaveMsg"><i class="fas fa-check"></i> Saved!</span>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../firebase-config.js"></script>
+<script>
+let currentUser = null;
+let brandData = null;
+
+// ── 인증 확인 ──
+auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+    currentUser = user;
+    document.getElementById('userEmail').textContent = user.email;
+    await loadBrandData(user.uid);
+});
+
+// ── 브랜드 데이터 로드 ──
+async function loadBrandData(uid) {
+    try {
+        const doc = await db.collection('brands').doc(uid).get();
+        if (!doc.exists) {
+            alert('Brand data not found. Please contact support.');
+            return;
+        }
+        brandData = doc.data();
+        populateDashboard();
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('dashboardContent').style.display = 'block';
+    } catch (err) {
+        console.error('Error loading brand:', err);
+    }
+}
+
+// ── 대시보드 채우기 ──
+function populateDashboard() {
+    document.getElementById('brandNameDisplay').textContent = brandData.brandName;
+
+    // Status badge
+    const badge = document.getElementById('statusBadge');
+    badge.textContent = brandData.status;
+    badge.className = 'status-badge status-' + brandData.status;
+
+    // Brand info
+    document.getElementById('editBrandName').value = brandData.brandName || '';
+    document.getElementById('editCountry').value = brandData.country || '';
+    document.getElementById('editCategory').value = brandData.category || '';
+    document.getElementById('editWebsite').value = brandData.website || '';
+    document.getElementById('editDescription').value = brandData.description || '';
+    document.getElementById('editTagline').value = brandData.tagline || '';
+    document.getElementById('editFounded').value = brandData.founded || '';
+    document.getElementById('editHeadquarters').value = brandData.headquarters || '';
+
+    // Contact info
+    document.getElementById('editContactName').value = brandData.contactName || '';
+    document.getElementById('editPosition').value = brandData.position || '';
+    document.getElementById('editEmail').value = brandData.email || '';
+    document.getElementById('editPhone').value = brandData.phone || '';
+
+    // Load products
+    loadProducts();
+    loadArticles();
+}
+
+// ── 탭 전환 ──
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ── 브랜드 정보 저장 ──
+document.getElementById('brandInfoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await db.collection('brands').doc(currentUser.uid).update({
+        country: document.getElementById('editCountry').value,
+        category: document.getElementById('editCategory').value,
+        website: document.getElementById('editWebsite').value,
+        description: document.getElementById('editDescription').value,
+        tagline: document.getElementById('editTagline').value,
+        founded: document.getElementById('editFounded').value,
+        headquarters: document.getElementById('editHeadquarters').value,
+    });
+    showSaveMsg('brandSaveMsg');
+});
+
+// ── 연락처 저장 ──
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await db.collection('brands').doc(currentUser.uid).update({
+        contactName: document.getElementById('editContactName').value,
+        position: document.getElementById('editPosition').value,
+        phone: document.getElementById('editPhone').value,
+    });
+    showSaveMsg('contactSaveMsg');
+});
+
+// ── 비밀번호 변경 ──
+document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('pwSaveMsg');
+    if (pw !== confirm) { msg.textContent = 'Passwords do not match'; msg.style.color = '#dc2626'; msg.classList.add('show'); return; }
+    if (pw.length < 6) { msg.textContent = 'Min 6 characters'; msg.style.color = '#dc2626'; msg.classList.add('show'); return; }
+    try {
+        await currentUser.updatePassword(pw);
+        msg.innerHTML = '<i class="fas fa-check"></i> Password changed!';
+        msg.style.color = '#16a34a';
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 3000);
+    } catch (err) {
+        msg.textContent = 'Please log out and log in again, then retry.';
+        msg.style.color = '#dc2626';
+        msg.classList.add('show');
+    }
+});
+
+// ── 제품 추가 ──
+document.getElementById('addProductBtn').addEventListener('click', () => {
+    document.getElementById('productForm').style.display = 'block';
+    document.getElementById('addProductBtn').style.display = 'none';
+});
+document.getElementById('cancelProduct').addEventListener('click', () => {
+    document.getElementById('productForm').style.display = 'none';
+    document.getElementById('addProductBtn').style.display = 'inline-block';
+});
+
+// 이미지 업로드 미리보기
+document.getElementById('prodUploadArea').addEventListener('click', () => document.getElementById('prodImage').click());
+document.getElementById('prodImage').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            document.getElementById('prodPreviewImg').src = ev.target.result;
+            document.getElementById('prodImagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// 제품 제출
+document.getElementById('submitProduct').addEventListener('click', async () => {
+    const name = document.getElementById('prodName').value.trim();
+    if (!name) { alert('Product name is required'); return; }
+
+    const btn = document.getElementById('submitProduct');
+    btn.disabled = true;
+    btn.textContent = 'Uploading...';
+
+    let imageUrl = '';
+    const imageFile = document.getElementById('prodImage').files[0];
+    if (imageFile) {
+        const ref = storage.ref(`products/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
+        await ref.put(imageFile);
+        imageUrl = await ref.getDownloadURL();
+    }
+
+    await db.collection('products').add({
+        brandId: currentUser.uid,
+        brandName: brandData.brandName,
+        name: name,
+        collection: document.getElementById('prodCollection').value.trim(),
+        description: document.getElementById('prodDesc').value.trim(),
+        materials: document.getElementById('prodMaterials').value.trim(),
+        dimensions: document.getElementById('prodDimensions').value.trim(),
+        designer: document.getElementById('prodDesigner').value.trim(),
+        priceRange: document.getElementById('prodPrice').value,
+        imageUrl: imageUrl,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Submit for Review';
+    document.getElementById('productForm').style.display = 'none';
+    document.getElementById('addProductBtn').style.display = 'inline-block';
+
+    // Reset form
+    ['prodName','prodCollection','prodDesc','prodMaterials','prodDimensions','prodDesigner'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('prodPrice').value = '';
+    document.getElementById('prodImage').value = '';
+    document.getElementById('prodImagePreview').style.display = 'none';
+
+    loadProducts();
+});
+
+// ── 제품 목록 로드 ──
+async function loadProducts() {
+    const snap = await db.collection('products').where('brandId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
+    const grid = document.getElementById('productGrid');
+    const empty = document.getElementById('emptyProducts');
+    grid.innerHTML = '';
+
+    if (snap.empty) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+
+    snap.forEach(doc => {
+        const p = doc.data();
+        const statusClass = p.status === 'approved' ? 'status-approved' : p.status === 'rejected' ? 'status-rejected' : 'status-pending';
+        grid.innerHTML += `
+            <div class="product-card">
+                <div class="img-area">${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : 'No image'}</div>
+                <div class="info">
+                    <h4>${p.name}</h4>
+                    <p>${p.collection || ''} ${p.materials ? '· ' + p.materials : ''}</p>
+                    <span class="status-badge ${statusClass}" style="margin-top:8px;">${p.status}</span>
+                </div>
+            </div>`;
+    });
+}
+
+// ── 매거진 아티클 ──
+document.getElementById('addArticleBtn').addEventListener('click', () => {
+    document.getElementById('articleForm').style.display = 'block';
+    document.getElementById('addArticleBtn').style.display = 'none';
+});
+document.getElementById('cancelArticle').addEventListener('click', () => {
+    document.getElementById('articleForm').style.display = 'none';
+    document.getElementById('addArticleBtn').style.display = 'inline-block';
+});
+
+document.getElementById('submitArticle').addEventListener('click', async () => {
+    const title = document.getElementById('artTitle').value.trim();
+    const content = document.getElementById('artContent').value.trim();
+    if (!title || !content) { alert('Title and content are required'); return; }
+
+    const btn = document.getElementById('submitArticle');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    let imageUrl = '';
+    const imageFile = document.getElementById('artImage').files[0];
+    if (imageFile) {
+        const ref = storage.ref(`articles/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
+        await ref.put(imageFile);
+        imageUrl = await ref.getDownloadURL();
+    }
+
+    await db.collection('articles').add({
+        brandId: currentUser.uid,
+        brandName: brandData.brandName,
+        title: title,
+        tag: document.getElementById('artTag').value,
+        content: content,
+        imageUrl: imageUrl,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Submit for Review';
+    document.getElementById('articleForm').style.display = 'none';
+    document.getElementById('addArticleBtn').style.display = 'inline-block';
+    document.getElementById('artTitle').value = '';
+    document.getElementById('artContent').value = '';
+
+    loadArticles();
+});
+
+async function loadArticles() {
+    const snap = await db.collection('articles').where('brandId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
+    const list = document.getElementById('articleList');
+    const empty = document.getElementById('emptyArticles');
+    list.innerHTML = '';
+
+    if (snap.empty) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+
+    snap.forEach(doc => {
+        const a = doc.data();
+        const statusClass = a.status === 'approved' ? 'status-approved' : a.status === 'rejected' ? 'status-rejected' : 'status-pending';
+        list.innerHTML += `
+            <div style="padding:16px;border:1px solid #eee;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <strong style="font-size:0.92rem;">${a.title}</strong>
+                    <span style="font-size:0.75rem;color:#C8A96E;margin-left:8px;">${a.tag}</span>
+                    <p style="font-size:0.8rem;color:#999;margin-top:4px;">${a.content.substring(0, 100)}...</p>
+                </div>
+                <span class="status-badge ${statusClass}">${a.status}</span>
+            </div>`;
+    });
+}
+
+// ── 로그아웃 ──
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await auth.signOut();
+    window.location.href = 'login.html';
+});
+
+// ── 유틸 ──
+function showSaveMsg(id) {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

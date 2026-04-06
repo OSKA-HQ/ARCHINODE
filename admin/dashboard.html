@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f0f0f0; color: #333; }
+
+/* TOPBAR */
+.topbar { background: #111; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar .logo { color: #fff; font-size: 1.1rem; font-weight: 800; text-decoration: none; }
+.topbar .logo span { color: #ff6b6b; font-size: 0.7rem; font-weight: 600; margin-left: 8px; background: rgba(255,107,107,0.15); padding: 2px 8px; border-radius: 3px; }
+.topbar .right { display: flex; align-items: center; gap: 16px; }
+.topbar .admin-email { color: #888; font-size: 0.8rem; }
+.topbar .logout-btn { background: none; border: 1px solid #444; color: #aaa; padding: 6px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
+.topbar .logout-btn:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+/* LAYOUT */
+.admin { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+/* STATS */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.stat-card .number { font-size: 2rem; font-weight: 800; color: #111; }
+.stat-card .label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+.stat-card .icon { float: right; font-size: 1.5rem; color: #e0e0e0; }
+
+/* TABS */
+.tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #ddd; background: #fff; border-radius: 10px 10px 0 0; padding: 0 8px; }
+.tab { padding: 14px 24px; font-size: 0.88rem; font-weight: 600; color: #999; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.3s; }
+.tab:hover { color: #666; }
+.tab.active { color: #111; border-bottom-color: #C8A96E; }
+.tab .count { background: #fee2e2; color: #dc2626; font-size: 0.68rem; padding: 2px 6px; border-radius: 10px; margin-left: 6px; font-weight: 700; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* TABLE */
+.section-card { background: #fff; border-radius: 0 0 10px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 24px; margin-bottom: 24px; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 10px 12px; font-size: 0.75rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f0f0f0; }
+td { padding: 14px 12px; font-size: 0.88rem; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+tr:hover { background: #fafafa; }
+
+/* STATUS */
+.status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-approved { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+
+/* ACTION BUTTONS */
+.act-btn { padding: 5px 12px; border: none; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-right: 4px; transition: opacity 0.3s; }
+.act-btn:hover { opacity: 0.8; }
+.act-approve { background: #d1fae5; color: #065f46; }
+.act-reject { background: #fee2e2; color: #991b1b; }
+.act-view { background: #e0e7ff; color: #3730a3; }
+
+/* DETAIL MODAL */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 32px; }
+.modal h2 { font-size: 1.2rem; margin-bottom: 20px; }
+.modal .close-btn { float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+.modal .detail-row { display: flex; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+.modal .detail-label { width: 140px; font-size: 0.82rem; font-weight: 600; color: #888; }
+.modal .detail-value { flex: 1; font-size: 0.88rem; color: #333; }
+
+.loading { text-align: center; padding: 60px; color: #999; }
+
+@media (max-width: 768px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 0.8rem; }
+    th, td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <a href="../index.html" class="logo">ARCHINODE <span>ADMIN</span></a>
+    <div class="right">
+        <span class="admin-email" id="adminEmail"></span>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+    </div>
+</div>
+
+<div class="loading" id="loadingScreen">
+    <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#C8A96E;"></i>
+    <p style="margin-top:12px;">Loading admin dashboard...</p>
+</div>
+
+<div class="admin" id="adminContent" style="display:none;">
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <i class="fas fa-building icon"></i>
+            <div class="number" id="statTotalBrands">0</div>
+            <div class="label">Total Brands</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-clock icon"></i>
+            <div class="number" id="statPendingBrands">0</div>
+            <div class="label">Pending Approval</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-box-open icon"></i>
+            <div class="number" id="statPendingProducts">0</div>
+            <div class="label">Products to Review</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-newspaper icon"></i>
+            <div class="number" id="statPendingArticles">0</div>
+            <div class="label">Articles to Review</div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" data-tab="brands">Brands <span class="count" id="brandCount"></span></div>
+        <div class="tab" data-tab="products">Products <span class="count" id="productCount"></span></div>
+        <div class="tab" data-tab="articles">Articles <span class="count" id="articleCount"></span></div>
+    </div>
+
+    <!-- TAB: BRANDS -->
+    <div class="tab-content active" id="tab-brands">
+        <div class="section-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Country</th>
+                        <th>Category</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="brandsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB: PRODUCTS -->
+    <div class="tab-content" id="tab-products">
+        <div class="section-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Brand</th>
+                        <th>Materials</th>
+                        <th>Image</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB: ARTICLES -->
+    <div class="tab-content" id="tab-articles">
+        <div class="section-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Brand</th>
+                        <th>Tag</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="articlesTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modal">
+    <div class="modal">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script src="../firebase-config.js"></script>
+<script>
+// ── 인증 확인 (관리자만) ──
+auth.onAuthStateChanged(async (user) => {
+    if (!user) { window.location.href = '../brand-portal/login.html'; return; }
+    if (!isAdmin(user.email)) {
+        alert('Access denied. Admin only.');
+        await auth.signOut();
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('adminEmail').textContent = user.email;
+    await loadAll();
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+});
+
+// ── 전체 데이터 로드 ──
+async function loadAll() {
+    await Promise.all([loadBrands(), loadProducts(), loadArticles()]);
+}
+
+// ── 브랜드 목록 ──
+async function loadBrands() {
+    const snap = await db.collection('brands').orderBy('createdAt', 'desc').get();
+    const tbody = document.getElementById('brandsTable');
+    tbody.innerHTML = '';
+    let total = 0, pending = 0;
+
+    snap.forEach(doc => {
+        const b = doc.data();
+        total++;
+        if (b.status === 'pending') pending++;
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${b.brandName}</strong></td>
+                <td>${b.country || '-'}</td>
+                <td>${b.category || '-'}</td>
+                <td>${b.contactName || '-'}<br><small style="color:#999;">${b.email}</small></td>
+                <td><span class="status status-${b.status}">${b.status}</span></td>
+                <td>
+                    ${b.status === 'pending' ? `
+                        <button class="act-btn act-approve" onclick="updateBrand('${doc.id}','approved')">Approve</button>
+                        <button class="act-btn act-reject" onclick="updateBrand('${doc.id}','rejected')">Reject</button>
+                    ` : `
+                        <button class="act-btn act-view" onclick="viewBrand('${doc.id}')">View</button>
+                    `}
+                </td>
+            </tr>`;
+    });
+
+    document.getElementById('statTotalBrands').textContent = total;
+    document.getElementById('statPendingBrands').textContent = pending;
+    document.getElementById('brandCount').textContent = pending > 0 ? pending : '';
+    document.getElementById('brandCount').style.display = pending > 0 ? 'inline' : 'none';
+}
+
+// ── 브랜드 상태 변경 ──
+async function updateBrand(docId, status) {
+    const confirmMsg = status === 'approved' ? 'Approve this brand?' : 'Reject this brand?';
+    if (!confirm(confirmMsg)) return;
+
+    const updateData = { status: status };
+    if (status === 'approved') updateData.approvedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+    await db.collection('brands').doc(docId).update(updateData);
+    await loadBrands();
+}
+
+// ── 브랜드 상세 보기 ──
+async function viewBrand(docId) {
+    const doc = await db.collection('brands').doc(docId).get();
+    const b = doc.data();
+    document.getElementById('modalContent').innerHTML = `
+        <h2>${b.brandName}</h2>
+        <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value"><span class="status status-${b.status}">${b.status}</span></div></div>
+        <div class="detail-row"><div class="detail-label">Country</div><div class="detail-value">${b.country || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">Category</div><div class="detail-value">${b.category || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">Website</div><div class="detail-value"><a href="${b.website}" target="_blank">${b.website || '-'}</a></div></div>
+        <div class="detail-row"><div class="detail-label">Contact</div><div class="detail-value">${b.contactName || '-'} (${b.position || '-'})</div></div>
+        <div class="detail-row"><div class="detail-label">Email</div><div class="detail-value">${b.email}</div></div>
+        <div class="detail-row"><div class="detail-label">Phone</div><div class="detail-value">${b.phone || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">Description</div><div class="detail-value">${b.description || '-'}</div></div>
+        <div class="detail-row"><div class="detail-label">Referral</div><div class="detail-value">${b.referral || '-'}</div></div>
+        <div style="margin-top:20px;">
+            <button class="act-btn act-approve" onclick="updateBrand('${docId}','approved');closeModal();">Approve</button>
+            <button class="act-btn act-reject" onclick="updateBrand('${docId}','rejected');closeModal();">Reject</button>
+        </div>`;
+    document.getElementById('modal').classList.add('show');
+}
+
+// ── 제품 목록 ──
+async function loadProducts() {
+    const snap = await db.collection('products').orderBy('createdAt', 'desc').get();
+    const tbody = document.getElementById('productsTable');
+    tbody.innerHTML = '';
+    let pending = 0;
+
+    snap.forEach(doc => {
+        const p = doc.data();
+        if (p.status === 'pending') pending++;
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${p.name}</strong><br><small style="color:#999;">${p.collection || ''}</small></td>
+                <td>${p.brandName}</td>
+                <td>${p.materials || '-'}</td>
+                <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">` : '-'}</td>
+                <td><span class="status status-${p.status}">${p.status}</span></td>
+                <td>
+                    ${p.status === 'pending' ? `
+                        <button class="act-btn act-approve" onclick="updateDoc('products','${doc.id}','approved')">Approve</button>
+                        <button class="act-btn act-reject" onclick="updateDoc('products','${doc.id}','rejected')">Reject</button>
+                    ` : `<span style="font-size:0.78rem;color:#999;">${p.status}</span>`}
+                </td>
+            </tr>`;
+    });
+
+    document.getElementById('statPendingProducts').textContent = pending;
+    document.getElementById('productCount').textContent = pending > 0 ? pending : '';
+    document.getElementById('productCount').style.display = pending > 0 ? 'inline' : 'none';
+}
+
+// ── 아티클 목록 ──
+async function loadArticles() {
+    const snap = await db.collection('articles').orderBy('createdAt', 'desc').get();
+    const tbody = document.getElementById('articlesTable');
+    tbody.innerHTML = '';
+    let pending = 0;
+
+    snap.forEach(doc => {
+        const a = doc.data();
+        if (a.status === 'pending') pending++;
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${a.title}</strong></td>
+                <td>${a.brandName}</td>
+                <td><span style="color:#C8A96E;font-size:0.8rem;">${a.tag}</span></td>
+                <td><span class="status status-${a.status}">${a.status}</span></td>
+                <td>
+                    ${a.status === 'pending' ? `
+                        <button class="act-btn act-view" onclick="viewArticle('${doc.id}')">Review</button>
+                        <button class="act-btn act-approve" onclick="updateDoc('articles','${doc.id}','approved')">Approve</button>
+                        <button class="act-btn act-reject" onclick="updateDoc('articles','${doc.id}','rejected')">Reject</button>
+                    ` : `<span style="font-size:0.78rem;color:#999;">${a.status}</span>`}
+                </td>
+            </tr>`;
+    });
+
+    document.getElementById('statPendingArticles').textContent = pending;
+    document.getElementById('articleCount').textContent = pending > 0 ? pending : '';
+    document.getElementById('articleCount').style.display = pending > 0 ? 'inline' : 'none';
+}
+
+// ── 아티클 상세 보기 ──
+async function viewArticle(docId) {
+    const doc = await db.collection('articles').doc(docId).get();
+    const a = doc.data();
+    document.getElementById('modalContent').innerHTML = `
+        <h2>${a.title}</h2>
+        <p style="color:#C8A96E;font-size:0.85rem;margin-bottom:16px;">${a.tag} · ${a.brandName}</p>
+        ${a.imageUrl ? `<img src="${a.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:16px;">` : ''}
+        <div style="white-space:pre-wrap;font-size:0.9rem;line-height:1.8;color:#444;">${a.content}</div>
+        <div style="margin-top:24px;">
+            <button class="act-btn act-approve" onclick="updateDoc('articles','${docId}','approved');closeModal();">Approve</button>
+            <button class="act-btn act-reject" onclick="updateDoc('articles','${docId}','rejected');closeModal();">Reject</button>
+        </div>`;
+    document.getElementById('modal').classList.add('show');
+}
+
+// ── 범용 상태 업데이트 ──
+async function updateDoc(collection, docId, status) {
+    if (!confirm(`${status === 'approved' ? 'Approve' : 'Reject'} this item?`)) return;
+    await db.collection(collection).doc(docId).update({ status: status });
+    await loadAll();
+}
+
+// ── 탭 전환 ──
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ── 모달 ──
+document.getElementById('closeModal').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal(); });
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+// ── 로그아웃 ──
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await auth.signOut();
+    window.location.href = '../brand-portal/login.html';
+});
+</script>
+</body>
+</html>
