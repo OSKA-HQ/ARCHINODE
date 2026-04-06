@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /_company/
+Disallow: /NEW/
+
+Sitemap: https://archinode.com/sitemap.xml

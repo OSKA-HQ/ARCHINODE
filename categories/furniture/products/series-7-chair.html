@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Series 7™ Chair — Fritz Hansen | ARCHINODE</title>
+<meta name="description" content="Arne Jacobsen's iconic Series 7™ chair — the world's most sold chair. Stackable, versatile, timeless.">
+<link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../../favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="../../../list-your-brand.html">Learn more &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="../../../index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="../../furniture.html" class="active-cat"><span>Furniture</span><small>가구</small></a>
+            <a href="../../bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="../../outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="../../lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="../../kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="../../office.html"><span>Office</span><small>오피스</small></a>
+            <a href="../../finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="../../wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="../../decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="../../construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="../../../brands.html">Brands</a>
+      <a href="../../../magazine.html">Magazine</a>
+      <a href="../../../about.html">About</a>
+      <a href="../../../list-your-brand.html" class="nav-cta">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-list">
+      <a href="../../../index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="../../furniture.html">Furniture</a>
+      <span class="sep">/</span>
+      <a href="../chairs-stools.html">Chairs & Stools</a>
+      <span class="sep">/</span>
+      <span class="current">Series 7™ Chair</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================================================
+     PRODUCT DETAIL — MAIN
+     ================================================ -->
+<section class="pd-main">
+  <div class="container">
+    <div class="pd-layout">
+
+      <!-- ========== LEFT: GALLERY ========== -->
+      <div class="pd-gallery fade-in">
+        <div class="pd-gallery-main" id="pdMainImg">
+          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1200&q=85" alt="Series 7 Chair — Front View" id="mainProductImg">
+          <span class="product-badge">Featured</span>
+          <button class="pd-gallery-zoom" onclick="openLightbox()"><i class="fas fa-expand"></i></button>
+        </div>
+        <div class="pd-gallery-thumbs">
+          <button class="pd-thumb active" onclick="changeImage(this, 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1200&q=85')">
+            <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=200&q=80" alt="Front">
+          </button>
+          <button class="pd-thumb" onclick="changeImage(this, 'https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=1200&q=85')">
+            <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=200&q=80" alt="Side">
+          </button>
+          <button class="pd-thumb" onclick="changeImage(this, 'https://images.unsplash.com/photo-1503602642458-232111445657?w=1200&q=85')">
+            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=200&q=80" alt="Detail">
+          </button>
+          <button class="pd-thumb" onclick="changeImage(this, 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=1200&q=85')">
+            <img src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=200&q=80" alt="Context">
+          </button>
+          <button class="pd-thumb" onclick="changeImage(this, 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=1200&q=85')">
+            <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=200&q=80" alt="In Space">
+          </button>
+        </div>
+      </div>
+
+
+      <!-- ========== RIGHT: PRODUCT INFO ========== -->
+      <div class="pd-info fade-in">
+
+        <!-- Brand & Bookmark -->
+        <div class="pd-brand-row">
+          <a href="#" class="pd-brand-name">Fritz Hansen</a>
+          <button class="pd-wishlist" onclick="toggleWish(this)" aria-label="Save">
+            <i class="far fa-bookmark"></i>
+          </button>
+        </div>
+
+        <!-- Title -->
+        <h1 class="pd-title">Series 7™ Chair</h1>
+        <p class="pd-subtitle">Model 3107 — Designed by Arne Jacobsen, 1955</p>
+
+        <!-- Short Description -->
+        <p class="pd-desc">
+          세계에서 가장 많이 팔린 의자. Arne Jacobsen이 1955년에 디자인한 Series 7™은
+          우아한 곡선과 가벼운 구조로 어떤 공간에도 자연스럽게 어울립니다.
+          스태커블 디자인으로 실용성까지 갖추었습니다.
+        </p>
+
+        <div class="pd-divider"></div>
+
+        <!-- Price on Request -->
+        <div class="pd-price-request">
+          <div class="pd-por-label">Price on Request</div>
+          <p class="pd-por-desc">가격은 선택 사양 및 딜러에 따라 다릅니다. 아래에서 원하시는 옵션을 선택 후 견적을 요청해주세요.</p>
+        </div>
+
+        <div class="pd-divider"></div>
+
+        <!-- OPTIONS — 견적 시 선호 사양 참고 -->
+        <div class="pd-options">
+          <div class="pd-option-hint">
+            <i class="fas fa-lightbulb"></i>
+            <span>선택한 사양이 견적 요청 시 자동으로 포함됩니다</span>
+          </div>
+
+          <!-- Shell Color -->
+          <div class="pd-option-group">
+            <label class="pd-option-label">
+              Shell Color <span class="pd-option-selected" id="colorLabel">Black (블랙)</span>
+            </label>
+            <div class="pd-color-swatches">
+              <button class="pd-swatch active" style="background:#1a1a1a" data-name="Black (블랙)" onclick="selectSwatch(this,'colorLabel')"><span class="sr-only">Black</span></button>
+              <button class="pd-swatch" style="background:#f5f5f0" data-name="White (화이트)" onclick="selectSwatch(this,'colorLabel')"></button>
+              <button class="pd-swatch" style="background:#c8b89a" data-name="Light Beige (라이트 베이지)" onclick="selectSwatch(this,'colorLabel')"></button>
+              <button class="pd-swatch" style="background:#2d4a3e" data-name="Evergreen (에버그린)" onclick="selectSwatch(this,'colorLabel')"></button>
+              <button class="pd-swatch" style="background:#8b4b6a" data-name="Pale Rose (페일 로즈)" onclick="selectSwatch(this,'colorLabel')"></button>
+              <button class="pd-swatch" style="background:#3a5a7c" data-name="Petrol Blue (페트롤 블루)" onclick="selectSwatch(this,'colorLabel')"></button>
+            </div>
+          </div>
+
+          <!-- Leg Finish -->
+          <div class="pd-option-group">
+            <label class="pd-option-label">
+              Leg Finish <span class="pd-option-selected" id="legLabel">Chrome (크롬)</span>
+            </label>
+            <div class="pd-select-buttons">
+              <button class="pd-select-btn active" data-name="Chrome (크롬)" onclick="selectOption(this,'legLabel')">Chrome</button>
+              <button class="pd-select-btn" data-name="Warm Graphite (웜 그래파이트)" onclick="selectOption(this,'legLabel')">Warm Graphite</button>
+              <button class="pd-select-btn" data-name="Black Powder Coated (블랙 파우더)" onclick="selectOption(this,'legLabel')">Black Powder</button>
+            </div>
+          </div>
+
+          <!-- Upholstery -->
+          <div class="pd-option-group">
+            <label class="pd-option-label">
+              Upholstery <span class="pd-option-selected" id="uphLabel">None (없음)</span>
+            </label>
+            <div class="pd-select-buttons">
+              <button class="pd-select-btn active" data-name="None (없음)" onclick="selectOption(this,'uphLabel')">None</button>
+              <button class="pd-select-btn" data-name="Front Upholstery (전면 패브릭)" onclick="selectOption(this,'uphLabel')">Front Uphol.</button>
+              <button class="pd-select-btn" data-name="Full Upholstery (풀 패브릭)" onclick="selectOption(this,'uphLabel')">Full Uphol.</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-divider"></div>
+
+        <!-- CTA — 리드 생성 중심 -->
+        <div class="pd-actions">
+          <button class="pd-btn-primary" onclick="requestQuote()">
+            <i class="fas fa-file-invoice"></i>
+            견적 요청하기 · Request a Quote
+          </button>
+          <button class="pd-btn-secondary" onclick="findDealer()">
+            <i class="fas fa-map-marker-alt"></i>
+            한국 공식 딜러 찾기 · Find Authorized Dealer
+          </button>
+          <button class="pd-btn-outline" onclick="contactBrand()">
+            <i class="fas fa-envelope"></i>
+            브랜드에 직접 문의 · Contact Brand
+          </button>
+        </div>
+
+        <!-- Response Note -->
+        <div class="pd-lead-note">
+          <p><i class="fas fa-clock"></i> 견적 요청 후 평균 1–2 영업일 내 회신됩니다</p>
+        </div>
+
+        <!-- Trust Signals -->
+        <div class="pd-trust">
+          <div class="pd-trust-item"><i class="fas fa-shield-alt"></i><span>공식 인증 브랜드</span></div>
+          <div class="pd-trust-item"><i class="fas fa-handshake"></i><span>검증된 딜러 연결</span></div>
+          <div class="pd-trust-item"><i class="fas fa-globe-asia"></i><span>한국 시장 전문</span></div>
+        </div>
+
+      </div><!-- /pd-info -->
+    </div><!-- /pd-layout -->
+  </div>
+</section>
+
+
+<!-- ================================================
+     PRODUCT DETAIL — TABS
+     ================================================ -->
+<section class="pd-details">
+  <div class="container">
+    <div class="pd-tabs">
+      <button class="pd-tab active" onclick="switchTab(this,'tabSpecs')">상세 스펙</button>
+      <button class="pd-tab" onclick="switchTab(this,'tabDesc')">제품 설명</button>
+      <button class="pd-tab" onclick="switchTab(this,'tabDesigner')">디자이너</button>
+      <button class="pd-tab" onclick="switchTab(this,'tabDownloads')">자료 다운로드</button>
+    </div>
+
+    <!-- Tab: Specs -->
+    <div class="pd-tab-content active" id="tabSpecs">
+      <div class="pd-specs-grid fade-in">
+        <div class="pd-spec-group">
+          <h4>Dimensions 치수</h4>
+          <table class="pd-spec-table">
+            <tr><td>Height 높이</td><td>80 cm</td></tr>
+            <tr><td>Width 너비</td><td>50 cm</td></tr>
+            <tr><td>Depth 깊이</td><td>52 cm</td></tr>
+            <tr><td>Seat Height 좌면 높이</td><td>46 cm</td></tr>
+            <tr><td>Weight 무게</td><td>3.4 kg</td></tr>
+          </table>
+        </div>
+        <div class="pd-spec-group">
+          <h4>Materials 소재</h4>
+          <table class="pd-spec-table">
+            <tr><td>Shell 쉘</td><td>Pressure-moulded veneer with lacquer</td></tr>
+            <tr><td>Legs 다리</td><td>Chromed / Powder-coated steel</td></tr>
+            <tr><td>Glides 글라이드</td><td>Felt or plastic</td></tr>
+          </table>
+        </div>
+        <div class="pd-spec-group">
+          <h4>Certifications 인증</h4>
+          <table class="pd-spec-table">
+            <tr><td>Indoor Advantage Gold</td><td><i class="fas fa-check"></i></td></tr>
+            <tr><td>Greenguard</td><td><i class="fas fa-check"></i></td></tr>
+            <tr><td>FSC® Certified</td><td><i class="fas fa-check"></i></td></tr>
+          </table>
+        </div>
+        <div class="pd-spec-group">
+          <h4>General 일반</h4>
+          <table class="pd-spec-table">
+            <tr><td>Brand 브랜드</td><td>Fritz Hansen</td></tr>
+            <tr><td>Designer 디자이너</td><td>Arne Jacobsen</td></tr>
+            <tr><td>Year 출시년도</td><td>1955</td></tr>
+            <tr><td>Stackable 스태커블</td><td>Yes (최대 12개)</td></tr>
+            <tr><td>Origin 원산지</td><td>Denmark</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Description -->
+    <div class="pd-tab-content" id="tabDesc">
+      <div class="pd-desc-content fade-in">
+        <div class="pd-desc-text">
+          <h3>An Icon of Modern Design</h3>
+          <p>
+            Series 7™은 덴마크 건축가이자 디자이너인 Arne Jacobsen이 Fritz Hansen을 위해
+            1955년에 디자인한 의자입니다. 출시 이후 전 세계적으로 수백만 개가 판매되며,
+            역사상 가장 많이 팔린 의자로 기록되었습니다.
+          </p>
+          <p>
+            하나의 곡면으로 이루어진 쉘은 프레셔 몰딩(pressure-moulded) 기법으로 제작되어,
+            인체공학적인 편안함과 유려한 곡선미를 동시에 구현합니다. 크롬 스틸 4본 다리는
+            구조적 안정성을 제공하면서도 시각적으로 가벼운 인상을 줍니다.
+          </p>
+          <p>
+            다이닝 체어, 데스크 체어, 회의실 의자 등 다양한 공간에서 활용 가능하며,
+            최대 12개까지 스태킹이 가능해 공간 효율성이 뛰어납니다.
+          </p>
+        </div>
+        <div class="pd-desc-img">
+          <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&q=80" alt="Series 7 in context">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Designer -->
+    <div class="pd-tab-content" id="tabDesigner">
+      <div class="pd-designer fade-in">
+        <div class="pd-designer-portrait">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Arne Jacobsen">
+        </div>
+        <div class="pd-designer-bio">
+          <span class="pd-designer-tag">Designer</span>
+          <h3>Arne Jacobsen</h3>
+          <p class="pd-designer-years">1902 — 1971 · Copenhagen, Denmark</p>
+          <p>
+            Arne Jacobsen은 20세기 덴마크를 대표하는 건축가이자 디자이너입니다.
+            그의 작품은 모더니즘의 정수를 보여주며, 건축과 가구 디자인 모두에서
+            아이코닉한 작품을 남겼습니다. Series 7™ 외에도 Egg Chair, Swan Chair 등
+            수많은 명작을 Fritz Hansen과 함께 탄생시켰습니다.
+          </p>
+          <a href="#" class="pd-designer-link">View all products by Arne Jacobsen <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Downloads -->
+    <div class="pd-tab-content" id="tabDownloads">
+      <div class="pd-downloads fade-in">
+        <a href="#" class="pd-download-item">
+          <div class="pd-download-icon"><i class="fas fa-file-pdf"></i></div>
+          <div class="pd-download-info">
+            <strong>Product Datasheet</strong>
+            <span>PDF · 2.4 MB</span>
+          </div>
+          <i class="fas fa-download"></i>
+        </a>
+        <a href="#" class="pd-download-item">
+          <div class="pd-download-icon"><i class="fas fa-cube"></i></div>
+          <div class="pd-download-info">
+            <strong>3D Model (Revit)</strong>
+            <span>RFA · 8.1 MB</span>
+          </div>
+          <i class="fas fa-download"></i>
+        </a>
+        <a href="#" class="pd-download-item">
+          <div class="pd-download-icon"><i class="fas fa-drafting-compass"></i></div>
+          <div class="pd-download-info">
+            <strong>CAD Drawing</strong>
+            <span>DWG · 1.2 MB</span>
+          </div>
+          <i class="fas fa-download"></i>
+        </a>
+        <a href="#" class="pd-download-item">
+          <div class="pd-download-icon"><i class="fas fa-image"></i></div>
+          <div class="pd-download-info">
+            <strong>High-Res Images</strong>
+            <span>ZIP · 15.6 MB</span>
+          </div>
+          <i class="fas fa-download"></i>
+        </a>
+        <a href="#" class="pd-download-item">
+          <div class="pd-download-icon"><i class="fas fa-book-open"></i></div>
+          <div class="pd-download-info">
+            <strong>Care Instructions</strong>
+            <span>PDF · 540 KB</span>
+          </div>
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================
+     BRAND BANNER
+     ================================================ -->
+<section class="pd-brand-banner">
+  <div class="container">
+    <div class="pd-brand-inner fade-in">
+      <div class="pd-brand-logo">
+        <span>Fritz Hansen</span>
+      </div>
+      <div class="pd-brand-text">
+        <p>Republic of Fritz Hansen — 1872년 덴마크 코펜하겐에서 설립. 150년 이상 세계 최고의 디자이너들과 함께 시대를 초월하는 가구를 만들어 온 덴마크 디자인의 정수.</p>
+        <a href="#" class="pd-brand-link">브랜드 전체 보기 <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================
+     RELATED PRODUCTS
+     ================================================ -->
+<section class="pd-related">
+  <div class="container">
+    <div class="section-header fade-in">
+      <h2 class="section-title">Related Products</h2>
+      <a href="../chairs-stools.html" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid">
+      <a href="#" class="product-card fade-in">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=600&q=80" alt="Eames Side Chair">
+          <div class="product-wish"><i class="far fa-bookmark"></i></div>
+        </div>
+        <div class="product-brand">Vitra</div>
+        <div class="product-name">Eames Side Chair DSW</div>
+        <div class="product-price">Price on Request</div>
+      </a>
+      <a href="#" class="product-card fade-in">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=600&q=80" alt="Masters Chair">
+          <span class="product-badge">New</span>
+          <div class="product-wish"><i class="far fa-bookmark"></i></div>
+        </div>
+        <div class="product-brand">Kartell</div>
+        <div class="product-name">Masters Chair</div>
+        <div class="product-price">Price on Request</div>
+      </a>
+      <a href="#" class="product-card fade-in">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=600&q=80" alt="Grand Prix Chair">
+          <div class="product-wish"><i class="far fa-bookmark"></i></div>
+        </div>
+        <div class="product-brand">Fritz Hansen</div>
+        <div class="product-name">Grand Prix™ Chair 4130</div>
+        <div class="product-price">Price on Request</div>
+      </a>
+      <a href="#" class="product-card fade-in">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80" alt="CH24 Wishbone Chair">
+          <div class="product-wish"><i class="far fa-bookmark"></i></div>
+        </div>
+        <div class="product-brand">Carl Hansen & Søn</div>
+        <div class="product-name">CH24 Wishbone Chair</div>
+        <div class="product-price">Price on Request</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-listing">
+  <div class="container">
+    <h2 class="fade-in">List Your Furniture Brand<br>in Korea</h2>
+    <p class="fade-in">Join brands already on ARCHINODE. Free listing through 2026.</p>
+    <a href="../../../list-your-brand.html" class="cta-btn fade-in">Apply for Brand Listing <i class="fas fa-arrow-right"></i></a>
+    <div class="cta-free-tag fade-in">Free listing through December 2026</div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p>Connecting global architecture &amp; design brands with the Korean market.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="../../furniture.html">Furniture</a></li>
+          <li><a href="../../bathroom.html">Bathroom</a></li>
+          <li><a href="../../outdoor.html">Outdoor</a></li>
+          <li><a href="../../lighting.html">Lighting</a></li>
+          <li><a href="../../kitchen.html">Kitchen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More Categories</h4>
+        <ul>
+          <li><a href="../../office.html">Office</a></li>
+          <li><a href="../../finishes.html">Finishes</a></li>
+          <li><a href="../../wellness.html">Wellness</a></li>
+          <li><a href="../../decor.html">Decor</a></li>
+          <li><a href="../../construction.html">Construction</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="../../../list-your-brand.html">Brand Listing</a></li>
+          <li><a href="#">Dealership Screening</a></li>
+          <li><a href="#">Exhibition Support</a></li>
+          <li><a href="#">ARCHINODE Awards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="../../../about.html">About ARCHINODE</a></li>
+          <li><a href="../../../magazine.html">Magazine</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- LIGHTBOX -->
+<div class="pd-lightbox" id="pdLightbox" onclick="closeLightbox()">
+  <span class="pd-lightbox-close">&times;</span>
+  <img id="lightboxImg" src="" alt="Product Image">
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+
+<script>
+/* ===== GLOBAL ===== */
+const header = document.getElementById('header');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
+
+/* Search */
+function toggleSearch() {
+  const o = document.getElementById('searchOverlay');
+  o.classList.toggle('active');
+  if (o.classList.contains('active')) o.querySelector('input').focus();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('searchOverlay').classList.remove('active');
+    closeLightbox();
+  }
+});
+
+/* Nav */
+function toggleCatMenu() { document.getElementById('catMenu').classList.toggle('active'); }
+document.addEventListener('click', e => {
+  const dd = document.querySelector('.nav-dropdown');
+  if (dd && !dd.contains(e.target)) document.getElementById('catMenu').classList.remove('active');
+});
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
+
+
+/* ===== GALLERY ===== */
+function changeImage(thumb, src) {
+  document.getElementById('mainProductImg').src = src;
+  document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+}
+
+function openLightbox() {
+  document.getElementById('lightboxImg').src = document.getElementById('mainProductImg').src;
+  document.getElementById('pdLightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('pdLightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+
+/* ===== OPTIONS ===== */
+function selectSwatch(btn, labelId) {
+  btn.closest('.pd-color-swatches').querySelectorAll('.pd-swatch').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(labelId).textContent = btn.dataset.name;
+}
+
+function selectOption(btn, labelId) {
+  btn.closest('.pd-select-buttons').querySelectorAll('.pd-select-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(labelId).textContent = btn.dataset.name;
+}
+
+
+/* ===== LEAD GENERATION ===== */
+function getSelectedOptions() {
+  return {
+    color: document.getElementById('colorLabel').textContent,
+    leg: document.getElementById('legLabel').textContent,
+    upholstery: document.getElementById('uphLabel').textContent
+  };
+}
+
+function requestQuote() {
+  const opts = getSelectedOptions();
+  const product = document.querySelector('.pd-title').textContent;
+  const brand = document.querySelector('.pd-brand-name').textContent;
+  // Production: redirect to quote form with pre-filled data
+  alert(
+    `[견적 요청]\n\n` +
+    `제품: ${brand} — ${product}\n` +
+    `선택 사양:\n` +
+    `  · Shell Color: ${opts.color}\n` +
+    `  · Leg Finish: ${opts.leg}\n` +
+    `  · Upholstery: ${opts.upholstery}\n\n` +
+    `견적 요청 양식으로 이동합니다.`
+  );
+}
+
+function findDealer() {
+  const brand = document.querySelector('.pd-brand-name').textContent;
+  alert(`[딜러 찾기]\n${brand}의 한국 공식 딜러 목록으로 이동합니다.`);
+}
+
+function contactBrand() {
+  const brand = document.querySelector('.pd-brand-name').textContent;
+  alert(`[브랜드 문의]\n${brand}에 직접 문의 양식으로 이동합니다.`);
+}
+
+
+/* ===== UI ===== */
+function toggleWish(btn) {
+  const i = btn.querySelector('i');
+  i.classList.toggle('far');
+  i.classList.toggle('fas');
+}
+
+function switchTab(tabBtn, contentId) {
+  document.querySelectorAll('.pd-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pd-tab-content').forEach(c => c.classList.remove('active'));
+  tabBtn.classList.add('active');
+  document.getElementById(contentId).classList.add('active');
+  document.getElementById(contentId).querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+}
+
+/* Fade-in */
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+/* Product card wish */
+document.querySelectorAll('.product-wish').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation(); e.preventDefault();
+    const i = this.querySelector('i');
+    i.classList.toggle('far');
+    i.classList.toggle('fas');
+  });
+});
+</script>
+</body>
+</html>

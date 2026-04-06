@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List Your Brand in Korea | ARCHINODE</title>
+<meta name="description" content="List your architecture, design, or furniture brand on ARCHINODE — the leading platform connecting global brands with the Korean market.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="#apply">Apply now &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
+            <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="categories/lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="categories/office.html"><span>Office</span><small>오피스</small></a>
+            <a href="categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="categories/decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="brands.html">Brands</a>
+      <a href="magazine.html">Magazine</a>
+      <a href="about.html">About</a>
+      <a href="list-your-brand.html" class="nav-cta active-nav">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- LISTING HERO -->
+<section class="listing-hero">
+  <div class="container">
+    <h1>Bring Your Brand<br>to Korea</h1>
+    <p>ARCHINODE is the gateway for global architecture and design brands to reach Korean architects, interior designers, and dealers. List your brand today — completely free for 2026.</p>
+  </div>
+</section>
+
+<!-- WHY ARCHINODE -->
+<section class="why-section">
+  <div class="container">
+    <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
+      <h2 class="section-title" style="font-size:2rem;">Why ARCHINODE?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-in">
+        <div class="why-num">01</div>
+        <h3>Korean Market Access</h3>
+        <p>Korea is Asia's fastest-growing design market. ARCHINODE gives your brand direct exposure to Korean architects, designers, and dealers actively looking for global products.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-num">02</div>
+        <h3>Zero Effort, Maximum Reach</h3>
+        <p>No office, no local staff, no Korean language skills needed. We handle localization, positioning, and connecting you with the right partners — all from your brand profile on our platform.</p>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-num">03</div>
+        <h3>Trusted Partner Services</h3>
+        <p>Beyond listing, we offer dealership screening, dealer monitoring, exhibition support, and more. We're your eyes and hands on the ground in Korea.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
+      <h2 class="section-title" style="font-size:2rem;">How It Works</h2>
+    </div>
+    <div class="how-steps">
+      <div class="how-step fade-in">
+        <div class="step-num">1</div>
+        <h3>Apply</h3>
+        <p>Fill out the brand listing form below. Tell us about your brand, products, and goals for the Korean market.</p>
+      </div>
+      <div class="how-step fade-in">
+        <div class="step-num">2</div>
+        <h3>Review</h3>
+        <p>Our team reviews your application and curates your brand profile — product images, descriptions, and positioning for the Korean audience.</p>
+      </div>
+      <div class="how-step fade-in">
+        <div class="step-num">3</div>
+        <h3>Go Live</h3>
+        <p>Your brand appears on ARCHINODE, visible to thousands of Korean architects, designers, and potential dealers browsing our platform.</p>
+      </div>
+      <div class="how-step fade-in">
+        <div class="step-num">4</div>
+        <h3>Connect</h3>
+        <p>Receive dealership inquiries, partnership requests, and exhibition opportunities — we facilitate every connection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES FOR BRANDS -->
+<section class="services-detail">
+  <div class="container">
+    <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
+      <h2 class="section-title" style="font-size:2rem;">Additional Services for Brands</h2>
+    </div>
+    <div class="services-detail-grid">
+      <div class="service-detail-card fade-in">
+        <i class="fas fa-handshake"></i>
+        <h3>Dealership Screening</h3>
+        <p>When a Korean company expresses interest in becoming your dealer, we investigate and verify them on your behalf. Online screening from $100, in-person meeting and detailed report from $1,000 — far less than a flight to Korea.</p>
+      </div>
+      <div class="service-detail-card fade-in">
+        <i class="fas fa-eye"></i>
+        <h3>Dealer Monitoring</h3>
+        <p>After you've established a dealership, we continuously monitor your Korean dealer to ensure they're upholding brand guidelines, meeting commitments, and operating with integrity.</p>
+      </div>
+      <div class="service-detail-card fade-in">
+        <i class="fas fa-calendar-check"></i>
+        <h3>Exhibition Support</h3>
+        <p>Want to exhibit at a Korean trade show? We handle everything — venue booking, booth design and setup, interpretation services, logistics, and on-site support throughout the event.</p>
+      </div>
+      <div class="service-detail-card fade-in">
+        <i class="fas fa-trophy"></i>
+        <h3>ARCHINODE Awards</h3>
+        <p>Our annual awards recognize the best products across every category. Winning brands gain significant exposure and credibility in the Korean market — a powerful marketing opportunity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
+      <h2 class="section-title" style="font-size:2rem;">Simple, Transparent Pricing</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card featured fade-in">
+        <h3>2026 Launch</h3>
+        <div class="price">Free</div>
+        <div class="price-sub">Through December 2026</div>
+        <ul>
+          <li>Brand profile page</li>
+          <li>Product catalog listing</li>
+          <li>Category placement</li>
+          <li>Search visibility</li>
+          <li>Dealership inquiry forwarding</li>
+        </ul>
+        <a href="#apply" class="pricing-btn">Apply Now — Free</a>
+      </div>
+      <div class="pricing-card fade-in">
+        <h3>Monthly</h3>
+        <div class="price">$10</div>
+        <div class="price-sub">per month, starting 2027</div>
+        <ul>
+          <li>Everything in Free tier</li>
+          <li>Analytics dashboard</li>
+          <li>Priority placement</li>
+          <li>Featured in newsletter</li>
+          <li>Cancel anytime</li>
+        </ul>
+        <a href="#apply" class="pricing-btn">Get Started</a>
+      </div>
+      <div class="pricing-card fade-in">
+        <h3>Annual</h3>
+        <div class="price">$100</div>
+        <div class="price-sub">per year (~$8.3/mo), starting 2027</div>
+        <ul>
+          <li>Everything in Monthly</li>
+          <li>Save ~17% vs monthly</li>
+          <li>Priority exhibition support</li>
+          <li>Annual market report</li>
+          <li>ARCHINODE Awards eligibility</li>
+        </ul>
+        <a href="#apply" class="pricing-btn">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="contact-section" id="apply">
+  <div class="container">
+    <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
+      <h2 class="section-title" style="font-size:2rem;">Apply for Brand Listing</h2>
+      <p style="color:var(--gray-500); font-size:0.9rem; margin-top:12px;">Fill out the form below and our team will get back to you within 3 business days.</p>
+    </div>
+    <form class="contact-form fade-in" onsubmit="event.preventDefault(); alert('Thank you! We will review your application and get back to you soon.');">
+
+      <!-- SECTION 1: COMPANY INFO -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">1</span> Company Information</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Brand Name (Official English) *</label>
+            <input type="text" required placeholder="e.g., Vitra">
+          </div>
+          <div class="form-group">
+            <label>Brand Name (Local Language)</label>
+            <input type="text" placeholder="e.g., ヴィトラ, فيترا">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Headquarters Country *</label>
+            <input type="text" required placeholder="e.g., Switzerland">
+          </div>
+          <div class="form-group">
+            <label>Year Founded</label>
+            <input type="text" placeholder="e.g., 1950">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Company Address</label>
+          <input type="text" placeholder="Full address including city, country">
+        </div>
+        <div class="form-group">
+          <label>Official Website *</label>
+          <input type="url" required placeholder="https://www.yourbrand.com">
+        </div>
+      </div>
+
+      <!-- SECTION 2: CONTACT -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">2</span> Contact Person</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" required placeholder="First and last name">
+          </div>
+          <div class="form-group">
+            <label>Job Title *</label>
+            <input type="text" required placeholder="e.g., Export Manager">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" required placeholder="email@brand.com">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+00 000 000 0000">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: BRAND PROFILE -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">3</span> Brand Profile</h3>
+
+        <div class="form-group">
+          <label>Brand Description (English, max 200 words) *</label>
+          <textarea required placeholder="Tell us about your brand — history, design philosophy, signature products, and market positioning..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Product Catalog URL or PDF Link</label>
+          <input type="url" placeholder="Link to your digital catalog (Dropbox, Google Drive, website, etc.)">
+        </div>
+        <div class="form-group">
+          <label>Social Media (Instagram, LinkedIn, etc.)</label>
+          <input type="text" placeholder="e.g., @yourbrand or https://instagram.com/yourbrand">
+        </div>
+      </div>
+
+      <!-- SECTION 4: CATEGORIES (CHECKBOX) -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">4</span> Product Categories</h3>
+        <p class="form-hint">Select all categories that apply to your brand. You can choose multiple.</p>
+
+        <div class="category-checkbox-grid">
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="furniture">
+            <span class="cat-check-box"><i class="fas fa-couch"></i></span>
+            <span class="cat-check-label">Furniture<small>가구</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="bathroom">
+            <span class="cat-check-box"><i class="fas fa-bath"></i></span>
+            <span class="cat-check-label">Bathroom<small>욕실</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="outdoor">
+            <span class="cat-check-box"><i class="fas fa-tree"></i></span>
+            <span class="cat-check-label">Outdoor<small>아웃도어</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="lighting">
+            <span class="cat-check-box"><i class="fas fa-lightbulb"></i></span>
+            <span class="cat-check-label">Lighting<small>조명</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="kitchen">
+            <span class="cat-check-box"><i class="fas fa-utensils"></i></span>
+            <span class="cat-check-label">Kitchen<small>주방</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="office">
+            <span class="cat-check-box"><i class="fas fa-building"></i></span>
+            <span class="cat-check-label">Office<small>오피스</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="finishes">
+            <span class="cat-check-box"><i class="fas fa-layer-group"></i></span>
+            <span class="cat-check-label">Finishes<small>마감재</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="wellness">
+            <span class="cat-check-box"><i class="fas fa-spa"></i></span>
+            <span class="cat-check-label">Wellness<small>웰니스</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="decor">
+            <span class="cat-check-box"><i class="fas fa-paint-brush"></i></span>
+            <span class="cat-check-label">Decor<small>데코</small></span>
+          </label>
+          <label class="cat-checkbox">
+            <input type="checkbox" name="categories" value="construction">
+            <span class="cat-check-box"><i class="fas fa-hard-hat"></i></span>
+            <span class="cat-check-label">Construction<small>건축자재</small></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- SECTION 5: KOREAN MARKET -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">5</span> Korean Market Status</h3>
+
+        <div class="form-group">
+          <label>Current dealer or distributor in Korea? *</label>
+          <select required>
+            <option value="">Select your current status</option>
+            <option value="no-seeking">No dealer — looking for a new dealer or distributor</option>
+            <option value="no-not-seeking">No dealer — not actively looking at this time</option>
+            <option value="yes-additional">Yes — but looking for additional dealers</option>
+            <option value="yes-monitoring">Yes — satisfied, but interested in dealer monitoring</option>
+            <option value="direct">No dealer — planning to enter Korea directly (showroom / exhibition)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>If you have existing Korean dealer(s), please provide details</label>
+          <input type="text" placeholder="Dealer name, city, contract year, etc.">
+        </div>
+        <div class="form-group">
+          <label>Preferred dealer requirements (if applicable)</label>
+          <textarea placeholder="e.g., minimum order volume, showroom requirement, exclusive territory, etc." style="min-height:80px;"></textarea>
+        </div>
+      </div>
+
+      <!-- SECTION 6: SERVICES -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">6</span> Services of Interest</h3>
+        <p class="form-hint">Select the ARCHINODE services you'd like to explore.</p>
+
+        <div class="services-checkbox-list">
+          <label class="svc-checkbox">
+            <input type="checkbox" name="services" value="listing" checked>
+            <span class="svc-check-mark"></span>
+            <span><strong>Brand Listing</strong> — Profile on ARCHINODE platform (free for 2026)</span>
+          </label>
+          <label class="svc-checkbox">
+            <input type="checkbox" name="services" value="screening">
+            <span class="svc-check-mark"></span>
+            <span><strong>Dealer Screening</strong> — Verify potential Korean dealers on your behalf</span>
+          </label>
+          <label class="svc-checkbox">
+            <input type="checkbox" name="services" value="monitoring">
+            <span class="svc-check-mark"></span>
+            <span><strong>Dealer Monitoring</strong> — Ongoing compliance checks for existing dealers</span>
+          </label>
+          <label class="svc-checkbox">
+            <input type="checkbox" name="services" value="exhibition">
+            <span class="svc-check-mark"></span>
+            <span><strong>Exhibition Support</strong> — Full-service trade show support in Korea</span>
+          </label>
+          <label class="svc-checkbox">
+            <input type="checkbox" name="services" value="awards">
+            <span class="svc-check-mark"></span>
+            <span><strong>ARCHINODE Awards</strong> — Annual product recognition program</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- SECTION 7: ADDITIONAL -->
+      <div class="form-section">
+        <h3 class="form-section-title"><span class="form-section-num">7</span> Additional Information</h3>
+
+        <div class="form-group">
+          <label>Notable certifications, awards, or project references</label>
+          <input type="text" placeholder="e.g., Red Dot Award 2025, iF Design Award, etc.">
+        </div>
+        <div class="form-group">
+          <label>Existing presence in other Asian markets</label>
+          <input type="text" placeholder="e.g., Dealers in Japan (Tokyo), China (Shanghai)">
+        </div>
+        <div class="form-group">
+          <label>Anything else you'd like us to know?</label>
+          <textarea placeholder="Additional comments, special requirements, or questions..." style="min-height:80px;"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="form-submit">Submit Application <i class="fas fa-arrow-right"></i></button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p>Connecting global architecture &amp; design brands with the Korean market.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="categories/furniture.html">Furniture</a></li>
+          <li><a href="categories/bathroom.html">Bathroom</a></li>
+          <li><a href="categories/outdoor.html">Outdoor</a></li>
+          <li><a href="categories/lighting.html">Lighting</a></li>
+          <li><a href="categories/kitchen.html">Kitchen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More Categories</h4>
+        <ul>
+          <li><a href="categories/office.html">Office</a></li>
+          <li><a href="categories/finishes.html">Finishes</a></li>
+          <li><a href="categories/wellness.html">Wellness</a></li>
+          <li><a href="categories/decor.html">Decor</a></li>
+          <li><a href="categories/construction.html">Construction</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="list-your-brand.html">Brand Listing</a></li>
+          <li><a href="#">Dealership Screening</a></li>
+          <li><a href="#">Exhibition Support</a></li>
+          <li><a href="#">ARCHINODE Awards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About ARCHINODE</a></li>
+          <li><a href="magazine.html">Magazine</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+const header = document.getElementById('header');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
+function toggleSearch() {
+  const o = document.getElementById('searchOverlay');
+  o.classList.toggle('active');
+  if (o.classList.contains('active')) o.querySelector('input').focus();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('searchOverlay').classList.remove('active'); });
+
+function toggleCatMenu() {
+  const menu = document.getElementById('catMenu');
+  menu.classList.toggle('active');
+}
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('catMenu').classList.remove('active');
+  }
+});
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
+const fadeEls = document.querySelectorAll('.fade-in');
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+fadeEls.forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>

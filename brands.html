@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands — 브랜드 디렉토리 | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="list-your-brand.html">Learn more &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
+            <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="categories/lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="categories/office.html"><span>Office</span><small>오피스</small></a>
+            <a href="categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="categories/decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="brands.html" class="active-nav">Brands</a>
+      <a href="magazine.html">Magazine</a>
+      <a href="about.html">About</a>
+      <a href="list-your-brand.html" class="nav-cta">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <img class="page-hero-bg" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&q=80" alt="Brands">
+  <div class="page-hero-content">
+    <div class="page-hero-inner">
+      <span class="page-hero-tag">Brand Directory</span>
+      <h1>Brands</h1>
+      <p>180+ global architecture &amp; design brands, designers, and studios — curated for the Korean market.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-list">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Brands (브랜드)</span>
+    </div>
+  </div>
+</div>
+
+<!-- BRAND SEARCH -->
+<section class="brand-search-section">
+  <div class="container">
+    <div class="brand-search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="brandSearch" placeholder="Search brands..." oninput="filterBrands()">
+      <span class="brand-count" id="brandCount">180 brands</span>
+    </div>
+  </div>
+</section>
+
+<!-- ALPHABET NAV -->
+<section class="alpha-nav-section">
+  <div class="container">
+    <div class="alpha-nav" id="alphaNav"></div>
+  </div>
+</section>
+<!-- BRANDS BY CATEGORY -->
+<section class="brands-directory">
+  <div class="container">
+    <div class="brand-category-block fade-in" id="cat-furniture">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-couch"></i>
+          <h2>Furniture <span class="brand-cat-ko">가구</span></h2>
+        </div>
+        <a href="categories/furniture.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="arper"><span>Arper</span></div>
+        <div class="brand-tile fade-in" data-brand="b&b italia"><span>B&B Italia</span></div>
+        <div class="brand-tile fade-in" data-brand="cappellini"><span>Cappellini</span></div>
+        <div class="brand-tile fade-in" data-brand="cassina"><span>Cassina</span></div>
+        <div class="brand-tile fade-in" data-brand="flexform"><span>Flexform</span></div>
+        <div class="brand-tile fade-in" data-brand="fritz hansen"><span>Fritz Hansen</span></div>
+        <div class="brand-tile fade-in" data-brand="hay"><span>Hay</span></div>
+        <div class="brand-tile fade-in" data-brand="kartell"><span>Kartell</span></div>
+        <div class="brand-tile fade-in" data-brand="knoll"><span>Knoll</span></div>
+        <div class="brand-tile fade-in" data-brand="lema"><span>Lema</span></div>
+        <div class="brand-tile fade-in" data-brand="mdf italia"><span>MDF Italia</span></div>
+        <div class="brand-tile fade-in" data-brand="minotti"><span>Minotti</span></div>
+        <div class="brand-tile fade-in" data-brand="molteni&c"><span>Molteni&C</span></div>
+        <div class="brand-tile fade-in" data-brand="moroso"><span>Moroso</span></div>
+        <div class="brand-tile fade-in" data-brand="poliform"><span>Poliform</span></div>
+        <div class="brand-tile fade-in" data-brand="porro"><span>Porro</span></div>
+        <div class="brand-tile fade-in" data-brand="vitra"><span>Vitra</span></div>
+        <div class="brand-tile fade-in" data-brand="zanotta"><span>Zanotta</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-bathroom">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-bath"></i>
+          <h2>Bathroom <span class="brand-cat-ko">욕실</span></h2>
+        </div>
+        <a href="categories/bathroom.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="agape"><span>Agape</span></div>
+        <div class="brand-tile fade-in" data-brand="antoniolupi"><span>Antoniolupi</span></div>
+        <div class="brand-tile fade-in" data-brand="boffi"><span>Boffi</span></div>
+        <div class="brand-tile fade-in" data-brand="cea design"><span>CEA Design</span></div>
+        <div class="brand-tile fade-in" data-brand="dornbracht"><span>Dornbracht</span></div>
+        <div class="brand-tile fade-in" data-brand="duravit"><span>Duravit</span></div>
+        <div class="brand-tile fade-in" data-brand="ex.t"><span>Ex.t</span></div>
+        <div class="brand-tile fade-in" data-brand="falper"><span>Falper</span></div>
+        <div class="brand-tile fade-in" data-brand="fantini"><span>Fantini</span></div>
+        <div class="brand-tile fade-in" data-brand="flaminia"><span>Flaminia</span></div>
+        <div class="brand-tile fade-in" data-brand="hansgrohe"><span>Hansgrohe</span></div>
+        <div class="brand-tile fade-in" data-brand="laufen"><span>Laufen</span></div>
+        <div class="brand-tile fade-in" data-brand="nic design"><span>NIC Design</span></div>
+        <div class="brand-tile fade-in" data-brand="rexa design"><span>Rexa Design</span></div>
+        <div class="brand-tile fade-in" data-brand="roca"><span>Roca</span></div>
+        <div class="brand-tile fade-in" data-brand="salvatori"><span>Salvatori</span></div>
+        <div class="brand-tile fade-in" data-brand="villeroy & boch"><span>Villeroy & Boch</span></div>
+        <div class="brand-tile fade-in" data-brand="zucchetti"><span>Zucchetti</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-outdoor">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-tree"></i>
+          <h2>Outdoor <span class="brand-cat-ko">아웃도어</span></h2>
+        </div>
+        <a href="categories/outdoor.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="corradi"><span>Corradi</span></div>
+        <div class="brand-tile fade-in" data-brand="dedon"><span>Dedon</span></div>
+        <div class="brand-tile fade-in" data-brand="ecosmart fire"><span>EcoSmart Fire</span></div>
+        <div class="brand-tile fade-in" data-brand="emu"><span>Emu</span></div>
+        <div class="brand-tile fade-in" data-brand="ethimo"><span>Ethimo</span></div>
+        <div class="brand-tile fade-in" data-brand="extremis"><span>Extremis</span></div>
+        <div class="brand-tile fade-in" data-brand="fermob"><span>Fermob</span></div>
+        <div class="brand-tile fade-in" data-brand="gandia blasco"><span>Gandia Blasco</span></div>
+        <div class="brand-tile fade-in" data-brand="gloster"><span>Gloster</span></div>
+        <div class="brand-tile fade-in" data-brand="kettal"><span>Kettal</span></div>
+        <div class="brand-tile fade-in" data-brand="manutti"><span>Manutti</span></div>
+        <div class="brand-tile fade-in" data-brand="paola lenti"><span>Paola Lenti</span></div>
+        <div class="brand-tile fade-in" data-brand="renson"><span>Renson</span></div>
+        <div class="brand-tile fade-in" data-brand="roda"><span>Roda</span></div>
+        <div class="brand-tile fade-in" data-brand="royal botania"><span>Royal Botania</span></div>
+        <div class="brand-tile fade-in" data-brand="talenti"><span>Talenti</span></div>
+        <div class="brand-tile fade-in" data-brand="tribu"><span>Tribu</span></div>
+        <div class="brand-tile fade-in" data-brand="vondom"><span>Vondom</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-lighting">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-lightbulb"></i>
+          <h2>Lighting <span class="brand-cat-ko">조명</span></h2>
+        </div>
+        <a href="categories/lighting.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="artemide"><span>Artemide</span></div>
+        <div class="brand-tile fade-in" data-brand="astep"><span>Astep</span></div>
+        <div class="brand-tile fade-in" data-brand="brokis"><span>Brokis</span></div>
+        <div class="brand-tile fade-in" data-brand="catellani & smith"><span>Catellani & Smith</span></div>
+        <div class="brand-tile fade-in" data-brand="dcw editions"><span>DCW Editions</span></div>
+        <div class="brand-tile fade-in" data-brand="davide groppi"><span>Davide Groppi</span></div>
+        <div class="brand-tile fade-in" data-brand="flos"><span>Flos</span></div>
+        <div class="brand-tile fade-in" data-brand="fontana arte"><span>Fontana Arte</span></div>
+        <div class="brand-tile fade-in" data-brand="foscarini"><span>Foscarini</span></div>
+        <div class="brand-tile fade-in" data-brand="ingo maurer"><span>Ingo Maurer</span></div>
+        <div class="brand-tile fade-in" data-brand="louis poulsen"><span>Louis Poulsen</span></div>
+        <div class="brand-tile fade-in" data-brand="luceplan"><span>Luceplan</span></div>
+        <div class="brand-tile fade-in" data-brand="marset"><span>Marset</span></div>
+        <div class="brand-tile fade-in" data-brand="nemo"><span>Nemo</span></div>
+        <div class="brand-tile fade-in" data-brand="oluce"><span>Oluce</span></div>
+        <div class="brand-tile fade-in" data-brand="santa & cole"><span>Santa & Cole</span></div>
+        <div class="brand-tile fade-in" data-brand="vibia"><span>Vibia</span></div>
+        <div class="brand-tile fade-in" data-brand="zafferano"><span>Zafferano</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-kitchen">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-utensils"></i>
+          <h2>Kitchen <span class="brand-cat-ko">주방</span></h2>
+        </div>
+        <a href="categories/kitchen.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="arclinea"><span>Arclinea</span></div>
+        <div class="brand-tile fade-in" data-brand="blanco"><span>Blanco</span></div>
+        <div class="brand-tile fade-in" data-brand="boffi"><span>Boffi</span></div>
+        <div class="brand-tile fade-in" data-brand="bulthaup"><span>Bulthaup</span></div>
+        <div class="brand-tile fade-in" data-brand="cesar"><span>Cesar</span></div>
+        <div class="brand-tile fade-in" data-brand="dada"><span>Dada</span></div>
+        <div class="brand-tile fade-in" data-brand="dornbracht"><span>Dornbracht</span></div>
+        <div class="brand-tile fade-in" data-brand="ernestomeda"><span>Ernestomeda</span></div>
+        <div class="brand-tile fade-in" data-brand="franke"><span>Franke</span></div>
+        <div class="brand-tile fade-in" data-brand="gaggenau"><span>Gaggenau</span></div>
+        <div class="brand-tile fade-in" data-brand="miele"><span>Miele</span></div>
+        <div class="brand-tile fade-in" data-brand="poggenpohl"><span>Poggenpohl</span></div>
+        <div class="brand-tile fade-in" data-brand="smeg"><span>Smeg</span></div>
+        <div class="brand-tile fade-in" data-brand="snaidero"><span>Snaidero</span></div>
+        <div class="brand-tile fade-in" data-brand="sub-zero"><span>Sub-Zero</span></div>
+        <div class="brand-tile fade-in" data-brand="valcucine"><span>Valcucine</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-office">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-building"></i>
+          <h2>Office <span class="brand-cat-ko">오피스</span></h2>
+        </div>
+        <a href="categories/office.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="ahrend"><span>Ahrend</span></div>
+        <div class="brand-tile fade-in" data-brand="arper"><span>Arper</span></div>
+        <div class="brand-tile fade-in" data-brand="bene"><span>Bene</span></div>
+        <div class="brand-tile fade-in" data-brand="brunner"><span>Brunner</span></div>
+        <div class="brand-tile fade-in" data-brand="fantoni"><span>Fantoni</span></div>
+        <div class="brand-tile fade-in" data-brand="hay"><span>Hay</span></div>
+        <div class="brand-tile fade-in" data-brand="herman miller"><span>Herman Miller</span></div>
+        <div class="brand-tile fade-in" data-brand="humanscale"><span>Humanscale</span></div>
+        <div class="brand-tile fade-in" data-brand="lapalma"><span>Lapalma</span></div>
+        <div class="brand-tile fade-in" data-brand="sedus"><span>Sedus</span></div>
+        <div class="brand-tile fade-in" data-brand="steelcase"><span>Steelcase</span></div>
+        <div class="brand-tile fade-in" data-brand="tecno"><span>Tecno</span></div>
+        <div class="brand-tile fade-in" data-brand="usm"><span>USM</span></div>
+        <div class="brand-tile fade-in" data-brand="unifor"><span>Unifor</span></div>
+        <div class="brand-tile fade-in" data-brand="vitra"><span>Vitra</span></div>
+        <div class="brand-tile fade-in" data-brand="wilkhahn"><span>Wilkhahn</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-finishes">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-layer-group"></i>
+          <h2>Finishes <span class="brand-cat-ko">마감재</span></h2>
+        </div>
+        <a href="categories/finishes.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="41zero42"><span>41zero42</span></div>
+        <div class="brand-tile fade-in" data-brand="abk"><span>ABK</span></div>
+        <div class="brand-tile fade-in" data-brand="ariostea"><span>Ariostea</span></div>
+        <div class="brand-tile fade-in" data-brand="bisazza"><span>Bisazza</span></div>
+        <div class="brand-tile fade-in" data-brand="caesarstone"><span>Caesarstone</span></div>
+        <div class="brand-tile fade-in" data-brand="cosentino"><span>Cosentino</span></div>
+        <div class="brand-tile fade-in" data-brand="cotto d'este"><span>Cotto d'Este</span></div>
+        <div class="brand-tile fade-in" data-brand="florim"><span>Florim</span></div>
+        <div class="brand-tile fade-in" data-brand="iris ceramica"><span>Iris Ceramica</span></div>
+        <div class="brand-tile fade-in" data-brand="lea ceramiche"><span>Lea Ceramiche</span></div>
+        <div class="brand-tile fade-in" data-brand="marazzi"><span>Marazzi</span></div>
+        <div class="brand-tile fade-in" data-brand="mutina"><span>Mutina</span></div>
+        <div class="brand-tile fade-in" data-brand="porcelanosa"><span>Porcelanosa</span></div>
+        <div class="brand-tile fade-in" data-brand="salvatori"><span>Salvatori</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-wellness">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-spa"></i>
+          <h2>Wellness <span class="brand-cat-ko">웰니스</span></h2>
+        </div>
+        <a href="categories/wellness.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="albatros"><span>Albatros</span></div>
+        <div class="brand-tile fade-in" data-brand="bette"><span>Bette</span></div>
+        <div class="brand-tile fade-in" data-brand="duravit"><span>Duravit</span></div>
+        <div class="brand-tile fade-in" data-brand="effe"><span>Effe</span></div>
+        <div class="brand-tile fade-in" data-brand="effegibi"><span>Effegibi</span></div>
+        <div class="brand-tile fade-in" data-brand="glass 1989"><span>Glass 1989</span></div>
+        <div class="brand-tile fade-in" data-brand="jacuzzi"><span>Jacuzzi</span></div>
+        <div class="brand-tile fade-in" data-brand="kaldewei"><span>Kaldewei</span></div>
+        <div class="brand-tile fade-in" data-brand="klafs"><span>Klafs</span></div>
+        <div class="brand-tile fade-in" data-brand="laufen"><span>Laufen</span></div>
+        <div class="brand-tile fade-in" data-brand="starpool"><span>Starpool</span></div>
+        <div class="brand-tile fade-in" data-brand="villeroy & boch"><span>Villeroy & Boch</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-decor">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-paint-brush"></i>
+          <h2>Decor <span class="brand-cat-ko">데코</span></h2>
+        </div>
+        <a href="categories/decor.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="alessi"><span>Alessi</span></div>
+        <div class="brand-tile fade-in" data-brand="baccarat"><span>Baccarat</span></div>
+        <div class="brand-tile fade-in" data-brand="barovier & toso"><span>Barovier & Toso</span></div>
+        <div class="brand-tile fade-in" data-brand="bitossi"><span>Bitossi</span></div>
+        <div class="brand-tile fade-in" data-brand="georg jensen"><span>Georg Jensen</span></div>
+        <div class="brand-tile fade-in" data-brand="iittala"><span>Iittala</span></div>
+        <div class="brand-tile fade-in" data-brand="kartell"><span>Kartell</span></div>
+        <div class="brand-tile fade-in" data-brand="lalique"><span>Lalique</span></div>
+        <div class="brand-tile fade-in" data-brand="menu"><span>Menu</span></div>
+        <div class="brand-tile fade-in" data-brand="muuto"><span>Muuto</span></div>
+        <div class="brand-tile fade-in" data-brand="normann copenhagen"><span>Normann Copenhagen</span></div>
+        <div class="brand-tile fade-in" data-brand="seletti"><span>Seletti</span></div>
+        <div class="brand-tile fade-in" data-brand="tom dixon"><span>Tom Dixon</span></div>
+        <div class="brand-tile fade-in" data-brand="venini"><span>Venini</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-construction">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-hard-hat"></i>
+          <h2>Construction <span class="brand-cat-ko">건설</span></h2>
+        </div>
+        <a href="categories/construction.html" class="section-link">View Category <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="aluk"><span>Aluk</span></div>
+        <div class="brand-tile fade-in" data-brand="dorma"><span>Dorma</span></div>
+        <div class="brand-tile fade-in" data-brand="geze"><span>GEZE</span></div>
+        <div class="brand-tile fade-in" data-brand="glas italia"><span>Glas Italia</span></div>
+        <div class="brand-tile fade-in" data-brand="hörmann"><span>Hörmann</span></div>
+        <div class="brand-tile fade-in" data-brand="laminam"><span>Laminam</span></div>
+        <div class="brand-tile fade-in" data-brand="lualdi"><span>Lualdi</span></div>
+        <div class="brand-tile fade-in" data-brand="metra"><span>Metra</span></div>
+        <div class="brand-tile fade-in" data-brand="oikos"><span>Oikos</span></div>
+        <div class="brand-tile fade-in" data-brand="reynaers"><span>Reynaers</span></div>
+        <div class="brand-tile fade-in" data-brand="rimadesio"><span>Rimadesio</span></div>
+        <div class="brand-tile fade-in" data-brand="schüco"><span>Schüco</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-designers">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-pen-nib"></i>
+          <h2>Designers <span class="brand-cat-ko">디자이너</span></h2>
+        </div>
+        <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="arne jacobsen"><span>Arne Jacobsen</span></div>
+        <div class="brand-tile fade-in" data-brand="patricia urquiola"><span>Patricia Urquiola</span></div>
+        <div class="brand-tile fade-in" data-brand="philippe starck"><span>Philippe Starck</span></div>
+        <div class="brand-tile fade-in" data-brand="jasper morrison"><span>Jasper Morrison</span></div>
+        <div class="brand-tile fade-in" data-brand="ronan & erwan bouroullec"><span>Ronan & Erwan Bouroullec</span></div>
+        <div class="brand-tile fade-in" data-brand="piero lissoni"><span>Piero Lissoni</span></div>
+        <div class="brand-tile fade-in" data-brand="antonio citterio"><span>Antonio Citterio</span></div>
+        <div class="brand-tile fade-in" data-brand="marcel wanders"><span>Marcel Wanders</span></div>
+        <div class="brand-tile fade-in" data-brand="konstantin grcic"><span>Konstantin Grcic</span></div>
+        <div class="brand-tile fade-in" data-brand="jean-marie massaud"><span>Jean-Marie Massaud</span></div>
+        <div class="brand-tile fade-in" data-brand="naoto fukasawa"><span>Naoto Fukasawa</span></div>
+        <div class="brand-tile fade-in" data-brand="ross lovegrove"><span>Ross Lovegrove</span></div>
+      </div>
+    </div>
+
+    <div class="brand-category-block fade-in" id="cat-studios">
+      <div class="brand-cat-header">
+        <div class="brand-cat-title">
+          <i class="fas fa-compass-drafting"></i>
+          <h2>Studios <span class="brand-cat-ko">디자인 스튜디오</span></h2>
+        </div>
+        <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="brands-list brand-dir-list">
+        <div class="brand-tile fade-in" data-brand="nendo"><span>Nendo</span></div>
+        <div class="brand-tile fade-in" data-brand="studio copenhagen"><span>Studio Copenhagen</span></div>
+        <div class="brand-tile fade-in" data-brand="norm architects"><span>Norm Architects</span></div>
+        <div class="brand-tile fade-in" data-brand="gamfratesi"><span>GamFratesi</span></div>
+        <div class="brand-tile fade-in" data-brand="lissoni & partners"><span>Lissoni & Partners</span></div>
+        <div class="brand-tile fade-in" data-brand="barber osgerby"><span>Barber Osgerby</span></div>
+        <div class="brand-tile fade-in" data-brand="raw edges"><span>Raw Edges</span></div>
+        <div class="brand-tile fade-in" data-brand="formafantasma"><span>Formafantasma</span></div>
+        <div class="brand-tile fade-in" data-brand="snarkitecture"><span>Snarkitecture</span></div>
+        <div class="brand-tile fade-in" data-brand="space copenhagen"><span>Space Copenhagen</span></div>
+        <div class="brand-tile fade-in" data-brand="cecilie manz"><span>Cecilie Manz</span></div>
+        <div class="brand-tile fade-in" data-brand="studio mk27"><span>Studio MK27</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-listing">
+  <div class="container">
+    <h2 class="fade-in">List Your Brand<br>on ARCHINODE</h2>
+    <p class="fade-in">Join 180+ global brands already on our platform. Free listing through 2026.</p>
+    <a href="list-your-brand.html" class="cta-btn fade-in">Apply for Brand Listing <i class="fas fa-arrow-right"></i></a>
+    <div class="cta-free-tag fade-in">Free listing through December 2026</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p>Connecting global architecture &amp; design brands with the Korean market.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="categories/furniture.html">Furniture</a></li>
+          <li><a href="categories/bathroom.html">Bathroom</a></li>
+          <li><a href="categories/outdoor.html">Outdoor</a></li>
+          <li><a href="categories/lighting.html">Lighting</a></li>
+          <li><a href="categories/kitchen.html">Kitchen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More Categories</h4>
+        <ul>
+          <li><a href="categories/office.html">Office</a></li>
+          <li><a href="categories/finishes.html">Finishes</a></li>
+          <li><a href="categories/wellness.html">Wellness</a></li>
+          <li><a href="categories/decor.html">Decor</a></li>
+          <li><a href="categories/construction.html">Construction</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="list-your-brand.html">Brand Listing</a></li>
+          <li><a href="#">Dealership Screening</a></li>
+          <li><a href="#">Exhibition Support</a></li>
+          <li><a href="#">ARCHINODE Awards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About ARCHINODE</a></li>
+          <li><a href="magazine.html">Magazine</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+const header = document.getElementById('header');
+const scrollTopBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
+function toggleSearch() {
+  const o = document.getElementById('searchOverlay');
+  o.classList.toggle('active');
+  if (o.classList.contains('active')) o.querySelector('input').focus();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('searchOverlay').classList.remove('active'); });
+
+function toggleCatMenu() {
+  const menu = document.getElementById('catMenu');
+  menu.classList.toggle('active');
+}
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('catMenu').classList.remove('active');
+  }
+});
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
+const fadeEls = document.querySelectorAll('.fade-in');
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+fadeEls.forEach(el => fadeObs.observe(el));
+</script>
+<script>
+// Brand search
+function filterBrands() {
+  const q = document.getElementById('brandSearch').value.toLowerCase();
+  const tiles = document.querySelectorAll('.brand-tile[data-brand]');
+  let count = 0;
+  tiles.forEach(t => {
+    const match = t.dataset.brand.includes(q);
+    t.style.display = match ? '' : 'none';
+    if (match) count++;
+  });
+  document.getElementById('brandCount').textContent = count + ' brand' + (count !== 1 ? 's' : '');
+  // Show/hide category blocks if no brands visible
+  document.querySelectorAll('.brand-category-block').forEach(block => {
+    const visible = block.querySelectorAll('.brand-tile[data-brand]:not([style*="display: none"])');
+    block.style.display = visible.length ? '' : 'none';
+  });
+}
+
+// Alphabet nav
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const alphaNav = document.getElementById('alphaNav');
+const allBrandNames = [...document.querySelectorAll('.brand-tile[data-brand]')].map(t => t.dataset.brand);
+const usedLetters = new Set(allBrandNames.map(b => b[0].toUpperCase()));
+letters.forEach(l => {
+  const btn = document.createElement('button');
+  btn.textContent = l;
+  btn.className = 'alpha-btn' + (usedLetters.has(l) ? ' active' : '');
+  btn.onclick = () => {
+    document.getElementById('brandSearch').value = l.toLowerCase();
+    // Show brands starting with letter
+    const tiles = document.querySelectorAll('.brand-tile[data-brand]');
+    let count = 0;
+    tiles.forEach(t => {
+      const match = t.dataset.brand.startsWith(l.toLowerCase());
+      t.style.display = match ? '' : 'none';
+      if (match) count++;
+    });
+    document.getElementById('brandCount').textContent = count + ' brand' + (count !== 1 ? 's' : '');
+    document.querySelectorAll('.brand-category-block').forEach(block => {
+      const visible = block.querySelectorAll('.brand-tile[data-brand]:not([style*="display: none"])');
+      block.style.display = visible.length ? '' : 'none';
+    });
+  };
+  alphaNav.appendChild(btn);
+});
+// Add "All" button
+const allBtn = document.createElement('button');
+allBtn.textContent = 'All';
+allBtn.className = 'alpha-btn active';
+allBtn.style.fontWeight = '700';
+allBtn.onclick = () => {
+  document.getElementById('brandSearch').value = '';
+  filterBrands();
+};
+alphaNav.prepend(allBtn);
+</script>
+</body>
+</html>
