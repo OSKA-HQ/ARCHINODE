@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Brand | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* ===== BRAND PAGE STYLES ===== */
+
+/* Loading State */
+.bp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+.bp-loading .spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--black);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.bp-loading p { font-size: 0.9rem; color: var(--gray-500); }
+
+/* Error State */
+.bp-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 16px;
+}
+.bp-error i { font-size: 3rem; color: var(--gray-300); }
+.bp-error h2 { font-size: 1.8rem; font-weight: 800; color: var(--black); }
+.bp-error p { font-size: 0.95rem; color: var(--gray-500); max-width: 400px; }
+.bp-error a {
+  background: var(--black); color: var(--white);
+  padding: 12px 24px; font-size: 0.85rem; font-weight: 600;
+  border-radius: 3px; text-decoration: none; margin-top: 8px;
+  transition: background 0.2s;
+}
+.bp-error a:hover { background: var(--gray-800); }
+
+/* Pending State */
+.bp-pending-badge {
+  display: inline-block;
+  background: #FFF3CD; color: #856404;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+/* Hero Section */
+.bp-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 100px 0 80px 0;
+}
+@media (max-width: 768px) {
+  .bp-hero { grid-template-columns: 1fr; gap: 40px; padding: 60px 0 40px 0; }
+}
+.bp-hero-image {
+  width: 100%; aspect-ratio: 3/4; overflow: hidden;
+  border-radius: 4px; background: var(--gray-100);
+  display: flex; align-items: center; justify-content: center;
+}
+.bp-hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.bp-hero-image .placeholder-logo {
+  font-size: 4rem; font-weight: 900; color: var(--gray-300);
+  letter-spacing: -0.02em;
+}
+.bp-hero-content h1 {
+  font-size: 3.5rem; font-weight: 900; letter-spacing: -0.02em;
+  line-height: 1.1; margin-bottom: 12px; color: var(--black);
+}
+@media (max-width: 768px) { .bp-hero-content h1 { font-size: 2.5rem; } }
+.bp-hero-badge {
+  display: inline-block; background: var(--gray-100); color: var(--gray-700);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 6px 12px; border-radius: 3px; margin-bottom: 20px;
+}
+.bp-hero-subtitle {
+  font-size: 1.1rem; font-weight: 400; color: var(--gray-600);
+  line-height: 1.8; margin-bottom: 24px; max-width: 95%;
+}
+.bp-hero-meta { font-size: 0.9rem; color: var(--gray-500); line-height: 1.8; margin-bottom: 32px; }
+.bp-hero-meta strong { font-weight: 600; color: var(--gray-700); }
+.bp-cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+.bp-cta-group .btn {
+  padding: 12px 24px; font-size: 0.85rem; font-weight: 600;
+  border-radius: 3px; transition: all 0.2s; cursor: pointer;
+  border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.bp-cta-group .btn-primary { background: var(--black); color: var(--white); }
+.bp-cta-group .btn-primary:hover { background: var(--gray-800); }
+.bp-cta-group .btn-secondary { background: var(--gray-100); color: var(--black); border: 1px solid var(--gray-200); }
+.bp-cta-group .btn-secondary:hover { background: var(--white); border-color: var(--black); }
+
+/* Info Bar */
+.bp-info-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+  padding: 40px; background: var(--gray-50); border-radius: 4px; margin: 60px 0;
+}
+@media (max-width: 1024px) { .bp-info-bar { grid-template-columns: repeat(2, 1fr); gap: 30px; padding: 30px; } }
+@media (max-width: 768px) { .bp-info-bar { grid-template-columns: 1fr; gap: 20px; padding: 24px; margin: 40px 0; } }
+.bp-info-item { display: flex; flex-direction: column; }
+.bp-info-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+.bp-info-value { font-size: 1.1rem; font-weight: 600; color: var(--black); line-height: 1.5; }
+
+/* Description Section */
+.bp-description {
+  padding: 80px 0; border-top: 1px solid var(--gray-200);
+}
+.bp-description h2 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 24px; color: var(--black); }
+.bp-description p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.8; margin-bottom: 16px; }
+
+/* Products Grid */
+.bp-products-section { padding: 80px 0; border-top: 1px solid var(--gray-200); }
+.bp-section-header { margin-bottom: 40px; }
+.bp-section-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; color: var(--black); margin-bottom: 12px; }
+.bp-section-desc { font-size: 0.95rem; color: var(--gray-500); }
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+@media (max-width: 1024px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
+.product-card {
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: 4px;
+  overflow: hidden; transition: all 0.3s; display: flex; flex-direction: column;
+}
+.product-card:hover { border-color: var(--black); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.product-card-image { width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--gray-100); }
+.product-card-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.3s; }
+.product-card:hover .product-card-image img { transform: scale(1.05); }
+.product-card-content { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+.product-card-brand { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+.product-card-name { font-size: 0.95rem; font-weight: 600; color: var(--black); margin-bottom: 12px; line-height: 1.4; }
+.product-card-specs { font-size: 0.8rem; color: var(--gray-500); line-height: 1.6; }
+
+/* Empty State */
+.bp-empty { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+.bp-empty i { font-size: 2.5rem; margin-bottom: 16px; }
+.bp-empty p { font-size: 0.9rem; }
+
+/* CTA Section */
+.bp-cta-section { padding: 80px 0; border-top: 1px solid var(--gray-200); text-align: center; }
+.bp-cta-section h2 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 16px; color: var(--black); }
+.bp-cta-section p { font-size: 0.95rem; color: var(--gray-600); margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.bp-cta-button {
+  background: var(--black); color: var(--white);
+  padding: 14px 32px; font-size: 0.9rem; font-weight: 600;
+  border-radius: 3px; transition: all 0.2s; display: inline-block; text-decoration: none;
+}
+.bp-cta-button:hover { background: var(--gray-800); }
+
+.fade-in { opacity: 1; animation: fadeIn 0.6s ease-in; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="../list-your-brand.html">Learn more &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="../index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="../categories/furniture.html"><span>Furniture</span><small>가구</small></a>
+            <a href="../categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="../categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="../categories/lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="../categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="../categories/office.html"><span>Office</span><small>오피스</small></a>
+            <a href="../categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="../categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="../categories/decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="../categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="../brands.html" class="active-nav">Brands</a>
+      <a href="../magazine.html">Magazine</a>
+      <a href="../about.html">About</a>
+      <a href="../list-your-brand.html" class="nav-cta">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <a href="../brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-list">
+      <a href="../index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="../brands.html">Brands</a>
+      <span class="sep">/</span>
+      <span class="current" id="breadcrumbName">Loading...</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT (동적으로 채워짐) -->
+<div id="brandContent">
+  <!-- Loading State -->
+  <div class="bp-loading" id="loadingState">
+    <div class="spinner"></div>
+    <p>Loading brand information...</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div>
+      <h4>ARCHINODE</h4>
+      <ul>
+        <li><a href="../about.html">About Us</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../list-your-brand.html">List Your Brand</a></li>
+        <li><a href="../for-brands.html">For Brands</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../brands.html">All Brands</a></li>
+        <li><a href="../magazine.html">Magazine</a></li>
+        <li><a href="../categories/furniture.html">Furniture</a></li>
+        <li><a href="../categories/bathroom.html">Bathroom</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="../terms.html">Terms of Service</a></li>
+        <li><a href="../privacy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 ARCHINODE by VIVIDELIVIBE. All rights reserved.
+  </div>
+</footer>
+
+<script src="../firebase-config.js"></script>
+<script>
+// ── URL에서 브랜드 slug 가져오기 ──
+const params = new URLSearchParams(window.location.search);
+const brandSlug = params.get('id');
+
+const contentDiv = document.getElementById('brandContent');
+const loadingDiv = document.getElementById('loadingState');
+
+// ── 브랜드 데이터 로드 ──
+async function loadBrand() {
+    if (!brandSlug) {
+        showError('브랜드를 찾을 수 없습니다', 'URL에 브랜드 ID가 없습니다.');
+        return;
+    }
+
+    try {
+        // slug로 브랜드 검색
+        const snapshot = await db.collection('brands')
+            .where('slug', '==', brandSlug)
+            .limit(1)
+            .get();
+
+        if (snapshot.empty) {
+            showError('브랜드를 찾을 수 없습니다', '요청하신 브랜드 페이지가 존재하지 않습니다.');
+            return;
+        }
+
+        const doc = snapshot.docs[0];
+        const brand = doc.data();
+        const brandId = doc.id;
+
+        // 승인되지 않은 브랜드 체크
+        if (brand.status !== 'approved') {
+            showError('아직 검토 중인 브랜드입니다', '이 브랜드는 현재 ARCHINODE 팀의 검토를 기다리고 있습니다. 승인 후 페이지가 공개됩니다.');
+            return;
+        }
+
+        // 페이지 타이틀 업데이트
+        document.getElementById('pageTitle').textContent = brand.brandName + ' | ARCHINODE';
+        document.getElementById('breadcrumbName').textContent = brand.brandName;
+
+        // 승인된 제품 가져오기
+        const productsSnap = await db.collection('brands').doc(brandId)
+            .collection('products')
+            .where('status', '==', 'approved')
+            .get();
+
+        const products = [];
+        productsSnap.forEach(p => products.push(p.data()));
+
+        // 페이지 렌더링
+        renderBrand(brand, products);
+
+    } catch (error) {
+        console.error('Error loading brand:', error);
+        showError('오류가 발생했습니다', '브랜드 정보를 불러오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+}
+
+// ── 브랜드 페이지 렌더링 ──
+function renderBrand(brand, products) {
+    const logoHtml = brand.logoUrl
+        ? `<img src="${brand.logoUrl}" alt="${brand.brandName}">`
+        : `<span class="placeholder-logo">${brand.brandName.charAt(0)}</span>`;
+
+    const categoryLabel = brand.category || 'Brand';
+    const description = brand.description || '';
+    const tagline = brand.tagline || '';
+    const country = brand.country || '';
+    const founded = brand.founded || '';
+    const website = brand.website || '';
+    const contactEmail = brand.contactEmail || brand.email || '';
+
+    // Products HTML
+    let productsHtml = '';
+    if (products.length > 0) {
+        const productCards = products.map(p => `
+            <div class="product-card fade-in">
+                <div class="product-card-image">
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-300);font-size:2rem;"><i class="fas fa-cube"></i></div>'}
+                </div>
+                <div class="product-card-content">
+                    <span class="product-card-brand">${brand.brandName}</span>
+                    <h3 class="product-card-name">${p.name || 'Untitled Product'}</h3>
+                    ${p.materials ? `<p class="product-card-specs"><strong>Materials:</strong> ${p.materials}</p>` : ''}
+                    ${p.dimensions ? `<p class="product-card-specs"><strong>Dimensions:</strong> ${p.dimensions}</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+
+        productsHtml = `
+        <section class="bp-products-section">
+            <div class="bp-section-header fade-in">
+                <h2 class="bp-section-title">Products</h2>
+                <p class="bp-section-desc">${brand.brandName}의 제품 라인업</p>
+            </div>
+            <div class="products-grid">${productCards}</div>
+        </section>`;
+    } else {
+        productsHtml = `
+        <section class="bp-products-section">
+            <div class="bp-section-header fade-in">
+                <h2 class="bp-section-title">Products</h2>
+                <p class="bp-section-desc">${brand.brandName}의 제품 라인업</p>
+            </div>
+            <div class="bp-empty">
+                <i class="fas fa-box-open"></i>
+                <p>아직 등록된 제품이 없습니다. 곧 업데이트될 예정입니다.</p>
+            </div>
+        </section>`;
+    }
+
+    contentDiv.innerHTML = `
+    <!-- HERO SECTION -->
+    <section class="bp-hero">
+        <div class="container" style="display: contents;">
+            <div class="bp-hero-image fade-in">
+                ${logoHtml}
+            </div>
+            <div class="bp-hero-content fade-in">
+                <span class="bp-hero-badge">${categoryLabel}</span>
+                <h1>${brand.brandName}</h1>
+                ${tagline ? `<p class="bp-hero-subtitle">${tagline}</p>` : ''}
+                ${description && !tagline ? `<p class="bp-hero-subtitle">${description.substring(0, 200)}${description.length > 200 ? '...' : ''}</p>` : ''}
+                <div class="bp-hero-meta">
+                    ${country ? `<strong>Country:</strong> ${country}<br>` : ''}
+                    ${founded ? `<strong>Founded:</strong> ${founded}<br>` : ''}
+                    ${website ? `<strong>Website:</strong> <a href="${website.startsWith('http') ? website : 'https://' + website}" target="_blank" style="color:var(--gray-700);">${website}</a>` : ''}
+                </div>
+                <div class="bp-cta-group">
+                    ${website ? `<a href="${website.startsWith('http') ? website : 'https://' + website}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>` : ''}
+                    <a href="../contact.html" class="btn btn-secondary"><i class="fas fa-envelope"></i> Contact</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- INFO BAR -->
+        <section class="bp-info-bar">
+            <div class="bp-info-item">
+                <span class="bp-info-label">Brand</span>
+                <span class="bp-info-value">${brand.brandName}</span>
+            </div>
+            <div class="bp-info-item">
+                <span class="bp-info-label">Country</span>
+                <span class="bp-info-value">${country || 'N/A'}</span>
+            </div>
+            <div class="bp-info-item">
+                <span class="bp-info-label">Category</span>
+                <span class="bp-info-value">${categoryLabel}</span>
+            </div>
+            <div class="bp-info-item">
+                <span class="bp-info-label">Products</span>
+                <span class="bp-info-value">${products.length} items</span>
+            </div>
+        </section>
+
+        <!-- DESCRIPTION -->
+        ${description ? `
+        <section class="bp-description">
+            <h2>About ${brand.brandName}</h2>
+            <p>${description}</p>
+        </section>` : ''}
+
+        <!-- PRODUCTS -->
+        ${productsHtml}
+
+        <!-- CTA -->
+        <section class="bp-cta-section">
+            <h2>Interested in ${brand.brandName}?</h2>
+            <p>${brand.brandName} 제품에 대한 문의나 한국 시장 유통에 관심이 있으시면 ARCHINODE 팀에게 연락해주세요.</p>
+            <a href="../contact.html" class="bp-cta-button"><i class="fas fa-envelope"></i> &nbsp;Contact ARCHINODE</a>
+        </section>
+    </div>`;
+}
+
+// ── 에러 표시 ──
+function showError(title, message) {
+    contentDiv.innerHTML = `
+    <div class="bp-error">
+        <i class="fas fa-building"></i>
+        <h2>${title}</h2>
+        <p>${message}</p>
+        <a href="../brands.html"><i class="fas fa-arrow-left"></i> &nbsp;All Brands</a>
+    </div>`;
+}
+
+// ── 실행 ──
+loadBrand();
+
+// ── 기존 사이트 JS (메뉴 등) ──
+function toggleCatMenu() {
+    const menu = document.getElementById('catMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+function toggleSearch() {
+    const overlay = document.getElementById('searchOverlay');
+    overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+}
+function toggleMobile() {
+    const nav = document.getElementById('mainNav');
+    nav.classList.toggle('mobile-active');
+}
+document.addEventListener('click', function(e) {
+    const dropdown = document.querySelector('.nav-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        document.getElementById('catMenu').style.display = 'none';
+    }
+});
+</script>
+</body>
+</html>

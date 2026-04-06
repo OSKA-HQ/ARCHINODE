@@ -353,12 +353,14 @@
 <!-- Firebase -->
 <script src="firebase-config.js"></script>
 <script>
-// ── 임시 비밀번호 생성 ──
-function generatePassword(len = 10) {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
-    let pw = '';
-    for (let i = 0; i < len; i++) pw += chars.charAt(Math.floor(Math.random() * chars.length));
-    return pw;
+// ── 임시 비밀번호 생성 (브랜드명 + 가입일자 YYMMDD) ──
+function generatePassword(brandName) {
+    const now = new Date();
+    const yy = String(now.getFullYear()).slice(-2);
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const slug = brandName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return slug + yy + mm + dd;
 }
 
 // ── 브랜드 슬러그 생성 ──
@@ -381,7 +383,7 @@ form.addEventListener('submit', async function(e) {
 
     const email = document.getElementById('email').value.trim();
     const brandName = document.getElementById('brandName').value.trim();
-    const tempPassword = generatePassword();
+    const tempPassword = generatePassword(brandName);
     const slug = slugify(brandName);
 
     try {

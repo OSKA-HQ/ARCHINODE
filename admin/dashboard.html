@@ -245,6 +245,7 @@ async function loadBrands() {
                         <button class="act-btn act-reject" onclick="updateBrand('${doc.id}','rejected')">Reject</button>
                     ` : `
                         <button class="act-btn act-view" onclick="viewBrand('${doc.id}')">View</button>
+                        ${b.status === 'approved' && b.slug ? `<a class="act-btn" href="../brands/view.html?id=${b.slug}" target="_blank" style="text-decoration:none;background:#e0f2fe;color:#0369a1;">Page</a>` : ''}
                     `}
                 </td>
             </tr>`;

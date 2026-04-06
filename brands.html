@@ -13,6 +13,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* Registered Brands Section */
+.registered-brands-section { padding: 60px 0 20px; }
+.registered-brands-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+}
+.registered-brands-header h2 {
+  font-size: 1.6rem; font-weight: 800; color: var(--black);
+  letter-spacing: -0.01em;
+}
+.registered-brands-header h2 i { color: #C8A96E; margin-right: 8px; }
+.registered-brands-header .reg-count {
+  font-size: 0.75rem; font-weight: 600; color: var(--gray-500);
+  background: var(--gray-100); padding: 4px 12px; border-radius: 20px;
+}
+.registered-brands-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+@media (max-width: 1024px) { .registered-brands-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .registered-brands-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .registered-brands-grid { grid-template-columns: 1fr; } }
+.reg-brand-card {
+  background: var(--white); border: 2px solid var(--gray-200); border-radius: 6px;
+  padding: 28px 20px; text-align: center; transition: all 0.3s;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  text-decoration: none; cursor: pointer; position: relative;
+}
+.reg-brand-card:hover {
+  border-color: #C8A96E; box-shadow: 0 8px 24px rgba(200,169,110,0.12);
+  transform: translateY(-3px);
+}
+.reg-brand-card .reg-logo {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--gray-100);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; font-weight: 800; color: var(--gray-400);
+}
+.reg-brand-card .reg-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.reg-brand-card .reg-name { font-size: 0.95rem; font-weight: 700; color: var(--black); }
+.reg-brand-card .reg-meta { font-size: 0.75rem; color: var(--gray-500); }
+.reg-brand-card .reg-badge {
+  position: absolute; top: 10px; right: 10px;
+  background: #C8A96E; color: white; font-size: 0.55rem;
+  font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.reg-brand-empty {
+  grid-column: 1 / -1; text-align: center; padding: 40px;
+  color: var(--gray-400); font-size: 0.9rem;
+}
+.reg-divider {
+  border: none; border-top: 2px solid var(--gray-200);
+  margin: 40px 0 0;
+}
+</style>
 </head>
 <body>
 
@@ -105,6 +164,20 @@
     <div class="alpha-nav" id="alphaNav"></div>
   </div>
 </section>
+<!-- REGISTERED BRANDS (Firestore 연동) -->
+<section class="registered-brands-section">
+  <div class="container">
+    <div class="registered-brands-header">
+      <h2><i class="fas fa-verified"></i>ARCHINODE Partners</h2>
+      <span class="reg-count" id="regBrandCount">Loading...</span>
+    </div>
+    <div class="registered-brands-grid" id="registeredBrandsGrid">
+      <div class="reg-brand-empty"><i class="fas fa-spinner fa-spin"></i> &nbsp;Loading registered brands...</div>
+    </div>
+    <hr class="reg-divider">
+  </div>
+</section>
+
 <!-- BRANDS BY CATEGORY -->
 <section class="brands-directory">
   <div class="container">
@@ -603,6 +676,62 @@ allBtn.onclick = () => {
   filterBrands();
 };
 alphaNav.prepend(allBtn);
+</script>
+
+<script src="firebase-config.js"></script>
+<script>
+// ── 승인된 브랜드 로드 (Firestore) ──
+async function loadRegisteredBrands() {
+    const grid = document.getElementById('registeredBrandsGrid');
+    const countEl = document.getElementById('regBrandCount');
+
+    try {
+        const snapshot = await db.collection('brands')
+            .where('status', '==', 'approved')
+            .orderBy('brandName')
+            .get();
+
+        if (snapshot.empty) {
+            grid.innerHTML = '<div class="reg-brand-empty">아직 등록된 파트너 브랜드가 없습니다.</div>';
+            countEl.textContent = '0 brands';
+            return;
+        }
+
+        let html = '';
+        let count = 0;
+
+        snapshot.forEach(doc => {
+            const b = doc.data();
+            count++;
+            const initial = b.brandName ? b.brandName.charAt(0).toUpperCase() : '?';
+            const logoHtml = b.logoUrl
+                ? `<img src="${b.logoUrl}" alt="${b.brandName}">`
+                : initial;
+            const link = b.slug ? `brands/view.html?id=${b.slug}` : '#';
+
+            html += `
+            <a href="${link}" class="reg-brand-card fade-in">
+                <span class="reg-badge">Partner</span>
+                <div class="reg-logo">${logoHtml}</div>
+                <div class="reg-name">${b.brandName}</div>
+                <div class="reg-meta">${b.country || ''} ${b.category ? '· ' + b.category : ''}</div>
+            </a>`;
+        });
+
+        grid.innerHTML = html;
+        countEl.textContent = count + ' brand' + (count !== 1 ? 's' : '');
+
+        // 새로 추가된 요소에 fade-in 적용
+        grid.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+    } catch (error) {
+        console.error('Error loading registered brands:', error);
+        grid.innerHTML = '<div class="reg-brand-empty">브랜드 정보를 불러올 수 없습니다.</div>';
+        countEl.textContent = '';
+    }
+}
+
+loadRegisteredBrands();
 </script>
 </body>
 </html>
