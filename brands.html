@@ -708,7 +708,6 @@ async function loadRegisteredBrands() {
     try {
         const snapshot = await db.collection('brands')
             .where('status', '==', 'approved')
-            .orderBy('brandName')
             .get();
 
         if (snapshot.empty) {
@@ -717,11 +716,15 @@ async function loadRegisteredBrands() {
             return;
         }
 
+        // 브랜드명 기준 정렬
+        const brands = [];
+        snapshot.forEach(doc => brands.push(doc.data()));
+        brands.sort((a, b) => (a.brandName || '').localeCompare(b.brandName || ''));
+
         let html = '';
         let count = 0;
 
-        snapshot.forEach(doc => {
-            const b = doc.data();
+        brands.forEach(b => {
             count++;
             const initial = b.brandName ? b.brandName.charAt(0).toUpperCase() : '?';
             const logoHtml = b.logoUrl
