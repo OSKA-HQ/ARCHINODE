@@ -264,6 +264,41 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
                     </div>
                 </div>
 
+                <hr style="border:none;border-top:1px solid #eee;margin:28px 0;">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:8px;color:#333;" data-en="Korean Dealer / Distributor" data-ko="한국 딜러 / 유통사"><i class="fas fa-handshake" style="margin-right:8px;color:#C8A96E;"></i>Korean Dealer / Distributor</h3>
+                <p style="font-size:0.8rem;color:#999;margin-bottom:16px;" data-en="If your brand has an official Korean dealer or distributor, add their info here. Korean architects and designers will see this on your brand page." data-ko="브랜드의 공식 한국 딜러 또는 유통사가 있다면 여기에 정보를 입력하세요. 한국 건축가와 디자이너가 브랜드 페이지에서 확인할 수 있습니다.">If your brand has an official Korean dealer or distributor, add their info here. Korean architects and designers will see this on your brand page.</p>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Dealer / Distributor Name" data-ko="딜러 / 유통사명">Dealer / Distributor Name</label>
+                        <input type="text" id="editDealerName" placeholder="e.g. Nexus Design">
+                    </div>
+                    <div class="field">
+                        <label data-en="Dealer Phone" data-ko="딜러 연락처">Dealer Phone</label>
+                        <input type="text" id="editDealerContact" placeholder="e.g. 02-1234-5678">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Dealer Email" data-ko="딜러 이메일">Dealer Email</label>
+                        <input type="email" id="editDealerEmail" placeholder="e.g. info@dealer.kr">
+                    </div>
+                    <div class="field">
+                        <label data-en="Dealer Website" data-ko="딜러 웹사이트">Dealer Website</label>
+                        <input type="url" id="editDealerWebsite" placeholder="https://dealer.kr">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Dealer Address" data-ko="딜러 주소">Dealer Address</label>
+                        <input type="text" id="editDealerAddress" placeholder="e.g. 서울특별시 강남구 논현로 123">
+                    </div>
+                    <div class="field">
+                        <label data-en="Showroom Location" data-ko="쇼룸 위치">Showroom Location</label>
+                        <input type="text" id="editDealerShowroom" placeholder="e.g. 서울 강남 쇼룸">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Save Changes</button>
                 <span class="save-msg" id="brandSaveMsg"><i class="fas fa-check"></i> Saved!</span>
             </form>
@@ -641,6 +676,15 @@ function populateDashboard() {
     document.getElementById('editPinterest').value = brandData.pinterest || '';
     document.getElementById('editYoutube').value = brandData.youtube || '';
 
+    // Korean dealer info
+    const dealer = brandData.koreanDealer || {};
+    document.getElementById('editDealerName').value = dealer.name || '';
+    document.getElementById('editDealerContact').value = dealer.contact || '';
+    document.getElementById('editDealerEmail').value = dealer.email || '';
+    document.getElementById('editDealerWebsite').value = dealer.website || '';
+    document.getElementById('editDealerAddress').value = dealer.address || '';
+    document.getElementById('editDealerShowroom').value = dealer.showroom || '';
+
     // Contact info
     document.getElementById('editContactName').value = brandData.contactName || '';
     document.getElementById('editPosition').value = brandData.position || '';
@@ -683,6 +727,14 @@ document.getElementById('brandInfoForm').addEventListener('submit', async (e) =>
         linkedin: document.getElementById('editLinkedin').value,
         pinterest: document.getElementById('editPinterest').value,
         youtube: document.getElementById('editYoutube').value,
+        koreanDealer: {
+            name: document.getElementById('editDealerName').value,
+            contact: document.getElementById('editDealerContact').value,
+            email: document.getElementById('editDealerEmail').value,
+            website: document.getElementById('editDealerWebsite').value,
+            address: document.getElementById('editDealerAddress').value,
+            showroom: document.getElementById('editDealerShowroom').value,
+        },
     });
     showSaveMsg('brandSaveMsg');
 });

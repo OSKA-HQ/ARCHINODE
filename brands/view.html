@@ -406,6 +406,7 @@ function renderBrand(brand, products) {
     const linkedin = brand.linkedin || '';
     const pinterest = brand.pinterest || '';
     const youtube = brand.youtube || '';
+    const dealer = brand.koreanDealer || {};
     const wsUrl = website.startsWith('http') ? website : 'https://' + website;
 
     // Hero image or logo or placeholder
@@ -544,6 +545,30 @@ function renderBrand(brand, products) {
 
         <!-- PRODUCTS -->
         ${productsHtml}
+
+        <!-- KOREAN DEALER -->
+        ${dealer.name ? `
+        <section class="bp-dealer-section" style="background:#fafaf7;border:1px solid #e8e5dd;border-radius:12px;padding:40px;margin-bottom:48px;">
+            <div class="bp-section-header fade-in" style="margin-bottom:24px;">
+                <h2 class="bp-section-title" style="display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-handshake" style="color:#C8A96E;"></i>
+                    <span data-en="Korean Official Dealer" data-ko="한국 공식 딜러">Korean Official Dealer</span>
+                </h2>
+                <p class="bp-section-desc" data-en="Official dealer & distributor in Korea" data-ko="한국 내 공식 딜러 및 유통사">${brand.brandName}의 한국 공식 딜러를 통해 제품을 문의하실 수 있습니다.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="font-size:1.2rem;font-weight:700;color:#111;">${dealer.name}</div>
+                    ${dealer.address ? `<div style="font-size:0.88rem;color:#555;"><i class="fas fa-map-marker-alt" style="width:18px;color:#C8A96E;"></i> ${dealer.address}</div>` : ''}
+                    ${dealer.showroom ? `<div style="font-size:0.88rem;color:#555;"><i class="fas fa-store" style="width:18px;color:#C8A96E;"></i> ${dealer.showroom}</div>` : ''}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    ${dealer.contact ? `<div style="font-size:0.88rem;color:#555;"><i class="fas fa-phone" style="width:18px;color:#C8A96E;"></i> ${dealer.contact}</div>` : ''}
+                    ${dealer.email ? `<div style="font-size:0.88rem;color:#555;"><i class="fas fa-envelope" style="width:18px;color:#C8A96E;"></i> <a href="mailto:${dealer.email}" style="color:#333;">${dealer.email}</a></div>` : ''}
+                    ${dealer.website ? `<div style="font-size:0.88rem;"><a href="${dealer.website.startsWith('http') ? dealer.website : 'https://'+dealer.website}" target="_blank" style="color:#C8A96E;font-weight:600;"><i class="fas fa-external-link-alt" style="width:18px;"></i> <span data-en="Visit Dealer Website" data-ko="딜러 웹사이트 방문">Visit Dealer Website</span></a></div>` : ''}
+                </div>
+            </div>
+        </section>` : ''}
 
         <!-- CTA -->
         <section class="bp-cta-section">

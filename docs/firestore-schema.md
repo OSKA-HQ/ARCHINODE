@@ -54,6 +54,16 @@ firestore/
   pinterest: "",
   youtube: "",
 
+  // ── 한국 딜러 정보 ──
+  koreanDealer: {
+    name: "Nexus Design",                // 딜러 회사명
+    contact: "02-1234-5678",             // 연락처
+    email: "info@nexusdesign.kr",        // 이메일
+    website: "https://nexusdesign.kr",   // 웹사이트
+    address: "서울특별시 강남구 논현로 123", // 주소
+    showroom: "서울 쇼룸"                 // 쇼룸 위치 (선택)
+  },
+
   // ── 시스템 필드 ──
   status: "approved",                   // pending | approved | rejected
   createdAt: Timestamp,                 // 입점 신청 시각

@@ -145,6 +145,7 @@ tr:hover { background: #fafafa; }
                         <th data-en="Country" data-ko="국가">Country</th>
                         <th data-en="Category" data-ko="카테고리">Category</th>
                         <th data-en="Contact" data-ko="연락처">Contact</th>
+                        <th data-en="KR Dealer" data-ko="한국 딜러">KR Dealer</th>
                         <th data-en="Status" data-ko="상태">Status</th>
                         <th data-en="Actions" data-ko="작업">Actions</th>
                     </tr>
@@ -242,6 +243,7 @@ async function loadBrands() {
                 <td>${b.country || '-'}</td>
                 <td>${b.category || '-'}</td>
                 <td>${b.contactName || '-'}<br><small style="color:#999;">${b.email}</small></td>
+                <td>${b.koreanDealer && b.koreanDealer.name ? `<strong>${b.koreanDealer.name}</strong><br><small style="color:#999;">${b.koreanDealer.contact || ''}</small>` : '<span style="color:#ccc;">—</span>'}</td>
                 <td><span class="status status-${b.status}">${b.status}</span></td>
                 <td>
                     ${b.status === 'pending' ? `
