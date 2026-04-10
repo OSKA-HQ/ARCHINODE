@@ -53,7 +53,7 @@
     <div class="header-actions">
       <a href="brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
       <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
-      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="auth/profile.html" aria-label="Saved"><i class="far fa-bookmark"></i></a>
       <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
@@ -200,9 +200,9 @@
         <h4 data-en="Services" data-ko="서비스">Services</h4>
         <ul>
           <li><a href="list-your-brand.html">Brand Listing</a></li>
-          <li><a href="#">Dealership Screening</a></li>
-          <li><a href="#">Exhibition Support</a></li>
-          <li><a href="#">ARCHINODE Awards</a></li>
+          <li><a href="for-brands.html">For Brands</a></li>
+          <li><a href="magazine.html">Magazine</a></li>
+          <li><a href="about.html">About</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -262,5 +262,6 @@ fadeEls.forEach(el => fadeObs.observe(el));
 </script>
 <script src="search.js"></script>
 <script src="lang.js"></script>
+<script src="auth-ui.js"></script>
 </body>
 </html>
