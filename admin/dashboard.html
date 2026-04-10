@@ -162,6 +162,7 @@ tr:hover { background: #fafafa; }
                     <tr>
                         <th data-en="Product" data-ko="제품">Product</th>
                         <th data-en="Brand" data-ko="브랜드">Brand</th>
+                        <th data-en="Category" data-ko="카테고리">Category</th>
                         <th data-en="Materials" data-ko="소재">Materials</th>
                         <th data-en="Image" data-ko="이미지">Image</th>
                         <th data-en="Status" data-ko="상태">Status</th>
@@ -308,6 +309,7 @@ async function loadProducts() {
             <tr>
                 <td><strong>${p.name}</strong><br><small style="color:#999;">${p.collection || ''}</small></td>
                 <td>${p.brandName}</td>
+                <td>${p.category || '-'}<br><small style="color:#999;">${p.subcategory || ''}</small></td>
                 <td>${p.materials || '-'}</td>
                 <td>${p.imageUrl ? `<img src="${p.imageUrl}" style="width:60px;height:40px;object-fit:cover;border-radius:4px;">` : '-'}</td>
                 <td><span class="status status-${p.status}">${p.status}</span></td>

@@ -1,0 +1,259 @@
+# ARCHINODE — Firestore Data Schema
+
+> 이 문서는 Firestore 컬렉션 구조를 정의합니다.
+> 모든 데이터 관련 작업은 이 스키마를 따릅니다.
+> 최종 수정: 2026-04-11
+
+---
+
+## 컬렉션 구조 개요
+
+```
+firestore/
+├── brands/          ← 브랜드 (문서 ID = Firebase Auth UID)
+├── products/        ← 제품 (자동 생성 ID)
+├── articles/        ← 매거진 기사 (자동 생성 ID)
+└── users/           ← 국내 전문가 계정 (Phase 2B, 문서 ID = Auth UID)
+```
+
+---
+
+## 1. brands 컬렉션
+
+**문서 ID:** Firebase Auth UID (브랜드 담당자 계정의 uid)
+
+```javascript
+{
+  // ── 기본 정보 (입점 신청 시 수집) ──
+  brandName: "Fritz Hansen",           // 브랜드명 (수정 불가)
+  slug: "fritz-hansen",                 // URL용 슬러그 (자동 생성, 소문자+하이픈)
+  email: "brand@fritzhansen.com",       // 담당자 이메일
+  contactName: "John Doe",             // 담당자 이름
+  position: "Marketing Director",       // 직책
+  phone: "+45-12345678",               // 전화번호
+  country: "Denmark",                   // 본사 국가
+  category: "Furniture",                // 대표 카테고리 (10개 중 택 1)
+  website: "https://fritzhansen.com",   // 공식 홈페이지
+  description: "...",                   // 브랜드 소개 (짧은)
+  referral: "Milan Design Week",        // 가입 경로
+
+  // ── 브랜드 페이지 편집 (브랜드 담당자가 대시보드에서 입력) ──
+  tagline: "Designed for life",         // 태그라인/슬로건
+  founded: "1872",                      // 설립 연도
+  headquarters: "Allerød, Denmark",     // 본사 위치
+  brandStory: "...",                    // 브랜드 스토리 (상세)
+  logoUrl: "https://...",               // 로고 이미지 URL
+  heroImage: "https://...",             // 히어로/배너 이미지 URL
+  gallery1: "https://...",              // 갤러리 이미지 1
+  gallery2: "https://...",              // 갤러리 이미지 2
+  gallery3: "https://...",              // 갤러리 이미지 3
+
+  // ── 소셜 미디어 ──
+  instagram: "https://instagram.com/fritzhansen",
+  linkedin: "https://linkedin.com/company/fritzhansen",
+  pinterest: "",
+  youtube: "",
+
+  // ── 시스템 필드 ──
+  status: "approved",                   // pending | approved | rejected
+  createdAt: Timestamp,                 // 입점 신청 시각
+  approvedAt: Timestamp,                // 승인 시각
+  updatedAt: Timestamp,                 // 마지막 수정 시각
+
+  // ── 통계 (Phase 2B에서 추가) ──
+  likeCount: 0,                         // 좋아요 수
+  productCount: 0,                      // 등록 제품 수
+  articleCount: 0                       // 매거진 기사 수
+}
+```
+
+**카테고리 허용 값:** Furniture, Bathroom, Outdoor, Lighting, Kitchen, Office, Finishes, Wellness, Decor, Construction
+
+---
+
+## 2. products 컬렉션
+
+**문서 ID:** 자동 생성
+
+```javascript
+{
+  // ── 브랜드 연결 ──
+  brandId: "uid-12345",                 // brands 문서 ID (= Auth UID)
+  brandName: "Fritz Hansen",            // 비정규화 (목록 표시용)
+  brandSlug: "fritz-hansen",            // 비정규화 (URL 생성용)
+
+  // ── 제품 기본 정보 ──
+  name: "Series 7 Chair",              // 제품명
+  slug: "series-7-chair",              // URL용 슬러그
+  collection: "Series 7",              // 컬렉션/시리즈명
+  description: "...",                   // 제품 설명
+  designer: "Arne Jacobsen",           // 디자이너명
+
+  // ── 카테고리 분류 ──
+  category: "Furniture",                // 대분류 (10개 중 택 1)
+  subcategory: "chairs-stools",         // 소분류 (서브카테고리 slug)
+
+  // ── 스펙 ──
+  materials: "Lacquered veneer",        // 소재
+  dimensions: "W50 × D52 × H82 cm",    // 치수
+  weight: "3.2 kg",                     // 무게 (선택)
+  colors: ["Black", "White", "Walnut"], // 컬러 옵션 (배열)
+  finishes: ["Matte", "Glossy"],        // 마감 옵션 (배열)
+
+  // ── 가격 ──
+  priceRange: "$$",                     // 가격대 ($, $$, $$$, $$$$, Contact)
+
+  // ── 이미지 ──
+  imageUrl: "https://...",              // 대표 이미지
+  images: [                             // 추가 이미지 (배열)
+    "https://...",
+    "https://..."
+  ],
+
+  // ── 문서/파일 (Phase 3+) ──
+  catalogPdf: "",                       // PDF 카탈로그 URL
+  bimFile: "",                          // BIM 파일 URL (Phase 4)
+  model3d: "",                          // 3D 모델 URL (Phase 4)
+
+  // ── 시스템 필드 ──
+  status: "pending",                    // pending | approved | rejected
+  createdAt: Timestamp,
+  approvedAt: Timestamp,
+  updatedAt: Timestamp,
+
+  // ── 통계 (Phase 2B) ──
+  likeCount: 0,                         // 좋아요 수
+  viewCount: 0                          // 조회 수
+}
+```
+
+**서브카테고리 slug 매핑 (category → subcategory 허용값):**
+
+| Category | Subcategories |
+|----------|--------------|
+| Furniture | sofas-armchairs, tables-desks, chairs-stools, storage-shelving, beds-bedroom, kids-furniture, cabinets-sideboards, modular-systems |
+| Bathroom | bathtubs, washbasins-vanities, showers, bathroom-taps, bathroom-furniture, bathroom-accessories, mirrors, toilets-bidets, steam-rooms |
+| Outdoor | outdoor-furniture, pergolas-canopies, outdoor-lighting, planters-pots, outdoor-kitchens, fire-pits-heaters, swimming-pools, garden-decor |
+| Lighting | pendant-lights, floor-lamps, table-lamps, wall-lights, ceiling-lights, architectural-lighting, outdoor-lighting, smart-lighting |
+| Kitchen | kitchen-systems, kitchen-appliances, sinks-taps, countertops, kitchen-storage, tableware |
+| Office | desks-workstations, office-chairs, meeting-conference, acoustic-solutions, office-storage, lounge-reception |
+| Finishes | tiles-ceramics, wood-flooring, natural-stone, wallcoverings, decorative-panels, metal-finishes |
+| Wellness | saunas, steam-rooms, spa-hot-tubs, pools-whirlpools, fitness-equipment, wellness-showers |
+| Decor | vases-planters, rugs-carpets, textiles-cushions, art-wall-decor, mirrors-frames, clocks-objects |
+| Construction | windows-doors, facades-cladding, roofing-systems, stairs-railings, insulation, building-automation |
+
+---
+
+## 3. articles 컬렉션
+
+**문서 ID:** 자동 생성
+
+```javascript
+{
+  // ── 브랜드 연결 ──
+  brandId: "uid-12345",
+  brandName: "Fritz Hansen",
+  brandSlug: "fritz-hansen",
+
+  // ── 기사 정보 ──
+  title: "How Danish Design Shapes Modern Korean Interiors",
+  slug: "how-danish-design-shapes-modern-korean-interiors",
+  tag: "Brand Spotlight",               // Brand Spotlight | Trend | Project | Interview | Guide | Market Report | Exhibition
+  content: "...",                        // 기사 본문 (HTML 또는 plain text)
+  excerpt: "...",                        // 요약 (목록 표시용, 자동 생성 가능)
+
+  // ── 이미지 ──
+  imageUrl: "https://...",              // 커버 이미지
+
+  // ── 시스템 필드 ──
+  status: "pending",                    // pending | approved | rejected
+  createdAt: Timestamp,
+  approvedAt: Timestamp,
+  publishedAt: Timestamp,               // 공개 시각 (승인 시 설정)
+
+  // ── 통계 ──
+  viewCount: 0,
+  likeCount: 0
+}
+```
+
+---
+
+## 4. users 컬렉션 (Phase 2B)
+
+**문서 ID:** Firebase Auth UID (국내 전문가 계정)
+
+```javascript
+{
+  // ── 기본 정보 ──
+  displayName: "김설계",
+  email: "kim@design.kr",
+  phone: "010-1234-5678",
+  company: "㈜디자인스튜디오",
+  role: "architect",                    // architect | interior-designer | dealer | contractor | other
+
+  // ── 좋아요 목록 ──
+  likedProducts: ["productDocId1", "productDocId2"],
+  likedBrands: ["brandDocId1"],
+
+  // ── 시스템 필드 ──
+  createdAt: Timestamp,
+  lastLoginAt: Timestamp
+}
+```
+
+---
+
+## 5. Firestore 보안 규칙 (권장)
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 브랜드: 본인 문서만 수정 가능, 누구나 approved 문서 읽기 가능
+    match /brands/{brandId} {
+      allow read: if resource.data.status == 'approved' || request.auth.uid == brandId || isAdmin();
+      allow create: if request.auth != null;
+      allow update: if request.auth.uid == brandId || isAdmin();
+    }
+
+    // 제품: 브랜드 소유자만 생성/수정, approved 제품은 누구나 읽기
+    match /products/{productId} {
+      allow read: if resource.data.status == 'approved' || request.auth.uid == resource.data.brandId || isAdmin();
+      allow create: if request.auth != null && request.resource.data.brandId == request.auth.uid;
+      allow update: if request.auth.uid == resource.data.brandId || isAdmin();
+    }
+
+    // 기사: 제품과 동일한 규칙
+    match /articles/{articleId} {
+      allow read: if resource.data.status == 'approved' || request.auth.uid == resource.data.brandId || isAdmin();
+      allow create: if request.auth != null && request.resource.data.brandId == request.auth.uid;
+      allow update: if request.auth.uid == resource.data.brandId || isAdmin();
+    }
+
+    // 유저 (Phase 2B): 본인 문서만 수정, 본인만 읽기
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return request.auth != null &&
+        (request.auth.token.email == 'office@archinode.org' ||
+         request.auth.token.email == 'wool21wool@gmail.com');
+    }
+  }
+}
+```
+
+---
+
+## 6. 인덱스 (Firestore Composite Indexes)
+
+```
+products: brandId ASC, createdAt DESC
+products: category ASC, status ASC, createdAt DESC
+products: subcategory ASC, status ASC, createdAt DESC
+articles: brandId ASC, createdAt DESC
+articles: status ASC, createdAt DESC
+```

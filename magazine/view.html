@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Magazine | ARCHINODE</title>
+<meta name="description" id="metaDesc" content="ARCHINODE Magazine — architecture and design insights.">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+.ma-loading { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; gap:20px; }
+.ma-loading .spinner { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--black); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.ma-error { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; text-align:center; gap:16px; }
+.ma-error i { font-size:3rem; color:var(--gray-300); }
+.ma-error h2 { font-size:1.8rem; font-weight:800; }
+.ma-error p { font-size:0.95rem; color:var(--gray-500); max-width:400px; }
+.ma-error a { background:var(--black); color:var(--white); padding:12px 24px; font-size:0.85rem; font-weight:600; text-decoration:none; }
+
+.ma-hero { width:100%; height:480px; overflow:hidden; position:relative; background:var(--gray-900); }
+.ma-hero img { width:100%; height:100%; object-fit:cover; opacity:0.5; }
+.ma-hero-overlay { position:absolute; bottom:0; left:0; right:0; padding:48px; background:linear-gradient(transparent,rgba(0,0,0,0.8)); }
+.ma-hero-tag { display:inline-block; font-size:0.65rem; font-weight:600; color:var(--white); letter-spacing:0.15em; text-transform:uppercase; border:1px solid rgba(255,255,255,0.3); padding:4px 12px; margin-bottom:12px; }
+.ma-hero-overlay h1 { color:var(--white); font-size:2.4rem; font-weight:800; letter-spacing:-0.02em; line-height:1.3; max-width:800px; }
+@media (max-width:768px) { .ma-hero { height:360px; } .ma-hero-overlay { padding:24px; } .ma-hero-overlay h1 { font-size:1.6rem; } }
+
+.ma-breadcrumb { padding:16px 0; font-size:0.78rem; color:var(--gray-500); }
+.ma-breadcrumb a { color:var(--gray-500); text-decoration:none; }
+.ma-breadcrumb a:hover { color:var(--black); }
+
+.ma-meta { display:flex; align-items:center; gap:16px; padding:20px 0; border-bottom:1px solid var(--gray-200); margin-bottom:40px; font-size:0.82rem; color:var(--gray-500); }
+.ma-meta a { color:#C8A96E; font-weight:600; text-decoration:none; }
+.ma-meta a:hover { text-decoration:underline; }
+
+.ma-content { max-width:760px; margin:0 auto; padding-bottom:80px; }
+.ma-content p { font-size:1rem; color:var(--gray-700); line-height:2; margin-bottom:24px; }
+.ma-content h2 { font-size:1.4rem; font-weight:700; margin:40px 0 16px; color:var(--black); }
+.ma-content h3 { font-size:1.1rem; font-weight:600; margin:32px 0 12px; color:var(--black); }
+
+.ma-brand-box { background:var(--gray-50); padding:24px; border-radius:4px; margin-top:40px; display:flex; align-items:center; gap:20px; }
+.ma-brand-box-text h4 { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+.ma-brand-box-text p { font-size:0.82rem; color:var(--gray-500); margin:0; }
+.ma-brand-box a { margin-left:auto; background:var(--black); color:var(--white); padding:10px 20px; font-size:0.82rem; font-weight:600; text-decoration:none; white-space:nowrap; }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  <span data-en="2026 Brand Listing —" data-ko="2026 브랜드 입점 —">2026 Brand Listing —</span> <strong data-en="Now Free" data-ko="무료">Now Free</strong> &nbsp;|&nbsp; <a href="../list-your-brand.html" data-en="Learn more →" data-ko="자세히 보기 →">Learn more &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="../index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="../categories/furniture.html"><span>Furniture</span><small>가구</small></a>
+            <a href="../categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="../categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="../categories/lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="../categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="../categories/office.html"><span>Office</span><small>오피스</small></a>
+            <a href="../categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="../categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="../categories/decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="../categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="../brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="../magazine.html" style="color:var(--black);font-weight:600;" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="../about.html" data-en="About" data-ko="소개">About</a>
+      <a href="../list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <a href="../brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers..." data-en-placeholder="Search brands, products, designers..." data-ko-placeholder="브랜드, 제품, 디자이너 검색...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="ma-loading" id="loadingState">
+  <div class="spinner"></div>
+  <p>Loading article...</p>
+</div>
+
+<!-- ARTICLE CONTENT -->
+<div id="articleContent" style="display:none;"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p data-en="Connecting global architecture &amp; design brands with the Korean market." data-ko="글로벌 건축·디자인 브랜드를 한국 시장과 연결합니다.">Connecting global architecture &amp; design brands with the Korean market.</p>
+      </div>
+      <div class="footer-col"><h4>Categories</h4><ul>
+        <li><a href="../categories/furniture.html">Furniture</a></li>
+        <li><a href="../categories/bathroom.html">Bathroom</a></li>
+        <li><a href="../categories/lighting.html">Lighting</a></li>
+        <li><a href="../categories/kitchen.html">Kitchen</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../magazine.html">Magazine</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>For Brands</h4><ul>
+        <li><a href="../list-your-brand.html">List Your Brand</a></li>
+        <li><a href="../brand-portal/login.html">Brand Login</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul>
+        <li><a href="../terms.html">Terms</a></li>
+        <li><a href="../privacy.html">Privacy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links"><a href="../terms.html">Terms</a> <a href="../privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="../firebase-config.js"></script>
+<script src="../search.js"></script>
+<script src="../lang.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const articleSlug = params.get('id');
+const contentDiv = document.getElementById('articleContent');
+const loadingDiv = document.getElementById('loadingState');
+
+async function loadArticle() {
+    if (!articleSlug) { showError('기사를 찾을 수 없습니다', 'URL에 기사 ID가 없습니다.'); return; }
+
+    try {
+        const snap = await db.collection('articles')
+            .where('slug', '==', articleSlug)
+            .where('status', '==', 'approved')
+            .limit(1)
+            .get();
+
+        if (snap.empty) { showError('기사를 찾을 수 없습니다', '요청하신 기사가 존재하지 않거나 아직 검토 중입니다.'); return; }
+
+        const article = snap.docs[0].data();
+        document.getElementById('pageTitle').textContent = article.title + ' | ARCHINODE Magazine';
+        document.getElementById('metaDesc').content = (article.excerpt || article.content || '').substring(0, 160);
+        renderArticle(article);
+    } catch (err) {
+        console.error('Error loading article:', err);
+        showError('오류가 발생했습니다', '기사를 불러오는 중 문제가 발생했습니다.');
+    }
+}
+
+function renderArticle(a) {
+    const dateStr = a.publishedAt ? a.publishedAt.toDate().toLocaleDateString('ko-KR') : (a.createdAt ? a.createdAt.toDate().toLocaleDateString('ko-KR') : '');
+    const escapeHtml = (str) => str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const contentHtml = a.content ? a.content.split('\n').filter(p => p.trim()).map(p => `<p>${escapeHtml(p)}</p>`).join('') : '';
+
+    contentDiv.innerHTML = `
+    <!-- HERO -->
+    <div class="ma-hero">
+        ${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}">` : ''}
+        <div class="ma-hero-overlay">
+            <span class="ma-hero-tag">${a.tag || 'Article'}</span>
+            <h1>${a.title}</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ma-breadcrumb">
+            <a href="../index.html">Home</a> &nbsp;/&nbsp;
+            <a href="../magazine.html">Magazine</a> &nbsp;/&nbsp;
+            <span>${a.title}</span>
+        </div>
+
+        <div class="ma-meta">
+            <span>${a.tag || ''}</span>
+            <span>·</span>
+            <a href="../brands/view.html?id=${a.brandSlug || ''}">${a.brandName}</a>
+            ${dateStr ? `<span>·</span><span>${dateStr}</span>` : ''}
+        </div>
+
+        <div class="ma-content">
+            ${contentHtml}
+
+            <div class="ma-brand-box">
+                <div class="ma-brand-box-text">
+                    <h4>${a.brandName}</h4>
+                    <p data-en="View brand page on ARCHINODE" data-ko="ARCHINODE에서 브랜드 페이지 보기">View brand page on ARCHINODE</p>
+                </div>
+                <a href="../brands/view.html?id=${a.brandSlug || ''}" data-en="View Brand" data-ko="브랜드 보기">View Brand →</a>
+            </div>
+        </div>
+    </div>`;
+
+    loadingDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
+}
+
+function showError(title, msg) {
+    loadingDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
+    contentDiv.innerHTML = `<div class="ma-error"><i class="fas fa-newspaper"></i><h2>${title}</h2><p>${msg}</p><a href="../magazine.html"><i class="fas fa-arrow-left"></i> Magazine</a></div>`;
+}
+
+loadArticle();
+
+function toggleCatMenu() { document.getElementById('catMenu').classList.toggle('active'); }
+function toggleSearch() { const o = document.getElementById('searchOverlay'); o.classList.toggle('active'); if(o.classList.contains('active')) o.querySelector('input').focus(); }
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
+document.addEventListener('click', e => { const d = document.querySelector('.nav-dropdown'); if(d && !d.contains(e.target)) document.getElementById('catMenu').classList.remove('active'); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.getElementById('searchOverlay').classList.remove('active'); });
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
+</script>
+</body>
+</html>

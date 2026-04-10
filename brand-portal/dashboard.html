@@ -297,6 +297,30 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
                 </div>
                 <div class="field-row">
                     <div class="field">
+                        <label data-en="Category *" data-ko="카테고리 *">Category *</label>
+                        <select id="prodCategory" required onchange="updateSubcategories()">
+                            <option value="" data-en="Select category" data-ko="카테고리 선택">Select category</option>
+                            <option value="Furniture">Furniture / 가구</option>
+                            <option value="Bathroom">Bathroom / 욕실</option>
+                            <option value="Outdoor">Outdoor / 아웃도어</option>
+                            <option value="Lighting">Lighting / 조명</option>
+                            <option value="Kitchen">Kitchen / 주방</option>
+                            <option value="Office">Office / 오피스</option>
+                            <option value="Finishes">Finishes / 마감재</option>
+                            <option value="Wellness">Wellness / 웰니스</option>
+                            <option value="Decor">Decor / 데코</option>
+                            <option value="Construction">Construction / 건축자재</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label data-en="Subcategory *" data-ko="서브카테고리 *">Subcategory *</label>
+                        <select id="prodSubcategory" required>
+                            <option value="" data-en="Select subcategory" data-ko="서브카테고리 선택">Select subcategory</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
                         <label>Materials</label>
                         <input type="text" id="prodMaterials" placeholder="e.g. Brass, Opal glass">
                     </div>
@@ -451,6 +475,114 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
 <script>
 let currentUser = null;
 let brandData = null;
+
+// ── 카테고리 → 서브카테고리 매핑 ──
+const SUBCATEGORIES = {
+  Furniture: [
+    { slug: 'sofas-armchairs', en: 'Sofas & Armchairs', ko: '소파 & 안락의자' },
+    { slug: 'tables-desks', en: 'Tables & Desks', ko: '테이블 & 책상' },
+    { slug: 'chairs-stools', en: 'Chairs & Stools', ko: '의자 & 스툴' },
+    { slug: 'storage-shelving', en: 'Storage & Shelving', ko: '수납 & 선반' },
+    { slug: 'beds-bedroom', en: 'Beds & Bedroom', ko: '침대 & 침실' },
+    { slug: 'kids-furniture', en: 'Kids Furniture', ko: '키즈 가구' },
+    { slug: 'cabinets-sideboards', en: 'Cabinets & Sideboards', ko: '캐비닛 & 사이드보드' },
+    { slug: 'modular-systems', en: 'Modular Systems', ko: '모듈러 시스템' }
+  ],
+  Bathroom: [
+    { slug: 'bathtubs', en: 'Bathtubs', ko: '욕조' },
+    { slug: 'washbasins-vanities', en: 'Washbasins & Vanities', ko: '세면대 & 세면 가구' },
+    { slug: 'showers', en: 'Showers', ko: '샤워' },
+    { slug: 'bathroom-taps', en: 'Bathroom Taps', ko: '욕실 수전' },
+    { slug: 'bathroom-furniture', en: 'Bathroom Furniture', ko: '욕실 가구' },
+    { slug: 'bathroom-accessories', en: 'Bathroom Accessories', ko: '욕실 액세서리' },
+    { slug: 'mirrors', en: 'Mirrors', ko: '거울' },
+    { slug: 'toilets-bidets', en: 'Toilets & Bidets', ko: '변기 & 비데' },
+    { slug: 'steam-rooms', en: 'Steam Rooms', ko: '스팀룸' }
+  ],
+  Outdoor: [
+    { slug: 'outdoor-furniture', en: 'Outdoor Furniture', ko: '아웃도어 가구' },
+    { slug: 'pergolas-canopies', en: 'Pergolas & Canopies', ko: '퍼골라 & 캐노피' },
+    { slug: 'outdoor-lighting', en: 'Outdoor Lighting', ko: '아웃도어 조명' },
+    { slug: 'planters-pots', en: 'Planters & Pots', ko: '화분 & 포트' },
+    { slug: 'outdoor-kitchens', en: 'Outdoor Kitchens', ko: '아웃도어 키친' },
+    { slug: 'fire-pits-heaters', en: 'Fire Pits & Heaters', ko: '화덕 & 히터' },
+    { slug: 'swimming-pools', en: 'Swimming Pools', ko: '수영장' },
+    { slug: 'garden-decor', en: 'Garden Decor', ko: '가든 데코' }
+  ],
+  Lighting: [
+    { slug: 'pendant-lights', en: 'Pendant Lights', ko: '펜던트 조명' },
+    { slug: 'floor-lamps', en: 'Floor Lamps', ko: '플로어 램프' },
+    { slug: 'table-lamps', en: 'Table Lamps', ko: '테이블 램프' },
+    { slug: 'wall-lights', en: 'Wall Lights', ko: '벽 조명' },
+    { slug: 'ceiling-lights', en: 'Ceiling Lights', ko: '천장 조명' },
+    { slug: 'architectural-lighting', en: 'Architectural Lighting', ko: '건축 조명' },
+    { slug: 'outdoor-lighting', en: 'Outdoor Lighting', ko: '아웃도어 조명' },
+    { slug: 'smart-lighting', en: 'Smart Lighting', ko: '스마트 조명' }
+  ],
+  Kitchen: [
+    { slug: 'kitchen-systems', en: 'Kitchen Systems', ko: '주방 시스템' },
+    { slug: 'kitchen-appliances', en: 'Kitchen Appliances', ko: '주방 가전' },
+    { slug: 'sinks-taps', en: 'Sinks & Taps', ko: '싱크 & 수전' },
+    { slug: 'countertops', en: 'Countertops', ko: '카운터탑' },
+    { slug: 'kitchen-storage', en: 'Kitchen Storage', ko: '주방 수납' },
+    { slug: 'tableware', en: 'Tableware', ko: '식기' }
+  ],
+  Office: [
+    { slug: 'desks-workstations', en: 'Desks & Workstations', ko: '책상 & 워크스테이션' },
+    { slug: 'office-chairs', en: 'Office Chairs', ko: '사무용 의자' },
+    { slug: 'meeting-conference', en: 'Meeting & Conference', ko: '회의실' },
+    { slug: 'acoustic-solutions', en: 'Acoustic Solutions', ko: '음향 솔루션' },
+    { slug: 'office-storage', en: 'Office Storage', ko: '사무 수납' },
+    { slug: 'lounge-reception', en: 'Lounge & Reception', ko: '라운지 & 리셉션' }
+  ],
+  Finishes: [
+    { slug: 'tiles-ceramics', en: 'Tiles & Ceramics', ko: '타일 & 세라믹' },
+    { slug: 'wood-flooring', en: 'Wood Flooring', ko: '원목 마루' },
+    { slug: 'natural-stone', en: 'Natural Stone', ko: '천연석' },
+    { slug: 'wallcoverings', en: 'Wallcoverings', ko: '벽지' },
+    { slug: 'decorative-panels', en: 'Decorative Panels', ko: '데코 패널' },
+    { slug: 'metal-finishes', en: 'Metal Finishes', ko: '금속 마감' }
+  ],
+  Wellness: [
+    { slug: 'saunas', en: 'Saunas', ko: '사우나' },
+    { slug: 'steam-rooms', en: 'Steam Rooms', ko: '스팀룸' },
+    { slug: 'spa-hot-tubs', en: 'Spa & Hot Tubs', ko: '스파 & 온수 욕조' },
+    { slug: 'pools-whirlpools', en: 'Pools & Whirlpools', ko: '풀 & 월풀' },
+    { slug: 'fitness-equipment', en: 'Fitness Equipment', ko: '피트니스 장비' },
+    { slug: 'wellness-showers', en: 'Wellness Showers', ko: '웰니스 샤워' }
+  ],
+  Decor: [
+    { slug: 'vases-planters', en: 'Vases & Planters', ko: '화병 & 화분' },
+    { slug: 'rugs-carpets', en: 'Rugs & Carpets', ko: '러그 & 카펫' },
+    { slug: 'textiles-cushions', en: 'Textiles & Cushions', ko: '텍스타일 & 쿠션' },
+    { slug: 'art-wall-decor', en: 'Art & Wall Decor', ko: '아트 & 벽 장식' },
+    { slug: 'mirrors-frames', en: 'Mirrors & Frames', ko: '거울 & 프레임' },
+    { slug: 'clocks-objects', en: 'Clocks & Objects', ko: '시계 & 오브제' }
+  ],
+  Construction: [
+    { slug: 'windows-doors', en: 'Windows & Doors', ko: '창호 & 문' },
+    { slug: 'facades-cladding', en: 'Facades & Cladding', ko: '파사드 & 클래딩' },
+    { slug: 'roofing-systems', en: 'Roofing Systems', ko: '지붕 시스템' },
+    { slug: 'stairs-railings', en: 'Stairs & Railings', ko: '계단 & 난간' },
+    { slug: 'insulation', en: 'Insulation', ko: '단열재' },
+    { slug: 'building-automation', en: 'Building Automation', ko: '빌딩 자동화' }
+  ]
+};
+
+function updateSubcategories() {
+  const cat = document.getElementById('prodCategory').value;
+  const subSelect = document.getElementById('prodSubcategory');
+  subSelect.innerHTML = '<option value="">Select subcategory</option>';
+  if (cat && SUBCATEGORIES[cat]) {
+    SUBCATEGORIES[cat].forEach(sub => {
+      subSelect.innerHTML += `<option value="${sub.slug}">${sub.en} / ${sub.ko}</option>`;
+    });
+  }
+}
+
+function generateSlug(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
 // ── 인증 확인 ──
 auth.onAuthStateChanged(async (user) => {
@@ -628,17 +760,26 @@ document.getElementById('submitProduct').addEventListener('click', async () => {
         imageUrl = await ref.getDownloadURL();
     }
 
+    const category = document.getElementById('prodCategory').value;
+    const subcategory = document.getElementById('prodSubcategory').value;
+    if (!category || !subcategory) { alert('Category and subcategory are required'); btn.disabled = false; btn.textContent = 'Submit for Review'; return; }
+
     await db.collection('products').add({
         brandId: currentUser.uid,
         brandName: brandData.brandName,
+        brandSlug: brandData.slug || generateSlug(brandData.brandName),
         name: name,
+        slug: generateSlug(name),
         collection: document.getElementById('prodCollection').value.trim(),
         description: document.getElementById('prodDesc').value.trim(),
+        category: category,
+        subcategory: subcategory,
         materials: document.getElementById('prodMaterials').value.trim(),
         dimensions: document.getElementById('prodDimensions').value.trim(),
         designer: document.getElementById('prodDesigner').value.trim(),
         priceRange: document.getElementById('prodPrice').value,
         imageUrl: imageUrl,
+        images: [],
         status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -651,6 +792,8 @@ document.getElementById('submitProduct').addEventListener('click', async () => {
     // Reset form
     ['prodName','prodCollection','prodDesc','prodMaterials','prodDimensions','prodDesigner'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('prodPrice').value = '';
+    document.getElementById('prodCategory').value = '';
+    document.getElementById('prodSubcategory').innerHTML = '<option value="">Select subcategory</option>';
     document.getElementById('prodImage').value = '';
     document.getElementById('prodImagePreview').style.display = 'none';
 
@@ -712,9 +855,12 @@ document.getElementById('submitArticle').addEventListener('click', async () => {
     await db.collection('articles').add({
         brandId: currentUser.uid,
         brandName: brandData.brandName,
+        brandSlug: brandData.slug || generateSlug(brandData.brandName),
         title: title,
+        slug: generateSlug(title),
         tag: document.getElementById('artTag').value,
         content: content,
+        excerpt: content.substring(0, 200) + (content.length > 200 ? '...' : ''),
         imageUrl: imageUrl,
         status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -726,6 +872,8 @@ document.getElementById('submitArticle').addEventListener('click', async () => {
     document.getElementById('addArticleBtn').style.display = 'inline-block';
     document.getElementById('artTitle').value = '';
     document.getElementById('artContent').value = '';
+    document.getElementById('artTag').value = 'Brand Spotlight';
+    document.getElementById('artImage').value = '';
 
     loadArticles();
 });

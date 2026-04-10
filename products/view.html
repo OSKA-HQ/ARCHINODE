@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Product | ARCHINODE</title>
+<meta name="description" id="metaDesc" content="Product details on ARCHINODE — global architecture and design products for the Korean market.">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* ===== PRODUCT PAGE STYLES ===== */
+
+/* Loading */
+.pp-loading { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; gap:20px; }
+.pp-loading .spinner { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--black); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Error */
+.pp-error { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; text-align:center; gap:16px; }
+.pp-error i { font-size:3rem; color:var(--gray-300); }
+.pp-error h2 { font-size:1.8rem; font-weight:800; }
+.pp-error p { font-size:0.95rem; color:var(--gray-500); max-width:400px; }
+.pp-error a { background:var(--black); color:var(--white); padding:12px 24px; font-size:0.85rem; font-weight:600; text-decoration:none; transition:background 0.2s; }
+.pp-error a:hover { background:var(--gray-800); }
+
+/* Breadcrumb */
+.pp-breadcrumb { padding:16px 0; font-size:0.78rem; color:var(--gray-500); }
+.pp-breadcrumb a { color:var(--gray-500); text-decoration:none; }
+.pp-breadcrumb a:hover { color:var(--black); }
+
+/* Product Layout */
+.pp-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; padding:40px 0 80px; align-items:start; }
+@media (max-width:768px) { .pp-layout { grid-template-columns:1fr; gap:32px; padding:24px 0 60px; } }
+
+/* Image Gallery */
+.pp-gallery { position:sticky; top:80px; }
+.pp-main-image { width:100%; aspect-ratio:1; overflow:hidden; background:var(--gray-100); border-radius:4px; margin-bottom:12px; }
+.pp-main-image img { width:100%; height:100%; object-fit:cover; }
+.pp-thumbs { display:flex; gap:8px; }
+.pp-thumb { width:72px; height:72px; overflow:hidden; border-radius:4px; border:2px solid var(--gray-200); cursor:pointer; transition:border-color 0.2s; }
+.pp-thumb.active, .pp-thumb:hover { border-color:var(--black); }
+.pp-thumb img { width:100%; height:100%; object-fit:cover; }
+
+/* Product Info */
+.pp-info {}
+.pp-brand-link { display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-500); text-decoration:none; margin-bottom:12px; transition:color 0.2s; }
+.pp-brand-link:hover { color:var(--black); }
+.pp-name { font-size:2.2rem; font-weight:800; letter-spacing:-0.02em; line-height:1.2; margin-bottom:8px; color:var(--black); }
+@media (max-width:768px) { .pp-name { font-size:1.6rem; } }
+.pp-collection { font-size:0.9rem; color:var(--gray-500); margin-bottom:24px; }
+.pp-description { font-size:0.95rem; color:var(--gray-600); line-height:1.8; margin-bottom:32px; }
+.pp-price-badge { display:inline-block; background:var(--gray-100); color:var(--gray-700); font-size:0.82rem; font-weight:600; padding:8px 16px; border-radius:3px; margin-bottom:24px; }
+
+/* Specs Table */
+.pp-specs { margin-bottom:32px; }
+.pp-specs-title { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-500); margin-bottom:16px; }
+.pp-specs-table { width:100%; }
+.pp-specs-table tr { border-bottom:1px solid var(--gray-100); }
+.pp-specs-table td { padding:12px 0; font-size:0.88rem; vertical-align:top; }
+.pp-specs-table td:first-child { font-weight:600; color:var(--gray-700); width:140px; }
+.pp-specs-table td:last-child { color:var(--gray-600); }
+
+/* CTA Buttons */
+.pp-cta { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:32px; }
+.pp-cta .btn { padding:14px 28px; font-size:0.88rem; font-weight:600; border:none; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+.pp-cta .btn-primary { background:var(--black); color:var(--white); }
+.pp-cta .btn-primary:hover { background:var(--gray-800); }
+.pp-cta .btn-secondary { background:var(--white); color:var(--black); border:1px solid var(--gray-300); }
+.pp-cta .btn-secondary:hover { border-color:var(--black); }
+
+/* Category Tag */
+.pp-category-tag { display:inline-block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#C8A96E; background:rgba(200,169,110,0.1); padding:4px 10px; border-radius:3px; margin-bottom:16px; text-decoration:none; }
+.pp-category-tag:hover { background:rgba(200,169,110,0.2); }
+
+/* Related Products */
+.pp-related { padding:80px 0; border-top:1px solid var(--gray-200); }
+.pp-related-title { font-size:1.6rem; font-weight:800; letter-spacing:-0.01em; margin-bottom:32px; }
+.pp-related-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+@media (max-width:1024px) { .pp-related-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:768px) { .pp-related-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px) { .pp-related-grid { grid-template-columns:1fr; } }
+
+.pp-rel-card { border:1px solid var(--gray-200); overflow:hidden; transition:all 0.3s; text-decoration:none; color:inherit; display:block; }
+.pp-rel-card:hover { border-color:var(--black); box-shadow:0 8px 24px rgba(0,0,0,0.08); }
+.pp-rel-card-img { width:100%; aspect-ratio:1; overflow:hidden; background:var(--gray-100); }
+.pp-rel-card-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s; }
+.pp-rel-card:hover .pp-rel-card-img img { transform:scale(1.05); }
+.pp-rel-card-body { padding:16px; }
+.pp-rel-card-brand { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-500); margin-bottom:4px; }
+.pp-rel-card-name { font-size:0.88rem; font-weight:600; color:var(--black); }
+
+.fade-in { opacity:1; animation:fadeIn 0.6s ease-in; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  <span data-en="2026 Brand Listing —" data-ko="2026 브랜드 입점 —">2026 Brand Listing —</span> <strong data-en="Now Free" data-ko="무료">Now Free</strong> &nbsp;|&nbsp; <span data-en="List your brand on ARCHINODE at no cost." data-ko="ARCHINODE에 무료로 브랜드를 등록하세요.">List your brand on ARCHINODE at no cost.</span> <a href="../list-your-brand.html" data-en="Learn more →" data-ko="자세히 보기 →">Learn more &rarr;</a>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="../index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
+        <div class="nav-dropdown-menu" id="catMenu">
+            <a href="../categories/furniture.html"><span>Furniture</span><small>가구</small></a>
+            <a href="../categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
+            <a href="../categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
+            <a href="../categories/lighting.html"><span>Lighting</span><small>조명</small></a>
+            <a href="../categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
+            <a href="../categories/office.html"><span>Office</span><small>오피스</small></a>
+            <a href="../categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
+            <a href="../categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
+            <a href="../categories/decor.html"><span>Decor</span><small>데코</small></a>
+            <a href="../categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+        </div>
+      </div>
+      <a href="../brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="../magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="../about.html" data-en="About" data-ko="소개">About</a>
+      <a href="../list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
+    </nav>
+    <div class="header-actions">
+      <a href="../brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
+      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
+      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <span class="search-close" onclick="toggleSearch()">&times;</span>
+  <div class="search-box">
+    <input type="text" placeholder="Search brands, products, designers..." data-en-placeholder="Search brands, products, designers..." data-ko-placeholder="브랜드, 제품, 디자이너 검색...">
+    <button><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- LOADING STATE -->
+<div class="pp-loading" id="loadingState">
+  <div class="spinner"></div>
+  <p data-en="Loading product..." data-ko="제품 로딩 중...">Loading product...</p>
+</div>
+
+<!-- PRODUCT CONTENT (rendered by JS) -->
+<div id="productContent" style="display:none;"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p data-en="Connecting global architecture &amp; design brands with the Korean market." data-ko="글로벌 건축·디자인 브랜드를 한국 시장과 연결합니다.">Connecting global architecture &amp; design brands with the Korean market.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="Categories" data-ko="카테고리">Categories</h4>
+        <ul>
+          <li><a href="../categories/furniture.html">Furniture</a></li>
+          <li><a href="../categories/bathroom.html">Bathroom</a></li>
+          <li><a href="../categories/outdoor.html">Outdoor</a></li>
+          <li><a href="../categories/lighting.html">Lighting</a></li>
+          <li><a href="../categories/kitchen.html">Kitchen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="More Categories" data-ko="추가 카테고리">More Categories</h4>
+        <ul>
+          <li><a href="../categories/office.html">Office</a></li>
+          <li><a href="../categories/finishes.html">Finishes</a></li>
+          <li><a href="../categories/wellness.html">Wellness</a></li>
+          <li><a href="../categories/decor.html">Decor</a></li>
+          <li><a href="../categories/construction.html">Construction</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="Company" data-ko="회사">Company</h4>
+        <ul>
+          <li><a href="../about.html" data-en="About" data-ko="소개">About</a></li>
+          <li><a href="../magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a></li>
+          <li><a href="../contact.html" data-en="Contact" data-ko="문의">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-en="For Brands" data-ko="브랜드를 위한">For Brands</h4>
+        <ul>
+          <li><a href="../list-your-brand.html" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a></li>
+          <li><a href="../brand-portal/login.html" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="../terms.html">Terms</a>
+        <a href="../privacy.html">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../firebase-config.js"></script>
+<script src="../search.js"></script>
+<script src="../lang.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const productSlug = params.get('id');
+const contentDiv = document.getElementById('productContent');
+const loadingDiv = document.getElementById('loadingState');
+
+async function loadProduct() {
+    if (!productSlug) { showError('제품을 찾을 수 없습니다', 'URL에 제품 ID가 없습니다.'); return; }
+
+    try {
+        const snap = await db.collection('products')
+            .where('slug', '==', productSlug)
+            .where('status', '==', 'approved')
+            .limit(1)
+            .get();
+
+        if (snap.empty) { showError('제품을 찾을 수 없습니다', '요청하신 제품이 존재하지 않거나 아직 검토 중입니다.'); return; }
+
+        const doc = snap.docs[0];
+        const product = doc.data();
+
+        document.getElementById('pageTitle').textContent = product.name + ' | ' + product.brandName + ' | ARCHINODE';
+        document.getElementById('metaDesc').content = (product.description || '').substring(0, 160);
+
+        // 같은 서브카테고리 관련 제품 (최대 4개)
+        let related = [];
+        if (product.subcategory) {
+            const relSnap = await db.collection('products')
+                .where('subcategory', '==', product.subcategory)
+                .where('status', '==', 'approved')
+                .limit(5)
+                .get();
+            relSnap.forEach(d => {
+                if (d.id !== doc.id) related.push(d.data());
+            });
+            related = related.slice(0, 4);
+        }
+
+        renderProduct(product, related);
+    } catch (err) {
+        console.error('Error loading product:', err);
+        showError('오류가 발생했습니다', '제품 정보를 불러오는 중 문제가 발생했습니다.');
+    }
+}
+
+function renderProduct(p, related) {
+    const catLabel = p.category || '';
+    const subLabel = p.subcategory ? p.subcategory.replace(/-/g, ' ') : '';
+
+    // Specs rows
+    const specs = [];
+    if (p.designer) specs.push(['Designer', p.designer]);
+    if (p.materials) specs.push(['Materials', p.materials]);
+    if (p.dimensions) specs.push(['Dimensions', p.dimensions]);
+    if (p.weight) specs.push(['Weight', p.weight]);
+    if (p.colors && p.colors.length) specs.push(['Colors', p.colors.join(', ')]);
+    if (p.finishes && p.finishes.length) specs.push(['Finishes', p.finishes.join(', ')]);
+    if (p.collection) specs.push(['Collection', p.collection]);
+
+    const specsHtml = specs.length > 0 ? `
+        <div class="pp-specs">
+            <div class="pp-specs-title" data-en="Specifications" data-ko="제품 사양">Specifications</div>
+            <table class="pp-specs-table">
+                ${specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+            </table>
+        </div>` : '';
+
+    // Price badge
+    const priceHtml = p.priceRange ? `<div class="pp-price-badge">${p.priceRange === 'Contact' ? 'Contact for price' : p.priceRange}</div>` : '';
+
+    // Related products
+    let relatedHtml = '';
+    if (related.length > 0) {
+        relatedHtml = `
+        <section class="pp-related">
+            <div class="container">
+                <h2 class="pp-related-title" data-en="Related Products" data-ko="관련 제품">Related Products</h2>
+                <div class="pp-related-grid">
+                    ${related.map(r => `
+                        <a href="view.html?id=${r.slug || ''}" class="pp-rel-card">
+                            <div class="pp-rel-card-img">
+                                ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.name}">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-300);"><i class="fas fa-cube" style="font-size:2rem;"></i></div>'}
+                            </div>
+                            <div class="pp-rel-card-body">
+                                <div class="pp-rel-card-brand">${r.brandName}</div>
+                                <div class="pp-rel-card-name">${r.name}</div>
+                            </div>
+                        </a>
+                    `).join('')}
+                </div>
+            </div>
+        </section>`;
+    }
+
+    contentDiv.innerHTML = `
+    <div class="container">
+        <!-- BREADCRUMB -->
+        <div class="pp-breadcrumb">
+            <a href="../index.html" data-en="Home" data-ko="홈">Home</a> &nbsp;/&nbsp;
+            ${catLabel ? `<a href="../categories/${catLabel.toLowerCase()}.html">${catLabel}</a> &nbsp;/&nbsp;` : ''}
+            ${subLabel ? `<a href="../categories/${catLabel.toLowerCase()}/${p.subcategory}.html" style="text-transform:capitalize;">${subLabel}</a> &nbsp;/&nbsp;` : ''}
+            <span>${p.name}</span>
+        </div>
+
+        <!-- PRODUCT LAYOUT -->
+        <div class="pp-layout fade-in">
+            <!-- IMAGE -->
+            <div class="pp-gallery">
+                <div class="pp-main-image">
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" id="mainImg">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-300);font-size:3rem;"><i class="fas fa-cube"></i></div>'}
+                </div>
+                ${p.images && p.images.length > 0 ? `
+                <div class="pp-thumbs">
+                    <div class="pp-thumb active" onclick="changeImg('${p.imageUrl}',this)"><img src="${p.imageUrl}" alt="Main"></div>
+                    ${p.images.map(img => `<div class="pp-thumb" onclick="changeImg('${img}',this)"><img src="${img}" alt="${p.name}"></div>`).join('')}
+                </div>` : ''}
+            </div>
+
+            <!-- INFO -->
+            <div class="pp-info">
+                <a href="../brands/view.html?id=${p.brandSlug || ''}" class="pp-brand-link">${p.brandName}</a>
+                <h1 class="pp-name">${p.name}</h1>
+                ${p.collection ? `<div class="pp-collection">${p.collection}</div>` : ''}
+                ${catLabel ? `<a href="../categories/${catLabel.toLowerCase()}.html" class="pp-category-tag">${catLabel}${subLabel ? ' / ' + subLabel : ''}</a>` : ''}
+                ${priceHtml}
+                ${p.description ? `<div class="pp-description">${p.description}</div>` : ''}
+                ${specsHtml}
+
+                <div class="pp-cta">
+                    <a href="../contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> <span data-en="Request Info" data-ko="문의하기">Request Info</span></a>
+                    ${p.catalogPdf ? `<a href="${p.catalogPdf}" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> <span data-en="PDF Catalog" data-ko="PDF 카탈로그">PDF Catalog</span></a>` : ''}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    ${relatedHtml}`;
+
+    loadingDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
+}
+
+function changeImg(url, el) {
+    document.getElementById('mainImg').src = url;
+    document.querySelectorAll('.pp-thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function showError(title, msg) {
+    loadingDiv.style.display = 'none';
+    contentDiv.style.display = 'block';
+    contentDiv.innerHTML = `<div class="pp-error"><i class="fas fa-cube"></i><h2>${title}</h2><p>${msg}</p><a href="../categories.html"><i class="fas fa-arrow-left"></i> Browse Categories</a></div>`;
+}
+
+loadProduct();
+
+// ── Site JS ──
+function toggleCatMenu() { document.getElementById('catMenu').classList.toggle('active'); }
+function toggleSearch() { const o = document.getElementById('searchOverlay'); o.classList.toggle('active'); if(o.classList.contains('active')) o.querySelector('input').focus(); }
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
+document.addEventListener('click', e => { const d = document.querySelector('.nav-dropdown'); if(d && !d.contains(e.target)) document.getElementById('catMenu').classList.remove('active'); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.getElementById('searchOverlay').classList.remove('active'); });
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 50); });
+</script>
+</body>
+</html>

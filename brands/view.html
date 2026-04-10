@@ -287,36 +287,41 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
+<footer class="footer">
   <div class="container">
-    <div>
-      <h4>ARCHINODE</h4>
-      <ul>
-        <li><a href="../about.html">About Us</a></li>
-        <li><a href="../contact.html">Contact</a></li>
-        <li><a href="../list-your-brand.html">List Your Brand</a></li>
-        <li><a href="../for-brands.html">For Brands</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Explore</h4>
-      <ul>
-        <li><a href="../brands.html">All Brands</a></li>
-        <li><a href="../magazine.html">Magazine</a></li>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
+        <p data-en="Connecting global architecture &amp; design brands with the Korean market." data-ko="글로벌 건축·디자인 브랜드를 한국 시장과 연결합니다.">Connecting global architecture &amp; design brands with the Korean market.</p>
+      </div>
+      <div class="footer-col"><h4>Categories</h4><ul>
         <li><a href="../categories/furniture.html">Furniture</a></li>
         <li><a href="../categories/bathroom.html">Bathroom</a></li>
-      </ul>
+        <li><a href="../categories/lighting.html">Lighting</a></li>
+        <li><a href="../categories/kitchen.html">Kitchen</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../magazine.html">Magazine</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>For Brands</h4><ul>
+        <li><a href="../list-your-brand.html">List Your Brand</a></li>
+        <li><a href="../brand-portal/login.html">Brand Login</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul>
+        <li><a href="../terms.html">Terms</a></li>
+        <li><a href="../privacy.html">Privacy</a></li>
+      </ul></div>
     </div>
-    <div>
-      <h4>Legal</h4>
-      <ul>
-        <li><a href="../terms.html">Terms of Service</a></li>
-        <li><a href="../privacy.html">Privacy Policy</a></li>
-      </ul>
+    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
+      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
+      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
     </div>
-  </div>
-  <div class="footer-bottom">
-    &copy; 2026 ARCHINODE by VIVIDELIVIBE. All rights reserved.
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
+      <div class="footer-bottom-links"><a href="../terms.html">Terms</a> <a href="../privacy.html">Privacy</a></div>
+    </div>
   </div>
 </footer>
 
@@ -364,9 +369,9 @@ async function loadBrand() {
         document.getElementById('pageTitle').textContent = brand.brandName + ' | ARCHINODE';
         document.getElementById('breadcrumbName').textContent = brand.brandName;
 
-        // 승인된 제품 가져오기
-        const productsSnap = await db.collection('brands').doc(brandId)
-            .collection('products')
+        // 승인된 제품 가져오기 (최상위 products 컬렉션에서)
+        const productsSnap = await db.collection('products')
+            .where('brandId', '==', brandId)
             .where('status', '==', 'approved')
             .get();
 
@@ -438,7 +443,7 @@ function renderBrand(brand, products) {
     let productsHtml = '';
     if (products.length > 0) {
         const productCards = products.map(p => `
-            <div class="product-card fade-in">
+            <a href="../products/view.html?id=${p.slug || ''}" class="product-card fade-in" style="text-decoration:none;color:inherit;">
                 <div class="product-card-image">
                     ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-300);font-size:2rem;"><i class="fas fa-cube"></i></div>'}
                 </div>
@@ -448,7 +453,7 @@ function renderBrand(brand, products) {
                     ${p.materials ? `<p class="product-card-specs"><strong>Materials:</strong> ${p.materials}</p>` : ''}
                     ${p.dimensions ? `<p class="product-card-specs"><strong>Dimensions:</strong> ${p.dimensions}</p>` : ''}
                 </div>
-            </div>
+            </a>
         `).join('');
 
         productsHtml = `
