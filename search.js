@@ -1,0 +1,262 @@
+// ═══════════════════════════════════════════════════════════
+// ARCHINODE Search System
+// ═══════════════════════════════════════════════════════════
+
+(function() {
+  var searchData = null;
+  var searchInput = null;
+  var resultsContainer = null;
+  var isLoaded = false;
+
+  // Determine base path relative to current page
+  function getBasePath() {
+    var path = window.location.pathname;
+    // Count depth from root
+    var parts = path.split('/').filter(function(p) { return p && !p.includes('.html'); });
+    // Remove leading empty or domain parts
+    var depth = 0;
+    if (path.includes('/categories/') && path.split('/categories/')[1] && path.split('/categories/')[1].includes('/')) {
+      depth = 2; // categories/bathroom/something.html
+    } else if (path.includes('/magazine/') || path.includes('/brands/') || path.includes('/categories/')) {
+      depth = 1;
+    } else if (path.includes('/brand-portal/') || path.includes('/admin/') || path.includes('/auth/')) {
+      depth = 1;
+    }
+    var prefix = '';
+    for (var i = 0; i < depth; i++) prefix += '../';
+    return prefix;
+  }
+
+  // Load search index
+  function loadSearchIndex(callback) {
+    if (searchData) { callback(); return; }
+    var basePath = getBasePath();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', basePath + 'search-index.json', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          searchData = JSON.parse(xhr.responseText);
+          isLoaded = true;
+          callback();
+        } catch(e) {
+          console.warn('Search index parse error:', e);
+        }
+      }
+    };
+    xhr.onerror = function() { console.warn('Failed to load search index'); };
+    xhr.send();
+  }
+
+  // Search function
+  function search(query) {
+    if (!searchData || !query) return [];
+    var q = query.toLowerCase().trim();
+    if (q.length < 1) return [];
+
+    var results = [];
+    var basePath = getBasePath();
+
+    for (var i = 0; i < searchData.length; i++) {
+      var item = searchData[i];
+      var score = 0;
+      var nameEn = (item.name_en || '').toLowerCase();
+      var nameKo = (item.name_ko || '').toLowerCase();
+      var descEn = (item.desc_en || '').toLowerCase();
+      var descKo = (item.desc_ko || '').toLowerCase();
+      var parentEn = (item.parent_en || '').toLowerCase();
+      var parentKo = (item.parent_ko || '').toLowerCase();
+      var country = (item.country || '').toLowerCase();
+      var category = (item.category || '').toLowerCase();
+
+      // Exact name match (highest priority)
+      if (nameEn === q || nameKo === q) {
+        score = 100;
+      }
+      // Name starts with query
+      else if (nameEn.indexOf(q) === 0 || nameKo.indexOf(q) === 0) {
+        score = 80;
+      }
+      // Name contains query
+      else if (nameEn.indexOf(q) !== -1 || nameKo.indexOf(q) !== -1) {
+        score = 60;
+      }
+      // Description/parent/country contains query
+      else if (descEn.indexOf(q) !== -1 || descKo.indexOf(q) !== -1) {
+        score = 40;
+      }
+      else if (parentEn.indexOf(q) !== -1 || parentKo.indexOf(q) !== -1) {
+        score = 30;
+      }
+      else if (country.indexOf(q) !== -1 || category.indexOf(q) !== -1) {
+        score = 20;
+      }
+
+      // Type priority boost
+      if (score > 0) {
+        if (item.type === 'brand') score += 5;
+        else if (item.type === 'category') score += 4;
+        else if (item.type === 'subcategory') score += 3;
+        else if (item.type === 'magazine') score += 2;
+
+        results.push({
+          item: item,
+          score: score,
+          url: basePath + item.url
+        });
+      }
+    }
+
+    // Sort by score descending
+    results.sort(function(a, b) { return b.score - a.score; });
+    return results.slice(0, 12); // Max 12 results
+  }
+
+  // Get type label
+  function getTypeLabel(type, lang) {
+    var labels = {
+      category: { en: 'Category', ko: '카테고리' },
+      subcategory: { en: 'Subcategory', ko: '서브카테고리' },
+      brand: { en: 'Brand', ko: '브랜드' },
+      magazine: { en: 'Magazine', ko: '매거진' },
+      page: { en: 'Page', ko: '페이지' }
+    };
+    var l = labels[type] || { en: type, ko: type };
+    return lang === 'ko' ? l.ko : l.en;
+  }
+
+  // Get type icon
+  function getTypeIcon(type) {
+    var icons = {
+      category: 'fas fa-th-large',
+      subcategory: 'fas fa-tag',
+      brand: 'fas fa-building',
+      magazine: 'fas fa-newspaper',
+      page: 'fas fa-file'
+    };
+    return icons[type] || 'fas fa-link';
+  }
+
+  // Render results
+  function renderResults(results) {
+    if (!resultsContainer) return;
+    var lang = localStorage.getItem('archinode-lang') || 'en';
+
+    if (results.length === 0) {
+      var q = searchInput ? searchInput.value.trim() : '';
+      if (q.length > 0) {
+        resultsContainer.innerHTML = '<div class="search-no-results">' +
+          (lang === 'ko' ? '검색 결과가 없습니다.' : 'No results found.') +
+          '</div>';
+      } else {
+        resultsContainer.innerHTML = '<div class="search-hint">' +
+          (lang === 'ko' ? '브랜드, 카테고리, 매거진을 검색하세요' : 'Search brands, categories, magazine') +
+          '</div>';
+      }
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < results.length; i++) {
+      var r = results[i];
+      var item = r.item;
+      var name = lang === 'ko' && item.name_ko ? item.name_ko : item.name_en;
+      var sub = '';
+
+      if (item.type === 'subcategory') {
+        sub = (lang === 'ko' ? item.parent_ko : item.parent_en) || '';
+      } else if (item.type === 'brand') {
+        sub = (item.country || '') + (item.category ? ' · ' + item.category : '');
+      } else if (item.type === 'category') {
+        sub = lang === 'ko' ? (item.desc_ko || '') : (item.desc_en || '');
+      } else if (item.type === 'magazine') {
+        sub = lang === 'ko' ? (item.name_ko || '').substring(0, 60) : '';
+        if (!sub) sub = item.name_en.substring(0, 60);
+        name = item.name_en; // Magazine titles stay in English
+      }
+
+      html += '<a href="' + r.url + '" class="search-result-item">' +
+        '<i class="' + getTypeIcon(item.type) + ' search-result-icon"></i>' +
+        '<div class="search-result-text">' +
+          '<div class="search-result-name">' + name + '</div>' +
+          (sub ? '<div class="search-result-sub">' + sub + '</div>' : '') +
+        '</div>' +
+        '<span class="search-result-type">' + getTypeLabel(item.type, lang) + '</span>' +
+      '</a>';
+    }
+    resultsContainer.innerHTML = html;
+  }
+
+  // Initialize search
+  function initSearch() {
+    // Find the search overlay
+    var overlay = document.getElementById('searchOverlay');
+    if (!overlay) return;
+
+    // Get existing input
+    searchInput = overlay.querySelector('.search-box input');
+    if (!searchInput) return;
+
+    // Create results container if not exists
+    resultsContainer = overlay.querySelector('.search-results');
+    if (!resultsContainer) {
+      resultsContainer = document.createElement('div');
+      resultsContainer.className = 'search-results';
+      var searchBox = overlay.querySelector('.search-box');
+      if (searchBox) {
+        searchBox.parentNode.insertBefore(resultsContainer, searchBox.nextSibling);
+      }
+    }
+
+    // Listen for input
+    searchInput.addEventListener('input', function() {
+      var q = this.value.trim();
+      if (q.length === 0) {
+        renderResults([]);
+        return;
+      }
+      loadSearchIndex(function() {
+        var results = search(q);
+        renderResults(results);
+      });
+    });
+
+    // Preload on overlay open
+    var searchToggleBtns = document.querySelectorAll('.search-toggle');
+    for (var i = 0; i < searchToggleBtns.length; i++) {
+      searchToggleBtns[i].addEventListener('click', function() {
+        loadSearchIndex(function() {});
+        // Focus input after overlay opens
+        setTimeout(function() {
+          if (searchInput) searchInput.focus();
+        }, 100);
+      });
+    }
+
+    // Clear on overlay close
+    var closeBtn = overlay.querySelector('.search-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        if (searchInput) searchInput.value = '';
+        if (resultsContainer) resultsContainer.innerHTML = '';
+      });
+    }
+
+    // Navigate results with keyboard
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        var firstResult = resultsContainer.querySelector('.search-result-item');
+        if (firstResult) {
+          firstResult.click();
+        }
+      }
+    });
+  }
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearch);
+  } else {
+    initSearch();
+  }
+})();

@@ -149,33 +149,118 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: 0.05em;
 }
 
-/* ===== COMING SOON ===== */
-.coming-soon {
-  padding: 100px 0;
+/* ===== SECTION TITLE ===== */
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 40px;
+}
+
+/* ===== ARTICLES GRID ===== */
+.articles-section {
+  padding: 40px 0 80px;
+}
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.article-card {
+  display: block;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.article-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+}
+.article-card-img {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+.article-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+.article-card:hover .article-card-img img {
+  transform: scale(1.05);
+}
+.article-card-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.75);
+  color: var(--white);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+}
+.article-card-body {
+  padding: 20px;
+}
+.article-card-body h3 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-card-body p {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-card-date {
+  font-size: 0.7rem;
+  color: var(--gray-400);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* ===== NEWSLETTER ===== */
+.mag-newsletter {
+  padding: 80px 0;
   text-align: center;
   background: var(--gray-100);
-  margin: 60px 0;
+  margin-bottom: 0;
 }
-.coming-soon h2 {
-  font-size: 2rem;
+.mag-newsletter h2 {
+  font-size: 1.8rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   margin-bottom: 16px;
 }
-.coming-soon p {
+.mag-newsletter p {
   font-size: 0.9rem;
   color: var(--gray-500);
   max-width: 600px;
   margin: 0 auto 40px;
   line-height: 1.7;
 }
-.coming-soon .newsletter-form {
+.mag-newsletter .newsletter-form {
   display: flex;
   max-width: 480px;
   margin: 0 auto;
   gap: 0;
 }
-.coming-soon .newsletter-form input {
+.mag-newsletter .newsletter-form input {
   flex: 1;
   padding: 14px 20px;
   border: 1px solid var(--gray-300);
@@ -185,8 +270,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-family: inherit;
   transition: border-color 0.2s;
 }
-.coming-soon .newsletter-form input:focus { border-color: var(--black); }
-.coming-soon .newsletter-form button {
+.mag-newsletter .newsletter-form input:focus { border-color: var(--black); }
+.mag-newsletter .newsletter-form button {
   background: var(--black);
   color: var(--white);
   padding: 14px 28px;
@@ -196,7 +281,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-family: inherit;
   transition: all 0.2s;
 }
-.coming-soon .newsletter-form button:hover { background: var(--gray-800); }
+.mag-newsletter .newsletter-form button:hover { background: var(--gray-800); }
 
 /* ===== CTA LISTING (same as index) ===== */
 .cta-listing {
@@ -247,13 +332,35 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .featured-card { height: 380px; }
   .featured-overlay { padding: 28px; }
   .featured-overlay h2 { font-size: 1.3rem; }
-  .coming-soon h2 { font-size: 1.5rem; }
-  .coming-soon .newsletter-form { flex-direction: column; gap: 8px; }
-  .coming-soon .newsletter-form input { border-right: 1px solid var(--gray-300); }
+  .articles-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .article-card-img { height: 160px; }
+  .section-title { font-size: 1.3rem; margin-bottom: 24px; }
+  .mag-newsletter h2 { font-size: 1.4rem; }
+  .mag-newsletter .newsletter-form { flex-direction: column; gap: 8px; }
+  .mag-newsletter .newsletter-form input { border-right: 1px solid var(--gray-300); }
   .cta-listing h2 { font-size: 1.6rem; }
   .cta-listing { padding: 80px 0; }
 }
+@media (max-width: 1024px) {
+  .articles-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .articles-grid { grid-template-columns: 1fr; }
+}
 </style>
+
+<!-- Open Graph / SEO -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://archinodekr.com/magazine.html">
+<meta property="og:title" content="Magazine | ARCHINODE">
+<meta property="og:description" content="ARCHINODE Magazine — Insights, trends, and stories from the world of architecture and design.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80">
+<meta property="og:site_name" content="ARCHINODE">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Magazine | ARCHINODE">
+<meta name="twitter:description" content="ARCHINODE Magazine — Insights, trends, and stories from the world of architecture and design.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80">
 </head>
 <body>
 
@@ -337,11 +444,117 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
 </section>
 
-<!-- COMING SOON -->
-<section class="coming-soon">
+<!-- ARTICLES GRID -->
+<section class="articles-section">
   <div class="container">
-    <h2 class="fade-in" data-en="More Stories Coming Soon" data-ko="더 많은 이야기가 곧 찾아옵니다">More Stories Coming Soon</h2>
-    <p class="fade-in" data-en="We're preparing in-depth interviews, brand spotlights, project showcases, and market reports. Subscribe to our newsletter to be the first to know." data-ko="인터뷰, 브랜드 스포트라이트, 프로젝트 쇼케이스, 시장 리포트를 준비하고 있습니다. 뉴스레터를 구독하시면 가장 먼저 알려드립니다.">We're preparing in-depth interviews, brand spotlights, project showcases, and market reports. Subscribe to our newsletter to be the first to know.</p>
+    <h2 class="section-title fade-in" data-en="Latest Articles" data-ko="최신 기사">Latest Articles</h2>
+    <div class="articles-grid">
+
+      <a href="magazine/korean-design-market-report-2026.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80" alt="Market Report">
+          <span class="article-card-tag" data-en="Market Report" data-ko="시장 리포트">Market Report</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Korean Architecture & Design Market Report 2026" data-ko="2026 한국 건축·디자인 시장 현황 및 전망">Korean Architecture & Design Market Report 2026</h3>
+          <p data-en="Market size, trends, and opportunities in the Korean architecture and design industry." data-ko="한국 건축·디자인 시장 규모, 트렌드, 기회 분석.">Market size, trends, and opportunities in the Korean architecture and design industry.</p>
+          <span class="article-card-date">2026-03-15</span>
+        </div>
+      </a>
+
+      <a href="magazine/milan-design-week-2026-preview.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" alt="Milan Design Week">
+          <span class="article-card-tag" data-en="Exhibition" data-ko="전시">Exhibition</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Milan Design Week 2026: What Korean Market Should Watch" data-ko="밀라노 디자인 위크 2026: 한국 시장이 주목해야 할 것들">Milan Design Week 2026: What Korean Market Should Watch</h3>
+          <p data-en="Preview of key exhibitions and brands that will impact the Korean market." data-ko="한국 시장에 영향을 줄 주요 전시와 브랜드 프리뷰.">Preview of key exhibitions and brands that will impact the Korean market.</p>
+          <span class="article-card-date">2026-02-10</span>
+        </div>
+      </a>
+
+      <a href="magazine/brand-spotlight-flos-korea.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&q=80" alt="Flos">
+          <span class="article-card-tag" data-en="Brand Spotlight" data-ko="브랜드 스포트라이트">Brand Spotlight</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Brand Spotlight: Flos — Illuminating Korean Architecture" data-ko="브랜드 스포트라이트: Flos — 한국 건축을 비추다">Brand Spotlight: Flos — Illuminating Korean Architecture</h3>
+          <p data-en="How Italian lighting brand Flos entered the Korean market and its most popular products." data-ko="이탈리아 조명 브랜드 Flos의 한국 시장 진출 스토리.">How Italian lighting brand Flos entered the Korean market and its most popular products.</p>
+          <span class="article-card-date">2026-02-01</span>
+        </div>
+      </a>
+
+      <a href="magazine/korean-bathroom-design-trends-2026.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80" alt="Bathroom Trends">
+          <span class="article-card-tag" data-en="Trends" data-ko="트렌드">Trends</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="2026 Korean Bathroom Design Trends" data-ko="2026 한국 욕실 디자인 트렌드">2026 Korean Bathroom Design Trends</h3>
+          <p data-en="Minimalism, natural materials, and smart features shaping Korean bathrooms." data-ko="미니멀리즘, 자연 소재, 스마트 기능이 만드는 한국 욕실 트렌드.">Minimalism, natural materials, and smart features shaping Korean bathrooms.</p>
+          <span class="article-card-date">2026-01-20</span>
+        </div>
+      </a>
+
+      <a href="magazine/interview-italian-design-meets-korea.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Italian Design">
+          <span class="article-card-tag" data-en="Interview" data-ko="인터뷰">Interview</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Italian Design Meets Korea: A Cross-Cultural Dialogue" data-ko="이탈리아 디자인과 한국의 만남: 문화를 넘은 대화">Italian Design Meets Korea: A Cross-Cultural Dialogue</h3>
+          <p data-en="How Italian design is reinterpreted in the Korean market." data-ko="이탈리아 디자인이 한국에서 어떻게 재해석되는가.">How Italian design is reinterpreted in the Korean market.</p>
+          <span class="article-card-date">2026-01-15</span>
+        </div>
+      </a>
+
+      <a href="magazine/seoul-hannam-dong-luxury-residence.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Hannam-dong">
+          <span class="article-card-tag" data-en="Project" data-ko="프로젝트">Project</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Seoul Hannam-dong: Where Global Design Brands Come Together" data-ko="서울 한남동: 글로벌 디자인 브랜드가 모이는 곳">Seoul Hannam-dong: Where Global Design Brands Come Together</h3>
+          <p data-en="A luxury residential project showcasing global design brands in Seoul." data-ko="서울 한남동 럭셔리 주거 프로젝트에 적용된 글로벌 브랜드.">A luxury residential project showcasing global design brands in Seoul.</p>
+          <span class="article-card-date">2026-01-05</span>
+        </div>
+      </a>
+
+      <a href="magazine/smart-home-integration-korean-apartments.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1558002038-1055907df827?w=600&q=80" alt="Smart Home">
+          <span class="article-card-tag" data-en="Guide" data-ko="가이드">Guide</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="Smart Home Integration in Korean Apartments" data-ko="한국 아파트 스마트홈 시스템 도입 가이드">Smart Home Integration in Korean Apartments</h3>
+          <p data-en="A practical guide to integrating smart home systems in Korean apartments." data-ko="한국 아파트에 스마트홈 시스템을 도입하는 실용적 가이드.">A practical guide to integrating smart home systems in Korean apartments.</p>
+          <span class="article-card-date">2025-12-20</span>
+        </div>
+      </a>
+
+      <a href="magazine/guide-choosing-flooring-korean-homes.html" class="article-card fade-in">
+        <div class="article-card-img">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Flooring Guide">
+          <span class="article-card-tag" data-en="Guide" data-ko="가이드">Guide</span>
+        </div>
+        <div class="article-card-body">
+          <h3 data-en="A Complete Guide to Choosing Flooring for Korean Homes" data-ko="한국 주거에 맞는 바닥재 선택 완벽 가이드">A Complete Guide to Choosing Flooring for Korean Homes</h3>
+          <p data-en="From ondol compatibility to maintenance — everything about flooring for Korean homes." data-ko="온돌 호환성부터 관리까지 — 한국 주거 환경에 맞는 바닥재 선택.">From ondol compatibility to maintenance — everything about flooring for Korean homes.</p>
+          <span class="article-card-date">2025-12-10</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="mag-newsletter">
+  <div class="container">
+    <h2 class="fade-in" data-en="Subscribe to ARCHINODE Magazine" data-ko="ARCHINODE 매거진 구독">Subscribe to ARCHINODE Magazine</h2>
+    <p class="fade-in" data-en="Get the latest articles, brand spotlights, and market reports delivered to your inbox." data-ko="최신 기사, 브랜드 스포트라이트, 시장 리포트를 이메일로 받아보세요.">Get the latest articles, brand spotlights, and market reports delivered to your inbox.</p>
     <form class="newsletter-form fade-in" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
       <input type="email" placeholder="Enter your email address" required data-en-placeholder="Enter your email address" data-ko-placeholder="이메일 주소를 입력하세요">
       <button type="submit" data-en="Subscribe" data-ko="구독">Subscribe</button>
@@ -484,6 +697,7 @@ const fadeObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 fadeEls.forEach(el => fadeObserver.observe(el));
 </script>
+<script src="search.js"></script>
 <script src="lang.js"></script>
 
 </body>

@@ -1,6 +1,11 @@
+# ARCHINODE - robots.txt
 User-agent: *
 Allow: /
-Disallow: /_company/
-Disallow: /NEW/
 
-Sitemap: https://archinode.com/sitemap.xml
+# Disallow admin / portal / auth pages
+Disallow: /admin/
+Disallow: /brand-portal/
+Disallow: /auth/
+
+# Sitemap
+Sitemap: https://archinodekr.com/sitemap.xml

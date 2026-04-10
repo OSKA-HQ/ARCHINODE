@@ -715,6 +715,59 @@ input, select, textarea { font-family: inherit; }
 .scroll-top.visible { opacity: 1; visibility: visible; }
 .scroll-top:hover { background: var(--gray-800); }
 </style>
+
+<!-- Open Graph / SEO -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://archinodekr.com/">
+<meta property="og:title" content="ARCHINODE — Connecting Global Design Brands with Korea">
+<meta property="og:description" content="Discover the world's finest architecture and design brands. ARCHINODE connects global brands with the Korean market.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80">
+<meta property="og:site_name" content="ARCHINODE">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ARCHINODE — Connecting Global Design Brands with Korea">
+<meta name="twitter:description" content="Discover the world's finest architecture and design brands. ARCHINODE connects global brands with the Korean market.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ARCHINODE",
+  "alternateName": "아키노드",
+  "url": "https://archinodekr.com",
+  "description": "Connecting global architecture and design brands with the Korean market.",
+  "inLanguage": ["ko", "en"],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://archinodekr.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ARCHINODE",
+  "alternateName": "비비들리바이브 (VIVIDELIVIBE)",
+  "url": "https://archinodekr.com",
+  "logo": "https://archinodekr.com/favicon.ico",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "office@archinode.org",
+    "contactType": "customer service"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Uiwang",
+    "addressRegion": "Gyeonggi-do",
+    "addressCountry": "KR"
+  },
+  "sameAs": []
+}
+</script>
 </head>
 <body>
 
@@ -1268,6 +1321,7 @@ document.querySelectorAll('.product-wish').forEach(btn => {
   });
 });
 </script>
+<script src="search.js"></script>
 <script src="lang.js"></script>
 
 </body>
