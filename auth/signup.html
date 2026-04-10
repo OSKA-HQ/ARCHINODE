@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; }
+
+.auth-header {
+    background: #0a0a0a; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+}
+.auth-header .logo { color: #fff; font-size: 1.3rem; font-weight: 800; text-decoration: none; letter-spacing: -0.5px; }
+.auth-header .logo span { font-size: 0.6rem; font-weight: 400; color: #666; margin-left: 4px; }
+.auth-header .nav-link { color: #999; font-size: 0.82rem; text-decoration: none; }
+.auth-header .nav-link:hover { color: #C8A96E; }
+
+.auth-container {
+    flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 24px;
+}
+.auth-box {
+    background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    padding: 48px 40px; max-width: 520px; width: 100%;
+}
+.auth-box h1 { font-size: 1.6rem; font-weight: 800; color: #111; margin-bottom: 6px; }
+.auth-box .subtitle { font-size: 0.88rem; color: #999; margin-bottom: 28px; line-height: 1.5; }
+
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 0.82rem; font-weight: 600; color: #333; margin-bottom: 6px; }
+.field input, .field select {
+    width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 0.92rem; font-family: inherit; transition: border-color 0.3s; background: #fff;
+}
+.field input:focus, .field select:focus { outline: none; border-color: #C8A96E; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field .hint { font-size: 0.75rem; color: #aaa; margin-top: 4px; }
+
+.auth-btn {
+    width: 100%; background: #111; color: #fff; border: none; padding: 14px;
+    border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: background 0.3s; font-family: inherit; margin-top: 8px;
+}
+.auth-btn:hover { background: #C8A96E; }
+.auth-btn:disabled { background: #999; cursor: not-allowed; }
+
+.auth-links { text-align: center; margin-top: 20px; font-size: 0.82rem; color: #999; }
+.auth-links a { color: #C8A96E; text-decoration: none; }
+.auth-links a:hover { text-decoration: underline; }
+
+.error-msg {
+    display: none; background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
+    padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem;
+}
+.success-msg {
+    display: none; background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a;
+    padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.85rem;
+}
+
+.divider { display: flex; align-items: center; margin: 24px 0 20px; }
+.divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #eee; }
+.divider span { padding: 0 14px; font-size: 0.78rem; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
+
+.benefits { background: #fafaf7; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+.benefits h3 { font-size: 0.85rem; font-weight: 700; color: #333; margin-bottom: 10px; }
+.benefits ul { list-style: none; padding: 0; }
+.benefits li { font-size: 0.82rem; color: #666; padding: 4px 0; }
+.benefits li i { color: #C8A96E; margin-right: 8px; width: 14px; }
+
+.terms-check { display: flex; align-items: flex-start; gap: 8px; margin: 20px 0 8px; font-size: 0.8rem; color: #666; }
+.terms-check input { margin-top: 2px; accent-color: #C8A96E; }
+.terms-check a { color: #C8A96E; }
+
+@media (max-width: 560px) {
+    .auth-box { padding: 32px 24px; }
+    .field-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="auth-header">
+    <a href="../index.html" class="logo">ARCHINODE <span>건축을 잇다</span></a>
+    <a href="login.html" class="nav-link" data-en="Already have an account? Log in" data-ko="이미 계정이 있으신가요? 로그인">Already have an account? Log in</a>
+</div>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <h1 data-en="Join ARCHINODE" data-ko="ARCHINODE 가입">Join ARCHINODE</h1>
+        <p class="subtitle" data-en="Create your free account to explore global architecture & design brands, save favorites, and connect with brands directly." data-ko="무료 계정을 만들어 글로벌 건축·디자인 브랜드를 탐색하고, 즐겨찾기를 저장하고, 브랜드와 직접 소통하세요.">Create your free account to explore global architecture & design brands, save favorites, and connect with brands directly.</p>
+
+        <div class="benefits">
+            <h3 data-en="Free membership includes:" data-ko="무료 멤버십 혜택:">Free membership includes:</h3>
+            <ul>
+                <li><i class="fas fa-heart"></i> <span data-en="Save your favorite products & brands" data-ko="제품 및 브랜드 즐겨찾기 저장">Save your favorite products & brands</span></li>
+                <li><i class="fas fa-comments"></i> <span data-en="Direct contact with international brands" data-ko="해외 브랜드와 직접 소통">Direct contact with international brands</span></li>
+                <li><i class="fas fa-download"></i> <span data-en="Download catalogs & technical documents" data-ko="카탈로그 및 기술 자료 다운로드">Download catalogs & technical documents</span></li>
+                <li><i class="fas fa-bell"></i> <span data-en="Get updates on new products & brands" data-ko="신제품 및 브랜드 소식 알림">Get updates on new products & brands</span></li>
+            </ul>
+        </div>
+
+        <div class="error-msg" id="signupError"></div>
+        <div class="success-msg" id="signupSuccess"></div>
+
+        <form id="signupForm">
+            <div class="field-row">
+                <div class="field">
+                    <label data-en="Full Name *" data-ko="이름 *">Full Name *</label>
+                    <input type="text" id="signupName" required placeholder="홍길동">
+                </div>
+                <div class="field">
+                    <label data-en="Email *" data-ko="이메일 *">Email *</label>
+                    <input type="email" id="signupEmail" required placeholder="name@company.com">
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label data-en="Password *" data-ko="비밀번호 *">Password *</label>
+                    <input type="password" id="signupPassword" required placeholder="6자 이상" minlength="6">
+                </div>
+                <div class="field">
+                    <label data-en="Confirm Password *" data-ko="비밀번호 확인 *">Confirm Password *</label>
+                    <input type="password" id="signupPasswordConfirm" required placeholder="비밀번호 재입력">
+                </div>
+            </div>
+
+            <div class="divider"><span data-en="Professional Info" data-ko="전문가 정보">Professional Info</span></div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label data-en="Company / Firm *" data-ko="회사 / 사무소 *">Company / Firm *</label>
+                    <input type="text" id="signupCompany" required placeholder="e.g. 삼우종합건축사사무소">
+                </div>
+                <div class="field">
+                    <label data-en="Job Title" data-ko="직책">Job Title</label>
+                    <input type="text" id="signupJobTitle" placeholder="e.g. 선임 건축가">
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label data-en="Industry *" data-ko="업종 *">Industry *</label>
+                    <select id="signupIndustry" required>
+                        <option value="" data-en="Select your industry" data-ko="업종 선택">Select your industry</option>
+                        <option value="architect" data-en="Architecture" data-ko="건축">Architecture</option>
+                        <option value="interior" data-en="Interior Design" data-ko="인테리어 디자인">Interior Design</option>
+                        <option value="landscape" data-en="Landscape Architecture" data-ko="조경">Landscape Architecture</option>
+                        <option value="furniture" data-en="Furniture Design" data-ko="가구 디자인">Furniture Design</option>
+                        <option value="construction" data-en="Construction" data-ko="건설">Construction</option>
+                        <option value="dealer" data-en="Dealer / Distributor" data-ko="딜러 / 유통">Dealer / Distributor</option>
+                        <option value="developer" data-en="Real Estate Developer" data-ko="부동산 개발">Real Estate Developer</option>
+                        <option value="student" data-en="Student" data-ko="학생">Student</option>
+                        <option value="other" data-en="Other" data-ko="기타">Other</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label data-en="Phone" data-ko="전화번호">Phone</label>
+                    <input type="tel" id="signupPhone" placeholder="010-1234-5678">
+                </div>
+            </div>
+
+            <div class="terms-check">
+                <input type="checkbox" id="signupTerms" required>
+                <label for="signupTerms">
+                    <span data-en="I agree to the" data-ko="동의합니다:">I agree to the</span>
+                    <a href="../terms.html" target="_blank" data-en="Terms of Service" data-ko="이용약관">Terms of Service</a>
+                    <span data-en="and" data-ko="및">and</span>
+                    <a href="../privacy.html" target="_blank" data-en="Privacy Policy" data-ko="개인정보처리방침">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="auth-btn" id="signupBtn" data-en="Create Account" data-ko="계정 만들기">Create Account</button>
+        </form>
+
+        <div class="auth-links">
+            <span data-en="Already have an account?" data-ko="이미 계정이 있으신가요?">Already have an account?</span>
+            <a href="login.html" data-en="Log in" data-ko="로그인">Log in</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <span data-en="Are you a brand?" data-ko="브랜드이신가요?">Are you a brand?</span>
+            <a href="../brand-portal/login.html" data-en="Brand Portal" data-ko="브랜드 포털">Brand Portal</a>
+        </div>
+    </div>
+</div>
+
+<script src="../firebase-config.js"></script>
+<script src="../lang.js"></script>
+<script>
+// ── 세션 유지 ──
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.warn('Persistence error:', err));
+
+// ── 이미 로그인 상태면 리디렉션 ──
+auth.onAuthStateChanged(user => {
+    if (user) {
+        // 어드민이면 어드민으로
+        if (isAdmin(user.email)) {
+            window.location.href = '../admin/dashboard.html';
+            return;
+        }
+        // brands 컬렉션에 있으면 브랜드 대시보드로
+        db.collection('brands').doc(user.uid).get().then(doc => {
+            if (doc.exists) {
+                window.location.href = '../brand-portal/dashboard.html';
+            } else {
+                window.location.href = 'profile.html';
+            }
+        });
+    }
+});
+
+// ── 회원가입 ──
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('signupBtn');
+    const errorDiv = document.getElementById('signupError');
+    const successDiv = document.getElementById('signupSuccess');
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+    const company = document.getElementById('signupCompany').value.trim();
+    const jobTitle = document.getElementById('signupJobTitle').value.trim();
+    const industry = document.getElementById('signupIndustry').value;
+    const phone = document.getElementById('signupPhone').value.trim();
+
+    // 유효성 검사
+    if (password !== passwordConfirm) {
+        errorDiv.textContent = '비밀번호가 일치하지 않습니다. / Passwords do not match.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    if (password.length < 6) {
+        errorDiv.textContent = '비밀번호는 6자 이상이어야 합니다. / Password must be at least 6 characters.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+        // Firebase Auth 계정 생성
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        const uid = cred.user.uid;
+
+        // 프로필 이름 설정
+        await cred.user.updateProfile({ displayName: name });
+
+        // Firestore users 컬렉션에 프로필 저장
+        await db.collection('users').doc(uid).set({
+            displayName: name,
+            email: email,
+            company: company,
+            jobTitle: jobTitle,
+            industry: industry,
+            phone: phone,
+            role: 'professional',
+            likedProducts: [],
+            likedBrands: [],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        successDiv.textContent = '계정이 생성되었습니다! 잠시 후 이동합니다... / Account created! Redirecting...';
+        successDiv.style.display = 'block';
+
+        // 프로필 페이지로 이동
+        setTimeout(() => {
+            window.location.href = 'profile.html';
+        }, 1500);
+
+    } catch (error) {
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        errorDiv.style.display = 'block';
+        if (error.code === 'auth/email-already-in-use') {
+            errorDiv.textContent = '이미 등록된 이메일입니다. 로그인해주세요. / Email already in use. Please log in.';
+        } else if (error.code === 'auth/weak-password') {
+            errorDiv.textContent = '비밀번호가 너무 약합니다. / Password is too weak.';
+        } else if (error.code === 'auth/invalid-email') {
+            errorDiv.textContent = '유효하지 않은 이메일 주소입니다. / Invalid email address.';
+        } else {
+            errorDiv.textContent = error.message;
+        }
+    }
+});
+</script>
+</body>
+</html>

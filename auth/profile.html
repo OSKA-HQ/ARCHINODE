@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Page | ARCHINODE</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; color: #333; }
+
+/* TOPBAR */
+.topbar { background: #0a0a0a; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar .logo { color: #fff; font-size: 1.1rem; font-weight: 800; text-decoration: none; }
+.topbar .logo span { color: #C8A96E; font-size: 0.7rem; font-weight: 400; margin-left: 8px; }
+.topbar .user-info { display: flex; align-items: center; gap: 16px; }
+.topbar .user-email { color: #888; font-size: 0.8rem; }
+.topbar .nav-links { display: flex; gap: 16px; }
+.topbar .nav-links a { color: #999; font-size: 0.82rem; text-decoration: none; }
+.topbar .nav-links a:hover { color: #C8A96E; }
+.topbar .logout-btn { background: none; border: 1px solid #444; color: #aaa; padding: 6px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
+.topbar .logout-btn:hover { border-color: #C8A96E; color: #C8A96E; }
+
+/* LOADING */
+.loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; color: #999; font-size: 0.9rem; gap: 12px; }
+
+/* LAYOUT */
+.dashboard { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+.welcome { margin-bottom: 32px; }
+.welcome h1 { font-size: 1.6rem; font-weight: 800; color: #111; margin-bottom: 4px; }
+.welcome p { font-size: 0.9rem; color: #888; }
+
+/* TABS */
+.tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 24px; }
+.tab { padding: 12px 20px; font-size: 0.88rem; font-weight: 600; color: #999; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab:hover { color: #333; }
+.tab.active { color: #111; border-bottom-color: #C8A96E; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* CARDS */
+.section-card {
+    background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    padding: 32px; margin-bottom: 24px;
+}
+.section-card h2 {
+    font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
+}
+.section-card h2 i { color: #C8A96E; margin-right: 8px; }
+
+/* FORM */
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 0.82rem; font-weight: 600; color: #333; margin-bottom: 6px; }
+.field input, .field select {
+    width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 0.92rem; font-family: inherit; transition: border-color 0.3s; background: #fff;
+}
+.field input:focus, .field select:focus { outline: none; border-color: #C8A96E; }
+.field input.readonly { background: #f5f5f5; color: #999; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.btn { padding: 11px 24px; border: none; border-radius: 6px; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.3s; }
+.btn-primary { background: #111; color: #fff; }
+.btn-primary:hover { background: #C8A96E; }
+
+.save-msg { display: inline-block; margin-left: 12px; font-size: 0.85rem; color: #16a34a; opacity: 0; transition: opacity 0.3s; }
+.save-msg.show { opacity: 1; }
+
+/* LIKED GRID */
+.liked-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.liked-card {
+    background: #fff; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none; color: inherit; position: relative;
+}
+.liked-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.liked-card-img { aspect-ratio: 4/3; background: #f0f0f0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.liked-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.liked-card-body { padding: 14px; }
+.liked-card-body h3 { font-size: 0.9rem; font-weight: 600; color: #111; margin-bottom: 4px; }
+.liked-card-body p { font-size: 0.78rem; color: #999; }
+.unlike-btn {
+    position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none;
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #e11d48;
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+}
+.unlike-btn:hover { background: #fff; }
+
+.empty-state { text-align: center; padding: 48px 20px; color: #999; }
+.empty-state i { font-size: 2.5rem; color: #ddd; margin-bottom: 12px; }
+.empty-state h3 { font-size: 1rem; color: #666; margin-bottom: 8px; }
+.empty-state p { font-size: 0.85rem; }
+.empty-state a { color: #C8A96E; text-decoration: none; font-weight: 600; }
+
+@media (max-width: 768px) {
+    .field-row { grid-template-columns: 1fr; }
+    .liked-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .topbar .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <a href="../index.html" class="logo">ARCHINODE <span data-en="My Page" data-ko="마이페이지">My Page</span></a>
+    <div class="user-info">
+        <div class="nav-links">
+            <a href="../index.html" data-en="Home" data-ko="홈">Home</a>
+            <a href="../brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+            <a href="../categories.html" data-en="Categories" data-ko="카테고리">Categories</a>
+        </div>
+        <span class="user-email" id="userEmail"></span>
+        <button class="logout-btn" id="logoutBtn" data-en="Log Out" data-ko="로그아웃">Log Out</button>
+    </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loadingScreen">
+    <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;"></i>
+    <p data-en="Loading your profile..." data-ko="프로필 로딩 중...">Loading your profile...</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboardContent" style="display:none;">
+
+    <div class="welcome">
+        <h1><span data-en="Hello, " data-ko="안녕하세요, ">Hello, </span><span id="userName"></span></h1>
+        <p data-en="Manage your profile and see your saved items." data-ko="프로필을 관리하고 저장된 항목을 확인하세요.">Manage your profile and see your saved items.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active" data-tab="likes" data-en="My Likes" data-ko="좋아요 목록">My Likes</div>
+        <div class="tab" data-tab="profile" data-en="Edit Profile" data-ko="프로필 수정">Edit Profile</div>
+        <div class="tab" data-tab="settings" data-en="Settings" data-ko="설정">Settings</div>
+    </div>
+
+    <!-- TAB: MY LIKES -->
+    <div class="tab-content active" id="tab-likes">
+        <div class="section-card">
+            <h2><i class="fas fa-heart"></i> <span data-en="Liked Products" data-ko="좋아요한 제품">Liked Products</span></h2>
+            <div class="liked-grid" id="likedProductsGrid"></div>
+            <div class="empty-state" id="emptyProducts" style="display:none;">
+                <i class="fas fa-heart"></i>
+                <h3 data-en="No liked products yet" data-ko="아직 좋아요한 제품이 없습니다">No liked products yet</h3>
+                <p data-en="Explore products and tap the heart icon to save your favorites." data-ko="제품을 탐색하고 하트 아이콘을 눌러 즐겨찾기를 저장하세요.">Explore products and tap the heart icon to save your favorites.</p>
+                <p style="margin-top:12px;"><a href="../categories.html" data-en="Browse Products →" data-ko="제품 둘러보기 →">Browse Products →</a></p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-building"></i> <span data-en="Liked Brands" data-ko="좋아요한 브랜드">Liked Brands</span></h2>
+            <div class="liked-grid" id="likedBrandsGrid"></div>
+            <div class="empty-state" id="emptyBrands" style="display:none;">
+                <i class="fas fa-building"></i>
+                <h3 data-en="No liked brands yet" data-ko="아직 좋아요한 브랜드가 없습니다">No liked brands yet</h3>
+                <p data-en="Discover brands and save the ones you love." data-ko="브랜드를 발견하고 마음에 드는 브랜드를 저장하세요.">Discover brands and save the ones you love.</p>
+                <p style="margin-top:12px;"><a href="../brands.html" data-en="Browse Brands →" data-ko="브랜드 둘러보기 →">Browse Brands →</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: EDIT PROFILE -->
+    <div class="tab-content" id="tab-profile">
+        <div class="section-card">
+            <h2><i class="fas fa-user"></i> <span data-en="Profile Information" data-ko="프로필 정보">Profile Information</span></h2>
+            <form id="profileForm">
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Full Name" data-ko="이름">Full Name</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="field">
+                        <label data-en="Email" data-ko="이메일">Email</label>
+                        <input type="email" id="editEmail" readonly class="readonly">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Company / Firm" data-ko="회사 / 사무소">Company / Firm</label>
+                        <input type="text" id="editCompany">
+                    </div>
+                    <div class="field">
+                        <label data-en="Job Title" data-ko="직책">Job Title</label>
+                        <input type="text" id="editJobTitle">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="Industry" data-ko="업종">Industry</label>
+                        <select id="editIndustry">
+                            <option value="architect" data-en="Architecture" data-ko="건축">Architecture</option>
+                            <option value="interior" data-en="Interior Design" data-ko="인테리어 디자인">Interior Design</option>
+                            <option value="landscape" data-en="Landscape Architecture" data-ko="조경">Landscape Architecture</option>
+                            <option value="furniture" data-en="Furniture Design" data-ko="가구 디자인">Furniture Design</option>
+                            <option value="construction" data-en="Construction" data-ko="건설">Construction</option>
+                            <option value="dealer" data-en="Dealer / Distributor" data-ko="딜러 / 유통">Dealer / Distributor</option>
+                            <option value="developer" data-en="Real Estate Developer" data-ko="부동산 개발">Real Estate Developer</option>
+                            <option value="student" data-en="Student" data-ko="학생">Student</option>
+                            <option value="other" data-en="Other" data-ko="기타">Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label data-en="Phone" data-ko="전화번호">Phone</label>
+                        <input type="tel" id="editPhone">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" data-en="Save Profile" data-ko="프로필 저장">Save Profile</button>
+                <span class="save-msg" id="profileSaveMsg"><i class="fas fa-check"></i> Saved!</span>
+            </form>
+        </div>
+    </div>
+
+    <!-- TAB: SETTINGS -->
+    <div class="tab-content" id="tab-settings">
+        <div class="section-card">
+            <h2><i class="fas fa-lock"></i> <span data-en="Change Password" data-ko="비밀번호 변경">Change Password</span></h2>
+            <form id="passwordForm">
+                <div class="field-row">
+                    <div class="field">
+                        <label data-en="New Password" data-ko="새 비밀번호">New Password</label>
+                        <input type="password" id="newPassword" minlength="6" placeholder="6자 이상">
+                    </div>
+                    <div class="field">
+                        <label data-en="Confirm Password" data-ko="비밀번호 확인">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="비밀번호 재입력">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" data-en="Update Password" data-ko="비밀번호 변경">Update Password</button>
+                <span class="save-msg" id="pwSaveMsg"></span>
+            </form>
+        </div>
+        <div class="section-card">
+            <h2><i class="fas fa-sign-out-alt"></i> <span data-en="Account" data-ko="계정">Account</span></h2>
+            <p style="font-size:0.88rem;color:#666;margin-bottom:16px;" data-en="Need to delete your account? Contact us at office@archinode.org" data-ko="계정 삭제가 필요하신가요? office@archinode.org로 연락해주세요.">Need to delete your account? Contact us at office@archinode.org</p>
+        </div>
+    </div>
+</div>
+
+<script src="../firebase-config.js"></script>
+<script src="../lang.js"></script>
+<script>
+let currentUser = null;
+let userData = null;
+
+// ── 인증 체크 ──
+auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+    currentUser = user;
+    document.getElementById('userEmail').textContent = user.email;
+
+    // users 컬렉션에서 프로필 가져오기
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+        // users 컬렉션에 없으면 브랜드 계정일 수 있음
+        const brandDoc = await db.collection('brands').doc(user.uid).get();
+        if (brandDoc.exists) {
+            window.location.href = '../brand-portal/dashboard.html';
+            return;
+        }
+        // 둘 다 아니면 새 users 문서 생성
+        await db.collection('users').doc(user.uid).set({
+            displayName: user.displayName || '',
+            email: user.email,
+            company: '', jobTitle: '', industry: '', phone: '',
+            role: 'professional',
+            likedProducts: [], likedBrands: [],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        userData = { displayName: user.displayName || '', email: user.email, likedProducts: [], likedBrands: [] };
+    } else {
+        userData = userDoc.data();
+    }
+
+    // UI 채우기
+    document.getElementById('userName').textContent = userData.displayName || user.email.split('@')[0];
+    populateProfile();
+    loadLikedProducts();
+    loadLikedBrands();
+
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('dashboardContent').style.display = 'block';
+});
+
+// ── 프로필 채우기 ──
+function populateProfile() {
+    document.getElementById('editName').value = userData.displayName || '';
+    document.getElementById('editEmail').value = userData.email || '';
+    document.getElementById('editCompany').value = userData.company || '';
+    document.getElementById('editJobTitle').value = userData.jobTitle || '';
+    document.getElementById('editIndustry').value = userData.industry || '';
+    document.getElementById('editPhone').value = userData.phone || '';
+}
+
+// ── 좋아요 제품 로드 ──
+async function loadLikedProducts() {
+    const grid = document.getElementById('likedProductsGrid');
+    const empty = document.getElementById('emptyProducts');
+    const ids = userData.likedProducts || [];
+
+    if (ids.length === 0) { empty.style.display = 'block'; grid.innerHTML = ''; return; }
+    empty.style.display = 'none';
+
+    let html = '';
+    // Firestore 'in' 쿼리는 최대 30개씩
+    const chunks = [];
+    for (let i = 0; i < ids.length; i += 30) chunks.push(ids.slice(i, i + 30));
+
+    for (const chunk of chunks) {
+        const snap = await db.collection('products').where(firebase.firestore.FieldPath.documentId(), 'in', chunk).get();
+        snap.forEach(doc => {
+            const p = doc.data();
+            html += `
+            <div class="liked-card">
+                <button class="unlike-btn" onclick="unlikeProduct('${doc.id}')" title="Remove"><i class="fas fa-heart"></i></button>
+                <a href="../products/view.html?id=${p.slug || ''}" style="text-decoration:none;color:inherit;">
+                    <div class="liked-card-img">
+                        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}">` : '<i class="fas fa-cube" style="font-size:2rem;color:#ddd;"></i>'}
+                    </div>
+                    <div class="liked-card-body">
+                        <h3>${p.name || 'Product'}</h3>
+                        <p>${p.brandName || ''}</p>
+                    </div>
+                </a>
+            </div>`;
+        });
+    }
+    grid.innerHTML = html || '';
+    if (!html) empty.style.display = 'block';
+}
+
+// ── 좋아요 브랜드 로드 ──
+async function loadLikedBrands() {
+    const grid = document.getElementById('likedBrandsGrid');
+    const empty = document.getElementById('emptyBrands');
+    const ids = userData.likedBrands || [];
+
+    if (ids.length === 0) { empty.style.display = 'block'; grid.innerHTML = ''; return; }
+    empty.style.display = 'none';
+
+    let html = '';
+    const chunks = [];
+    for (let i = 0; i < ids.length; i += 30) chunks.push(ids.slice(i, i + 30));
+
+    for (const chunk of chunks) {
+        const snap = await db.collection('brands').where(firebase.firestore.FieldPath.documentId(), 'in', chunk).get();
+        snap.forEach(doc => {
+            const b = doc.data();
+            html += `
+            <div class="liked-card">
+                <button class="unlike-btn" onclick="unlikeBrand('${doc.id}')" title="Remove"><i class="fas fa-heart"></i></button>
+                <a href="../brands/view.html?id=${b.slug || ''}" style="text-decoration:none;color:inherit;">
+                    <div class="liked-card-img">
+                        ${b.logoUrl ? `<img src="${b.logoUrl}" alt="${b.brandName}" style="object-fit:contain;padding:20px;">` : '<i class="fas fa-building" style="font-size:2rem;color:#ddd;"></i>'}
+                    </div>
+                    <div class="liked-card-body">
+                        <h3>${b.brandName || 'Brand'}</h3>
+                        <p>${b.country || ''} · ${b.category || ''}</p>
+                    </div>
+                </a>
+            </div>`;
+        });
+    }
+    grid.innerHTML = html || '';
+    if (!html) empty.style.display = 'block';
+}
+
+// ── 좋아요 취소 ──
+async function unlikeProduct(productId) {
+    await db.collection('users').doc(currentUser.uid).update({
+        likedProducts: firebase.firestore.FieldValue.arrayRemove(productId)
+    });
+    await db.collection('products').doc(productId).update({
+        likeCount: firebase.firestore.FieldValue.increment(-1)
+    }).catch(() => {});
+    userData.likedProducts = userData.likedProducts.filter(id => id !== productId);
+    loadLikedProducts();
+}
+
+async function unlikeBrand(brandId) {
+    await db.collection('users').doc(currentUser.uid).update({
+        likedBrands: firebase.firestore.FieldValue.arrayRemove(brandId)
+    });
+    await db.collection('brands').doc(brandId).update({
+        likeCount: firebase.firestore.FieldValue.increment(-1)
+    }).catch(() => {});
+    userData.likedBrands = userData.likedBrands.filter(id => id !== brandId);
+    loadLikedBrands();
+}
+
+// ── 탭 전환 ──
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ── 프로필 저장 ──
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await db.collection('users').doc(currentUser.uid).update({
+        displayName: document.getElementById('editName').value.trim(),
+        company: document.getElementById('editCompany').value.trim(),
+        jobTitle: document.getElementById('editJobTitle').value.trim(),
+        industry: document.getElementById('editIndustry').value,
+        phone: document.getElementById('editPhone').value.trim(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const msg = document.getElementById('profileSaveMsg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 3000);
+});
+
+// ── 비밀번호 변경 ──
+document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = document.getElementById('newPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('pwSaveMsg');
+    if (pw !== confirm) { msg.textContent = '비밀번호가 일치하지 않습니다'; msg.style.color = '#dc2626'; msg.classList.add('show'); return; }
+    if (pw.length < 6) { msg.textContent = '6자 이상 입력해주세요'; msg.style.color = '#dc2626'; msg.classList.add('show'); return; }
+    try {
+        await currentUser.updatePassword(pw);
+        msg.innerHTML = '<i class="fas fa-check"></i> 비밀번호가 변경되었습니다!';
+        msg.style.color = '#16a34a';
+        msg.classList.add('show');
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+        setTimeout(() => msg.classList.remove('show'), 3000);
+    } catch (err) {
+        msg.textContent = '다시 로그인 후 시도해주세요.';
+        msg.style.color = '#dc2626';
+        msg.classList.add('show');
+    }
+});
+
+// ── 로그아웃 ──
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    auth.signOut().then(() => window.location.href = '../index.html');
+});
+</script>
+</body>
+</html>

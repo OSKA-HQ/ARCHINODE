@@ -98,6 +98,11 @@
 .pp-rel-card-brand { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-500); margin-bottom:4px; }
 .pp-rel-card-name { font-size:0.88rem; font-weight:600; color:var(--black); }
 
+.btn-like { background:#fff; border:1px solid #ddd; color:#333; display:inline-flex; align-items:center; gap:6px; padding:11px 20px; border-radius:6px; font-size:0.92rem; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit; }
+.btn-like:hover { border-color:#e11d48; color:#e11d48; }
+.btn-like.liked { border-color:#e11d48; color:#e11d48; background:#fef2f2; }
+.btn-like.liked .fa-heart { font-weight:900; }
+
 .fade-in { opacity:1; animation:fadeIn 0.6s ease-in; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 </style>
@@ -229,6 +234,7 @@
 <script src="../firebase-config.js"></script>
 <script src="../search.js"></script>
 <script src="../lang.js"></script>
+<script src="../auth-ui.js"></script>
 <script>
 const params = new URLSearchParams(window.location.search);
 const productSlug = params.get('id');
@@ -249,6 +255,7 @@ async function loadProduct() {
 
         const doc = snap.docs[0];
         const product = doc.data();
+        currentProductDocId = doc.id;
 
         document.getElementById('pageTitle').textContent = product.name + ' | ' + product.brandName + ' | ARCHINODE';
         document.getElementById('metaDesc').content = (product.description || '').substring(0, 160);
@@ -358,6 +365,11 @@ function renderProduct(p, related) {
                 ${specsHtml}
 
                 <div class="pp-cta">
+                    <button class="btn btn-like" id="likeBtn" onclick="toggleLike()" title="Like">
+                        <i class="far fa-heart" id="likeIcon"></i>
+                        <span id="likeLabel" data-en="Like" data-ko="좋아요">Like</span>
+                        <span id="likeCount" style="margin-left:4px;font-size:0.82rem;color:#999;">${p.likeCount || 0}</span>
+                    </button>
                     <a href="../contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> <span data-en="Request Info" data-ko="문의하기">Request Info</span></a>
                     ${p.catalogPdf ? `<a href="${p.catalogPdf}" target="_blank" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> <span data-en="PDF Catalog" data-ko="PDF 카탈로그">PDF Catalog</span></a>` : ''}
                 </div>
@@ -384,6 +396,91 @@ function showError(title, msg) {
 }
 
 loadProduct();
+
+// ── 좋아요 기능 ──
+let currentProductDocId = null;
+let isLiked = false;
+
+auth.onAuthStateChanged(async (user) => {
+    if (!user || !currentProductDocId) return;
+    // users 컬렉션에서 좋아요 상태 확인
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+        const data = userDoc.data();
+        if (data.likedProducts && data.likedProducts.includes(currentProductDocId)) {
+            isLiked = true;
+            updateLikeUI();
+        }
+    }
+});
+
+function updateLikeUI() {
+    const btn = document.getElementById('likeBtn');
+    const icon = document.getElementById('likeIcon');
+    const label = document.getElementById('likeLabel');
+    if (!btn) return;
+    if (isLiked) {
+        btn.classList.add('liked');
+        icon.className = 'fas fa-heart';
+        label.textContent = label.getAttribute('data-ko') && document.documentElement.lang === 'ko' ? '좋아요 취소' : 'Liked';
+    } else {
+        btn.classList.remove('liked');
+        icon.className = 'far fa-heart';
+        label.textContent = label.getAttribute('data-ko') && document.documentElement.lang === 'ko' ? '좋아요' : 'Like';
+    }
+}
+
+async function toggleLike() {
+    const user = auth.currentUser;
+    if (!user) {
+        // 비로그인 → 로그인 안내
+        if (confirm('좋아요를 누르려면 로그인이 필요합니다.\nLog in to like this product.\n\n로그인 페이지로 이동할까요?')) {
+            window.location.href = '../auth/login.html';
+        }
+        return;
+    }
+    if (!currentProductDocId) return;
+
+    // users 컬렉션에 문서가 없으면 brands 계정일 수 있음
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+        alert('전문가 계정으로 로그인해주세요.\nPlease log in with a professional account.');
+        return;
+    }
+
+    const likeBtn = document.getElementById('likeBtn');
+    likeBtn.disabled = true;
+
+    try {
+        if (isLiked) {
+            // 좋아요 취소
+            await db.collection('users').doc(user.uid).update({
+                likedProducts: firebase.firestore.FieldValue.arrayRemove(currentProductDocId)
+            });
+            await db.collection('products').doc(currentProductDocId).update({
+                likeCount: firebase.firestore.FieldValue.increment(-1)
+            });
+            isLiked = false;
+            const countEl = document.getElementById('likeCount');
+            if (countEl) countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+        } else {
+            // 좋아요
+            await db.collection('users').doc(user.uid).update({
+                likedProducts: firebase.firestore.FieldValue.arrayUnion(currentProductDocId)
+            });
+            await db.collection('products').doc(currentProductDocId).update({
+                likeCount: firebase.firestore.FieldValue.increment(1)
+            });
+            isLiked = true;
+            const countEl = document.getElementById('likeCount');
+            if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
+        }
+        updateLikeUI();
+    } catch (err) {
+        console.error('Like error:', err);
+    }
+    likeBtn.disabled = false;
+}
 
 // ── Site JS ──
 function toggleCatMenu() { document.getElementById('catMenu').classList.toggle('active'); }

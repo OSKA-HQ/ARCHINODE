@@ -20,6 +20,10 @@
 
 <style>
 /* ===== BRAND PAGE STYLES ===== */
+.btn-like { background:#fff; border:1px solid #ddd; color:#333; display:inline-flex; align-items:center; gap:6px; padding:11px 20px; border-radius:6px; font-size:0.92rem; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:inherit; }
+.btn-like:hover { border-color:#e11d48; color:#e11d48; }
+.btn-like.liked { border-color:#e11d48; color:#e11d48; background:#fef2f2; }
+.btn-like.liked .fa-heart { font-weight:900; }
 
 /* Loading State */
 .bp-loading {
@@ -328,6 +332,7 @@
 <script src="../firebase-config.js"></script>
 <script src="../search.js"></script>
 <script src="../lang.js"></script>
+<script src="../auth-ui.js"></script>
 <script>
 // ── URL에서 브랜드 slug 가져오기 ──
 const params = new URLSearchParams(window.location.search);
@@ -358,6 +363,7 @@ async function loadBrand() {
         const doc = snapshot.docs[0];
         const brand = doc.data();
         const brandId = doc.id;
+        currentBrandDocId = brandId;
 
         // 승인되지 않은 브랜드 체크
         if (brand.status !== 'approved') {
@@ -501,6 +507,11 @@ function renderBrand(brand, products) {
                     ${website ? `<strong>Website:</strong> <a href="${wsUrl}" target="_blank" style="color:var(--gray-700);">${website}</a>` : ''}
                 </div>
                 <div class="bp-cta-group">
+                    <button class="btn-like" id="brandLikeBtn" onclick="toggleBrandLike()" title="Like">
+                        <i class="far fa-heart" id="brandLikeIcon"></i>
+                        <span id="brandLikeLabel" data-en="Like" data-ko="좋아요">Like</span>
+                        <span id="brandLikeCount" style="margin-left:4px;font-size:0.82rem;color:#999;">${brand.likeCount || 0}</span>
+                    </button>
                     ${website ? `<a href="${wsUrl}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>` : ''}
                     <a href="../contact.html" class="btn btn-secondary"><i class="fas fa-envelope"></i> Contact</a>
                 </div>
@@ -592,6 +603,70 @@ function showError(title, message) {
 
 // ── 실행 ──
 loadBrand();
+
+// ── 브랜드 좋아요 기능 ──
+let currentBrandDocId = null;
+let isBrandLiked = false;
+
+auth.onAuthStateChanged(async (user) => {
+    if (!user || !currentBrandDocId) return;
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+        const data = userDoc.data();
+        if (data.likedBrands && data.likedBrands.includes(currentBrandDocId)) {
+            isBrandLiked = true;
+            updateBrandLikeUI();
+        }
+    }
+});
+
+function updateBrandLikeUI() {
+    const btn = document.getElementById('brandLikeBtn');
+    const icon = document.getElementById('brandLikeIcon');
+    if (!btn) return;
+    if (isBrandLiked) {
+        btn.classList.add('liked');
+        icon.className = 'fas fa-heart';
+    } else {
+        btn.classList.remove('liked');
+        icon.className = 'far fa-heart';
+    }
+}
+
+async function toggleBrandLike() {
+    const user = auth.currentUser;
+    if (!user) {
+        if (confirm('좋아요를 누르려면 로그인이 필요합니다.\nLog in to like this brand.\n\n로그인 페이지로 이동할까요?')) {
+            window.location.href = '../auth/login.html';
+        }
+        return;
+    }
+    if (!currentBrandDocId) return;
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+        alert('전문가 계정으로 로그인해주세요.\nPlease log in with a professional account.');
+        return;
+    }
+    const btn = document.getElementById('brandLikeBtn');
+    btn.disabled = true;
+    try {
+        if (isBrandLiked) {
+            await db.collection('users').doc(user.uid).update({ likedBrands: firebase.firestore.FieldValue.arrayRemove(currentBrandDocId) });
+            await db.collection('brands').doc(currentBrandDocId).update({ likeCount: firebase.firestore.FieldValue.increment(-1) });
+            isBrandLiked = false;
+            const c = document.getElementById('brandLikeCount');
+            if (c) c.textContent = Math.max(0, parseInt(c.textContent) - 1);
+        } else {
+            await db.collection('users').doc(user.uid).update({ likedBrands: firebase.firestore.FieldValue.arrayUnion(currentBrandDocId) });
+            await db.collection('brands').doc(currentBrandDocId).update({ likeCount: firebase.firestore.FieldValue.increment(1) });
+            isBrandLiked = true;
+            const c = document.getElementById('brandLikeCount');
+            if (c) c.textContent = parseInt(c.textContent) + 1;
+        }
+        updateBrandLikeUI();
+    } catch (err) { console.error('Brand like error:', err); }
+    btn.disabled = false;
+}
 
 // ── 기존 사이트 JS (메뉴 등) ──
 function toggleCatMenu() {

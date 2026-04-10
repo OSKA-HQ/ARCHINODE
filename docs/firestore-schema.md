@@ -189,7 +189,7 @@ firestore/
 
 ---
 
-## 4. users 컬렉션 (Phase 2B)
+## 4. users 컬렉션 (Phase 2B — 구현 완료)
 
 **문서 ID:** Firebase Auth UID (국내 전문가 계정)
 
@@ -199,18 +199,22 @@ firestore/
   displayName: "김설계",
   email: "kim@design.kr",
   phone: "010-1234-5678",
-  company: "㈜디자인스튜디오",
-  role: "architect",                    // architect | interior-designer | dealer | contractor | other
+  company: "㈜디자인스튜디오",          // 회사 / 사무소
+  jobTitle: "선임 건축가",              // 직책
+  industry: "architect",                // architect | interior | landscape | furniture | construction | dealer | developer | student | other
+  role: "professional",                 // professional (고정값 — 브랜드 계정과 구분용)
 
   // ── 좋아요 목록 ──
-  likedProducts: ["productDocId1", "productDocId2"],
-  likedBrands: ["brandDocId1"],
+  likedProducts: ["productDocId1", "productDocId2"],  // 좋아요한 제품 문서 ID 배열
+  likedBrands: ["brandDocId1"],                        // 좋아요한 브랜드 문서 ID 배열
 
   // ── 시스템 필드 ──
   createdAt: Timestamp,
-  lastLoginAt: Timestamp
+  updatedAt: Timestamp
 }
 ```
+
+**industry 허용 값:** architect, interior, landscape, furniture, construction, dealer, developer, student, other
 
 ---
 

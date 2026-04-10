@@ -144,6 +144,26 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
         <p data-en="Manage your brand presence on ARCHINODE." data-ko="ARCHINODE에서 브랜드 존재감을 관리하세요.">Manage your brand presence on ARCHINODE. <span class="status-badge" id="statusBadge"></span></p>
     </div>
 
+    <!-- STATS CARDS -->
+    <div id="statsCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px;">
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.04);text-align:center;">
+            <div style="font-size:0.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;" data-en="Brand Likes" data-ko="브랜드 좋아요">Brand Likes</div>
+            <div id="statBrandLikes" style="font-size:1.8rem;font-weight:800;color:#e11d48;">0</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.04);text-align:center;">
+            <div style="font-size:0.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;" data-en="Product Likes" data-ko="제품 좋아요">Product Likes</div>
+            <div id="statProductLikes" style="font-size:1.8rem;font-weight:800;color:#C8A96E;">0</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.04);text-align:center;">
+            <div style="font-size:0.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;" data-en="Products" data-ko="등록 제품">Products</div>
+            <div id="statProductCount" style="font-size:1.8rem;font-weight:800;color:#111;">0</div>
+        </div>
+        <div style="background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.04);text-align:center;">
+            <div style="font-size:0.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;" data-en="Articles" data-ko="매거진 기사">Articles</div>
+            <div id="statArticleCount" style="font-size:1.8rem;font-weight:800;color:#111;">0</div>
+        </div>
+    </div>
+
     <!-- TABS -->
     <div class="tabs">
         <div class="tab active" data-tab="brand" data-en="Brand Info" data-ko="브랜드 정보">Brand Info</div>
@@ -640,10 +660,32 @@ async function loadBrandData(uid) {
         }
         brandData = doc.data();
         populateDashboard();
+        loadStats();
         document.getElementById('loadingScreen').style.display = 'none';
         document.getElementById('dashboardContent').style.display = 'block';
     } catch (err) {
         console.error('Error loading brand:', err);
+    }
+}
+
+// ── 통계 로드 ──
+async function loadStats() {
+    try {
+        // 브랜드 좋아요 수
+        document.getElementById('statBrandLikes').textContent = brandData.likeCount || 0;
+
+        // 제품 좋아요 합산 + 제품 수
+        const prodSnap = await db.collection('products').where('brandId', '==', currentUser.uid).get();
+        let totalProductLikes = 0;
+        prodSnap.forEach(doc => { totalProductLikes += (doc.data().likeCount || 0); });
+        document.getElementById('statProductLikes').textContent = totalProductLikes;
+        document.getElementById('statProductCount').textContent = prodSnap.size;
+
+        // 매거진 기사 수
+        const artSnap = await db.collection('articles').where('brandId', '==', currentUser.uid).get();
+        document.getElementById('statArticleCount').textContent = artSnap.size;
+    } catch (err) {
+        console.error('Stats loading error:', err);
     }
 }
 
