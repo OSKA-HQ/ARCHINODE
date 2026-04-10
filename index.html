@@ -720,7 +720,7 @@ input, select, textarea { font-family: inherit; }
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar">
-  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="list-your-brand.html">Learn more &rarr;</a>
+  <span data-en="2026 Brand Listing —" data-ko="2026 브랜드 입점 —">2026 Brand Listing —</span> <strong data-en="Now Free" data-ko="무료">Now Free</strong> &nbsp;|&nbsp; <span data-en="List your brand on ARCHINODE at no cost." data-ko="ARCHINODE에 무료로 브랜드를 등록하세요.">List your brand on ARCHINODE at no cost.</span> <a href="list-your-brand.html" data-en="Learn more →" data-ko="자세히 보기 →">Learn more &rarr;</a>
 </div>
 
 <!-- HEADER -->
@@ -729,7 +729,7 @@ input, select, textarea { font-family: inherit; }
     <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
     <nav class="main-nav" id="mainNav">
       <div class="nav-dropdown">
-        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
         <div class="nav-dropdown-menu" id="catMenu">
             <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
             <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
@@ -743,15 +743,15 @@ input, select, textarea { font-family: inherit; }
             <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
         </div>
       </div>
-      <a href="brands.html">Brands</a>
-      <a href="magazine.html">Magazine</a>
-      <a href="about.html">About</a>
-      <a href="list-your-brand.html" class="nav-cta">List Your Brand</a>
+      <a href="brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="about.html" data-en="About" data-ko="소개">About</a>
+      <a href="list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
     </nav>
     <div class="header-actions">
-      <a href="brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
       <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
-      <a href="#" class="lang-switch">KR / EN</a>
+      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -796,8 +796,8 @@ input, select, textarea { font-family: inherit; }
 <section class="categories" id="categories">
   <div class="container">
     <div class="section-header fade-in">
-      <h2 class="section-title">Categories</h2>
-      <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+      <h2 class="section-title" data-en="Categories" data-ko="카테고리">Categories</h2>
+      <a href="categories.html" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
   <div class="cat-grid">
@@ -878,8 +878,8 @@ input, select, textarea { font-family: inherit; }
 <section class="brands-section" id="brands">
   <div class="container">
     <div class="section-header fade-in">
-      <h2 class="section-title">Featured Brands</h2>
-      <a href="brands.html" class="section-link">All Brands <i class="fas fa-arrow-right"></i></a>
+      <h2 class="section-title" data-en="Featured Brands" data-ko="주요 브랜드">Featured Brands</h2>
+      <a href="brands.html" class="section-link" data-en="All Brands" data-ko="전체 브랜드">All Brands <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
   <div class="brands-marquee">
@@ -929,8 +929,8 @@ input, select, textarea { font-family: inherit; }
 <section class="featured" id="products">
   <div class="container">
     <div class="section-header fade-in">
-      <h2 class="section-title">New Products</h2>
-      <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+      <h2 class="section-title" data-en="New Products" data-ko="신제품">New Products</h2>
+      <a href="#" class="section-link" data-en="View All" data-ko="전체 보기">View All <i class="fas fa-arrow-right"></i></a>
     </div>
     <div class="products-grid">
       <div class="product-card fade-in">
@@ -941,7 +941,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Fritz Hansen</div>
         <div class="product-name">Series 7 Chair — Lacquered</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -950,7 +950,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Flos</div>
         <div class="product-name">IC Lights Floor — Brushed Brass</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -960,7 +960,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">B&B Italia</div>
         <div class="product-name">Charles Sofa — Large</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -969,7 +969,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Kettal</div>
         <div class="product-name">Bitta Lounge Armchair</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -978,7 +978,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Agape</div>
         <div class="product-name">Drop Freestanding Bathtub</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -988,7 +988,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Boffi</div>
         <div class="product-name">K14 Kitchen System</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -997,7 +997,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Mutina</div>
         <div class="product-name">Mews Collection — Fog</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
       <div class="product-card fade-in">
         <div class="product-img">
@@ -1006,7 +1006,7 @@ input, select, textarea { font-family: inherit; }
         </div>
         <div class="product-brand">Vitra</div>
         <div class="product-name">Eames Aluminium Group Chair</div>
-        <div class="product-price">Contact for price</div>
+        <div class="product-price" data-en="Contact for price" data-ko="가격 문의">Contact for price</div>
       </div>
     </div>
   </div>
@@ -1016,8 +1016,8 @@ input, select, textarea { font-family: inherit; }
 <section class="editorial" id="magazine">
   <div class="container">
     <div class="section-header fade-in">
-      <h2 class="section-title">Magazine</h2>
-      <a href="magazine.html" class="section-link">All Stories <i class="fas fa-arrow-right"></i></a>
+      <h2 class="section-title" data-en="Magazine" data-ko="매거진">Magazine</h2>
+      <a href="magazine.html" class="section-link" data-en="All Stories" data-ko="전체 보기">All Stories <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
   <div class="container">
@@ -1053,23 +1053,23 @@ input, select, textarea { font-family: inherit; }
     <div class="services-grid">
       <div class="service-item fade-in">
         <i class="fas fa-handshake"></i>
-        <h4>Dealership Screening</h4>
-        <p>We verify and evaluate potential Korean dealers on behalf of global brands.</p>
+        <h4 data-en="Dealership Screening" data-ko="딜러십 검증">Dealership Screening</h4>
+        <p data-en="We verify and evaluate potential Korean dealers on behalf of global brands." data-ko="글로벌 브랜드를 대신하여 한국 딜러 후보를 검증하고 평가합니다.">We verify and evaluate potential Korean dealers on behalf of global brands.</p>
       </div>
       <div class="service-item fade-in">
         <i class="fas fa-eye"></i>
-        <h4>Dealer Monitoring</h4>
-        <p>Ongoing compliance monitoring for dealership agreements in Korea.</p>
+        <h4 data-en="Dealer Monitoring" data-ko="딜러 모니터링">Dealer Monitoring</h4>
+        <p data-en="Ongoing compliance monitoring for dealership agreements in Korea." data-ko="한국 내 딜러십 계약 이행을 지속적으로 모니터링합니다.">Ongoing compliance monitoring for dealership agreements in Korea.</p>
       </div>
       <div class="service-item fade-in">
         <i class="fas fa-calendar-check"></i>
-        <h4>Exhibition Support</h4>
-        <p>Full-service trade show support — booth setup, translation, and logistics.</p>
+        <h4 data-en="Exhibition Support" data-ko="박람회 지원">Exhibition Support</h4>
+        <p data-en="Full-service trade show support — booth setup, translation, and logistics." data-ko="부스 설치, 통역, 물류까지 원스톱 박람회 지원 서비스를 제공합니다.">Full-service trade show support — booth setup, translation, and logistics.</p>
       </div>
       <div class="service-item fade-in">
         <i class="fas fa-trophy"></i>
-        <h4>ARCHINODE Awards</h4>
-        <p>Annual awards celebrating the best products across every category.</p>
+        <h4 data-en="ARCHINODE Awards" data-ko="ARCHINODE 어워드">ARCHINODE Awards</h4>
+        <p data-en="Annual awards celebrating the best products across every category." data-ko="매년 각 카테고리 최고의 제품을 선정하는 어워드 프로그램입니다.">Annual awards celebrating the best products across every category.</p>
       </div>
     </div>
   </div>
@@ -1078,18 +1078,18 @@ input, select, textarea { font-family: inherit; }
 <!-- CTA - BRAND LISTING -->
 <section class="cta-listing" id="cta">
   <div class="container">
-    <h2 class="fade-in">List Your Brand<br>in Korea</h2>
-    <p class="fade-in">ARCHINODE connects global architecture and design brands with Korean architects, designers, and dealers. Join our growing directory — free for 2026.</p>
-    <a href="list-your-brand.html" class="cta-btn fade-in">Apply for Brand Listing <i class="fas fa-arrow-right"></i></a>
-    <div class="cta-free-tag fade-in">Free listing through December 2026</div>
+    <h2 class="fade-in" data-en-html="List Your Brand&lt;br&gt;in Korea" data-ko-html="한국에 브랜드를&lt;br&gt;등록하세요">List Your Brand<br>in Korea</h2>
+    <p class="fade-in" data-en="ARCHINODE connects global architecture and design brands with Korean architects, designers, and dealers. Join our growing directory — free for 2026." data-ko="ARCHINODE는 글로벌 건축·디자인 브랜드와 한국의 건축가, 디자이너, 딜러를 연결합니다. 2026년 무료 입점 — 지금 등록하세요.">ARCHINODE connects global architecture and design brands with Korean architects, designers, and dealers. Join our growing directory — free for 2026.</p>
+    <a href="list-your-brand.html" class="cta-btn fade-in" data-en="Apply for Brand Listing" data-ko="브랜드 입점 신청">Apply for Brand Listing <i class="fas fa-arrow-right"></i></a>
+    <div class="cta-free-tag fade-in" data-en="Free listing through December 2026" data-ko="2026년 12월까지 무료 입점">Free listing through December 2026</div>
   </div>
 </section>
 
 <!-- NEWSLETTER -->
 <section class="newsletter">
   <div class="container">
-    <h2 class="fade-in">Stay Updated</h2>
-    <p class="fade-in">Subscribe to receive the latest from global design brands entering Korea.</p>
+    <h2 class="fade-in" data-en="Stay Updated" data-ko="소식 받기">Stay Updated</h2>
+    <p class="fade-in" data-en="Subscribe to receive the latest from global design brands entering Korea." data-ko="한국에 진출하는 글로벌 디자인 브랜드의 최신 소식을 받아보세요.">Subscribe to receive the latest from global design brands entering Korea.</p>
     <form class="newsletter-form fade-in" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
       <input type="email" placeholder="Your email address" required>
       <button type="submit">Subscribe</button>
@@ -1103,7 +1103,7 @@ input, select, textarea { font-family: inherit; }
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
-        <p>Connecting global architecture &amp; design brands with the Korean market. Discover, connect, and grow with ARCHINODE.</p>
+        <p data-en="Connecting global architecture &amp; design brands with the Korean market. Discover, connect, and grow with ARCHINODE." data-ko="글로벌 건축·디자인 브랜드를 한국 시장과 연결합니다. ARCHINODE와 함께 발견하고, 연결하고, 성장하세요.">Connecting global architecture &amp; design brands with the Korean market. Discover, connect, and grow with ARCHINODE.</p>
         <div class="footer-social">
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -1112,48 +1112,48 @@ input, select, textarea { font-family: inherit; }
         </div>
       </div>
       <div class="footer-col">
-        <h4>Categories</h4>
+        <h4 data-en="Categories" data-ko="카테고리">Categories</h4>
         <ul>
-          <li><a href="categories/furniture.html">Furniture</a></li>
-          <li><a href="categories/bathroom.html">Bathroom</a></li>
-          <li><a href="categories/outdoor.html">Outdoor</a></li>
-          <li><a href="categories/lighting.html">Lighting</a></li>
-          <li><a href="categories/kitchen.html">Kitchen</a></li>
-          <li><a href="categories/office.html">Office</a></li>
-          <li><a href="categories/finishes.html">Finishes</a></li>
-          <li><a href="categories/wellness.html">Wellness</a></li>
-          <li><a href="categories/decor.html">Decor</a></li>
-          <li><a href="categories/construction.html">Construction</a></li>
+          <li><a href="categories/furniture.html" data-en="Furniture" data-ko="가구">Furniture</a></li>
+          <li><a href="categories/bathroom.html" data-en="Bathroom" data-ko="욕실">Bathroom</a></li>
+          <li><a href="categories/outdoor.html" data-en="Outdoor" data-ko="아웃도어">Outdoor</a></li>
+          <li><a href="categories/lighting.html" data-en="Lighting" data-ko="조명">Lighting</a></li>
+          <li><a href="categories/kitchen.html" data-en="Kitchen" data-ko="주방">Kitchen</a></li>
+          <li><a href="categories/office.html" data-en="Office" data-ko="오피스">Office</a></li>
+          <li><a href="categories/finishes.html" data-en="Finishes" data-ko="마감재">Finishes</a></li>
+          <li><a href="categories/wellness.html" data-en="Wellness" data-ko="웰니스">Wellness</a></li>
+          <li><a href="categories/decor.html" data-en="Decor" data-ko="데코">Decor</a></li>
+          <li><a href="categories/construction.html" data-en="Construction" data-ko="건축자재">Construction</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Services</h4>
+        <h4 data-en="Services" data-ko="서비스">Services</h4>
         <ul>
-          <li><a href="list-your-brand.html">Brand Listing</a></li>
-          <li><a href="list-your-brand.html">Dealership Screening</a></li>
-          <li><a href="list-your-brand.html">Dealer Monitoring</a></li>
-          <li><a href="list-your-brand.html">Exhibition Support</a></li>
-          <li><a href="about.html">ARCHINODE Awards</a></li>
+          <li><a href="list-your-brand.html" data-en="Brand Listing" data-ko="브랜드 입점">Brand Listing</a></li>
+          <li><a href="list-your-brand.html" data-en="Dealership Screening" data-ko="딜러십 검증">Dealership Screening</a></li>
+          <li><a href="list-your-brand.html" data-en="Dealer Monitoring" data-ko="딜러 모니터링">Dealer Monitoring</a></li>
+          <li><a href="list-your-brand.html" data-en="Exhibition Support" data-ko="박람회 지원">Exhibition Support</a></li>
+          <li><a href="about.html" data-en="ARCHINODE Awards" data-ko="ARCHINODE 어워드">ARCHINODE Awards</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Company</h4>
+        <h4 data-en="Company" data-ko="회사">Company</h4>
         <ul>
-          <li><a href="about.html">About ARCHINODE</a></li>
-          <li><a href="magazine.html">Magazine</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="about.html">Contact</a></li>
-          <li><a href="#">Press</a></li>
+          <li><a href="about.html" data-en="About ARCHINODE" data-ko="ARCHINODE 소개">About ARCHINODE</a></li>
+          <li><a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a></li>
+          <li><a href="#" data-en="Careers" data-ko="채용">Careers</a></li>
+          <li><a href="about.html" data-en="Contact" data-ko="문의">Contact</a></li>
+          <li><a href="#" data-en="Press" data-ko="보도자료">Press</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>For Brands</h4>
+        <h4 data-en="For Brands" data-ko="브랜드를 위한">For Brands</h4>
         <ul>
-          <li><a href="list-your-brand.html">List Your Brand</a></li>
-          <li><a href="list-your-brand.html#pricing">Pricing</a></li>
-          <li><a href="list-your-brand.html">How It Works</a></li>
-          <li><a href="#">Success Stories</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="list-your-brand.html" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a></li>
+          <li><a href="list-your-brand.html#pricing" data-en="Pricing" data-ko="요금 안내">Pricing</a></li>
+          <li><a href="list-your-brand.html" data-en="How It Works" data-ko="이용 방법">How It Works</a></li>
+          <li><a href="#" data-en="Success Stories" data-ko="성공 사례">Success Stories</a></li>
+          <li><a href="#" data-en="FAQ" data-ko="자주 묻는 질문">FAQ</a></li>
         </ul>
       </div>
     </div>
@@ -1164,9 +1164,9 @@ input, select, textarea { font-family: inherit; }
     <div class="footer-bottom">
       <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
       <div class="footer-bottom-links">
-        <a href="#">Terms</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Cookie Policy</a>
+        <a href="terms.html" data-en="Terms" data-ko="이용약관">Terms</a>
+        <a href="privacy.html" data-en="Privacy Policy" data-ko="개인정보처리방침">Privacy Policy</a>
+        <a href="#" data-en="Cookie Policy" data-ko="쿠키 정책">Cookie Policy</a>
       </div>
     </div>
   </div>
@@ -1242,11 +1242,7 @@ function toggleMobile() {
   document.getElementById('mainNav').classList.toggle('active');
 }
 
-/* ===== LANGUAGE (placeholder) ===== */
-function toggleLang(e) {
-  e.preventDefault();
-  // Language toggle logic to be implemented
-}
+/* Language handled by lang.js */
 
 /* ===== SCROLL ANIMATIONS ===== */
 const fadeEls = document.querySelectorAll('.fade-in');
@@ -1271,6 +1267,7 @@ document.querySelectorAll('.product-wish').forEach(btn => {
   });
 });
 </script>
+<script src="lang.js"></script>
 
 </body>
 </html>

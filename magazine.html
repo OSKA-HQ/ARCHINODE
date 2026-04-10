@@ -1,393 +1,894 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Magazine — 매거진 | ARCHINODE</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazine - ARCHINODE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Georgia:wght@400;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000;
+            --accent: #C8A96E;
+            --dark-gray: #1a1a1a;
+            --gray: #6b6b6b;
+            --light-gray: #f5f5f5;
+            --white: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Announcement Bar */
+        .announcement-bar {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Georgia', serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-desktop a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-desktop a:hover {
+            color: var(--accent);
+        }
+
+        .nav-desktop a.active {
+            color: var(--accent);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: var(--white);
+            border: 1px solid #e0e0e0;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--black);
+            font-size: 13px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--light-gray);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-toggle, .mobile-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--black);
+            transition: color 0.3s ease;
+        }
+
+        .search-toggle:hover, .mobile-toggle:hover {
+            color: var(--accent);
+        }
+
+        .language-toggle {
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            color: var(--accent);
+        }
+
+        .search-bar {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: var(--white);
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .search-bar.active {
+            display: block;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .mobile-nav.active {
+            display: block;
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: var(--black);
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-family: 'Georgia', serif;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Featured Article Card */
+        .featured-section {
+            padding: 60px 0;
+        }
+
+        .featured-card {
+            position: relative;
+            height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--light-gray);
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 40px;
+            color: var(--white);
+        }
+
+        .featured-tag {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .featured-title {
+            font-family: 'Georgia', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .featured-excerpt {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            opacity: 0.95;
+        }
+
+        .featured-meta {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            padding: 100px 20px;
+            text-align: center;
+            background: var(--light-gray);
+            margin: 60px 0;
+            border-radius: 8px;
+        }
+
+        .coming-soon-title {
+            font-family: 'Georgia', serif;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .coming-soon-description {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Newsletter Form */
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid #d0d0d0;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            border-radius: 4px;
+            background: var(--white);
+        }
+
+        .newsletter-form input::placeholder {
+            color: #999;
+        }
+
+        .newsletter-form button {
+            padding: 14px 28px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--accent);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            margin: 60px 0 0 0;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Georgia', serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta-description {
+            font-size: 16px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--accent);
+            color: var(--black);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: #dab86f;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 20px 40px;
+            margin-top: 80px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .footer-column a {
+            display: block;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+        }
+
+        /* Fade-in Observer */
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: var(--black);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .scroll-to-top:hover {
+            background: #dab86f;
+            transform: translateY(-5px);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .featured-card {
+                height: 350px;
+            }
+
+            .featured-title {
+                font-size: 24px;
+            }
+
+            .coming-soon-title {
+                font-size: 32px;
+            }
+
+            .cta-title {
+                font-size: 28px;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .hero-subtitle {
+                font-size: 14px;
+            }
+
+            .featured-card {
+                height: 280px;
+            }
+
+            .featured-overlay {
+                padding: 24px;
+            }
+
+            .featured-title {
+                font-size: 18px;
+            }
+
+            .featured-excerpt {
+                font-size: 14px;
+            }
+
+            .coming-soon {
+                padding: 60px 20px;
+            }
+
+            .coming-soon-title {
+                font-size: 24px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scroll-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- ANNOUNCEMENT BAR -->
-<div class="announcement-bar">
-  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="list-your-brand.html">Learn more &rarr;</a>
-</div>
-
-<!-- HEADER -->
-<header class="header" id="header">
-  <div class="container">
-    <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
-    <nav class="main-nav" id="mainNav">
-      <div class="nav-dropdown">
-        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
-        <div class="nav-dropdown-menu" id="catMenu">
-            <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
-            <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
-            <a href="categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
-            <a href="categories/lighting.html"><span>Lighting</span><small>조명</small></a>
-            <a href="categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
-            <a href="categories/office.html"><span>Office</span><small>오피스</small></a>
-            <a href="categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
-            <a href="categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
-            <a href="categories/decor.html"><span>Decor</span><small>데코</small></a>
-            <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
-        </div>
-      </div>
-      <a href="brands.html">Brands</a>
-      <a href="magazine.html" class="active-nav">Magazine</a>
-      <a href="about.html">About</a>
-      <a href="list-your-brand.html" class="nav-cta">List Your Brand</a>
-    </nav>
-    <div class="header-actions">
-      <a href="brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
-      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
-      <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
-      <a href="#" class="lang-switch">KR / EN</a>
-      <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar" data-en="Get the latest trends from selected brands" data-ko="선정된 브랜드들의 최신 정보와 트렌드를 받아보세요">
+        선정된 브랜드들의 최신 정보와 트렌드를 받아보세요 | Get the latest trends from selected brands
     </div>
-  </div>
-</header>
 
-<!-- SEARCH OVERLAY -->
-<div class="search-overlay" id="searchOverlay">
-  <span class="search-close" onclick="toggleSearch()">&times;</span>
-  <div class="search-box">
-    <input type="text" placeholder="Search brands, products, designers...">
-    <button><i class="fas fa-arrow-right"></i></button>
-  </div>
-</div>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">ARCHINODE</div>
 
-<!-- PAGE HERO -->
-<section class="page-hero">
-  <img class="page-hero-bg" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80" alt="Magazine">
-  <div class="page-hero-content">
-    <div class="page-hero-inner">
-      <span class="page-hero-tag">Editorial</span>
-      <h1>Magazine</h1>
-      <p>Trends, interviews, project stories, and market insights — connecting global design with Korea.</p>
+            <nav class="nav-desktop">
+                <a href="index.html" data-en="Home" data-ko="홈">Home</a>
+                <div class="dropdown">
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event)">
+                        <span data-en="Categories" data-ko="카테고리">Categories</span> <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="categoryDropdown">
+                        <a href="#">Interior Design</a>
+                        <a href="#">Architecture</a>
+                        <a href="#">Furniture</a>
+                        <a href="#">Lighting</a>
+                        <a href="#">Home Decor</a>
+                    </div>
+                </div>
+                <a href="#" data-en="Brands" data-ko="브랜드">Brands</a>
+                <a href="magazine.html" class="active" data-en="Magazine" data-ko="매거진">Magazine</a>
+                <a href="#" data-en="About" data-ko="소개">About</a>
+                <a href="#" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="search-toggle" onclick="toggleSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="mobile-toggle" onclick="toggleMobileNav()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="language-toggle" onclick="toggleLang(event)">KR/EN</div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar" id="searchBar">
+            <input type="text" placeholder="Search articles, brands, trends...">
+        </div>
+
+        <!-- Mobile Nav -->
+        <nav class="mobile-nav" id="mobileNav">
+            <a href="index.html" data-en="Home" data-ko="홈">Home</a>
+            <a href="#" data-en="Categories" data-ko="카테고리">Categories</a>
+            <a href="#" data-en="Brands" data-ko="브랜드">Brands</a>
+            <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+            <a href="#" data-en="About" data-ko="소개">About</a>
+            <a href="#" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <div class="hero-tag" data-en="ARCHINODE Magazine" data-ko="ARCHINODE 매거진">ARCHINODE Magazine</div>
+            <h1 class="hero-title" data-en="Magazine" data-ko="매거진">Magazine</h1>
+            <p class="hero-subtitle" data-en="Insights, trends, and stories from the world of architecture and design." data-ko="건축과 디자인 세계의 인사이트, 트렌드, 이야기.">Insights, trends, and stories from the world of architecture and design.</p>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="index.html" data-en="Home" data-ko="홈">Home</a> / <span data-en="Magazine" data-ko="매거진">Magazine</span>
     </div>
-  </div>
-</section>
 
-<!-- BREADCRUMB -->
-<div class="breadcrumb">
-  <div class="container">
-    <div class="breadcrumb-list">
-      <a href="index.html">Home</a>
-      <span class="sep">/</span>
-      <span class="current">Magazine (매거진)</span>
-    </div>
-  </div>
-</div>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Featured Article -->
+        <section class="featured-section fade-in">
+            <div class="featured-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" alt="2026 Architecture & Design Trends">
+                <div class="featured-overlay">
+                    <div class="featured-tag" data-en="Trend Report" data-ko="트렌드 리포트">Trend Report</div>
+                    <h2 class="featured-title" data-en="2026 Architecture & Design Trends: Bridging East and West" data-ko="2026 건축·디자인 트렌드: 동양과 서양의 만남">2026 Architecture & Design Trends: Bridging East and West</h2>
+                    <p class="featured-excerpt" data-en="A look at how global design brands are adapting to the Korean market, and what architects and designers should expect this year." data-ko="글로벌 디자인 브랜드들이 한국 시장에 어떻게 적응하고 있는지, 그리고 건축가와 디자이너들이 올해 기대할 수 있는 것들을 살펴봅니다.">A look at how global design brands are adapting to the Korean market, and what architects and designers should expect this year.</p>
+                    <div class="featured-meta" data-en="March 2026" data-ko="2026년 3월">March 2026</div>
+                </div>
+            </div>
+        </section>
 
-<!-- CATEGORY FILTER -->
-<section class="mag-filter-section">
-  <div class="container">
-    <div class="mag-filter">
-      <button class="mag-filter-btn active" onclick="filterArticles('all', this)">All</button>
-      <button class="mag-filter-btn" onclick="filterArticles('trend', this)">Trend</button>
-      <button class="mag-filter-btn" onclick="filterArticles('interview', this)">Interview</button>
-      <button class="mag-filter-btn" onclick="filterArticles('project', this)">Project</button>
-      <button class="mag-filter-btn" onclick="filterArticles('guide', this)">Guide</button>
-      <button class="mag-filter-btn" onclick="filterArticles('brand spotlight', this)">Brand Spotlight</button>
-      <button class="mag-filter-btn" onclick="filterArticles('market report', this)">Market Report</button>
-      <button class="mag-filter-btn" onclick="filterArticles('exhibition', this)">Exhibition</button>
-    </div>
-  </div>
-</section>
+        <!-- Coming Soon Section -->
+        <section class="coming-soon fade-in">
+            <h2 class="coming-soon-title" data-en="More Stories Coming Soon" data-ko="더 많은 이야기가 곧 찾아옵니다">More Stories Coming Soon</h2>
+            <p class="coming-soon-description" data-en="We're preparing in-depth interviews, brand spotlights, project showcases, and market reports. Subscribe to our newsletter to be the first to know." data-ko="인터뷰, 브랜드 스포트라이트, 프로젝트 쇼케이스, 시장 리포트를 준비하고 있습니다. 뉴스레터를 구독하시면 가장 먼저 알려드립니다.">We're preparing in-depth interviews, brand spotlights, project showcases, and market reports. Subscribe to our newsletter to be the first to know.</p>
 
-<!-- FEATURED ARTICLE -->
-<section class="mag-featured">
-  <div class="container">
-    <div class="mag-hero-grid">
-      <div class="mag-hero-card fade-in" data-tag="trend">
-        <div class="mag-hero-img">
-          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" alt="Featured Article">
-        </div>
-        <div class="mag-hero-content">
-          <span class="mag-tag">Trend</span>
-          <h2>2026 Architecture & Design Trends: Bridging East and West</h2>
-          <p>From biophilic design to neo-minimalism, we explore the top trends shaping architecture and interiors in 2026 — and how they resonate with Korean design sensibility.</p>
-          <div class="mag-meta">
-            <span>March 15, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>8 min read</span>
-          </div>
-          <a href="#" class="mag-read-btn">Read Article <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
+            <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                <input type="email" placeholder="Enter your email address" required data-en-placeholder="Enter your email address" data-ko-placeholder="이메일 주소를 입력하세요">
+                <button type="submit" data-en="Subscribe" data-ko="구독">Subscribe</button>
+            </form>
+        </section>
     </div>
-  </div>
-</section>
 
-<!-- ALL ARTICLES -->
-<section class="mag-articles">
-  <div class="container">
-    <div class="section-header fade-in">
-      <h2 class="section-title">Latest Stories</h2>
-    </div>
-    <div class="mag-grid">
-      <div class="mag-card fade-in" data-tag="interview">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="European Brands on Entering the Korean Market">
-          <span class="mag-tag">Interview</span>
+    <!-- CTA Section -->
+    <section class="cta-section fade-in">
+        <div class="cta-content">
+            <h2 class="cta-title" data-en="Are you a design brand?" data-ko="디자인 브랜드인가요?">Are you a design brand?</h2>
+            <p class="cta-description" data-en="Reach architecture and design professionals in Korea. List your brand and showcase your products to the right audience." data-ko="한국의 건축 및 디자인 전문가들에게 도달하세요. 귀사의 브랜드를 등록하고 적절한 고객층에게 제품을 선보이세요.">Reach architecture and design professionals in Korea. List your brand and showcase your products to the right audience.</p>
+            <button class="cta-button" onclick="listYourBrand()" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</button>
         </div>
-        <div class="mag-card-body">
-          <h3>European Brands on Entering the Korean Market</h3>
-          <p>Three leading European design brands share their strategies, challenges, and expectations for growth in South Korea.</p>
-          <div class="mag-meta">
-            <span>March 10, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>6 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="project">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="Seoul Flagship: When Global Design Meets Korean Sensibility">
-          <span class="mag-tag">Project</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Seoul Flagship: When Global Design Meets Korean Sensibility</h3>
-          <p>A look inside Seoul's newest flagship showroom, where Italian craftsmanship meets Korean spatial philosophy.</p>
-          <div class="mag-meta">
-            <span>March 5, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>5 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="guide">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80" alt="The Complete Guide to Importing European Furniture into Korea">
-          <span class="mag-tag">Guide</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>The Complete Guide to Importing European Furniture into Korea</h3>
-          <p>Customs, logistics, certifications, and dealer agreements — everything you need to know about bringing global design brands to the Korean market.</p>
-          <div class="mag-meta">
-            <span>February 28, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>12 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="brand spotlight">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=800&q=80" alt="Kettal: Redefining Outdoor Living for the Korean Climate">
-          <span class="mag-tag">Brand Spotlight</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Kettal: Redefining Outdoor Living for the Korean Climate</h3>
-          <p>How the Spanish outdoor furniture brand is adapting its designs for Korea's unique four-season climate.</p>
-          <div class="mag-meta">
-            <span>February 20, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>5 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="market report">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="Korean Interior Design Market: $12B and Growing">
-          <span class="mag-tag">Market Report</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Korean Interior Design Market: $12B and Growing</h3>
-          <p>An in-depth analysis of the Korean interior design and furniture market, with forecasts for 2026–2030.</p>
-          <div class="mag-meta">
-            <span>February 15, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>10 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="interview">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Architect Kim Joon: On Specifying International Products in Korea">
-          <span class="mag-tag">Interview</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Architect Kim Joon: On Specifying International Products in Korea</h3>
-          <p>One of Korea's top architects discusses how he selects and specifies global design products for his projects.</p>
-          <div class="mag-meta">
-            <span>February 10, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>7 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="exhibition">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80" alt="Milan Design Week 2026: What Korean Professionals Need to Know">
-          <span class="mag-tag">Exhibition</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Milan Design Week 2026: What Korean Professionals Need to Know</h3>
-          <p>Preview of Salone del Mobile 2026 with a focus on brands entering or expanding in the Korean market.</p>
-          <div class="mag-meta">
-            <span>February 5, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>6 min read</span>
-          </div>
-        </div>
-      </div>
-      <div class="mag-card fade-in" data-tag="trend">
-        <div class="mag-card-img">
-          <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80" alt="Wellness Design: The Rise of Spa-Inspired Living Spaces in Korea">
-          <span class="mag-tag">Trend</span>
-        </div>
-        <div class="mag-card-body">
-          <h3>Wellness Design: The Rise of Spa-Inspired Living Spaces in Korea</h3>
-          <p>How the wellness trend is transforming Korean residential and hospitality design, and which brands are leading the way.</p>
-          <div class="mag-meta">
-            <span>January 28, 2026</span>
-            <span class="mag-dot">·</span>
-            <span>6 min read</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- NEWSLETTER -->
-<section class="mag-newsletter">
-  <div class="container">
-    <div class="mag-newsletter-inner fade-in">
-      <h2>Stay Updated</h2>
-      <p>Subscribe to ARCHINODE Magazine for the latest trends, interviews, and market insights delivered to your inbox.</p>
-      <div class="mag-newsletter-form">
-        <input type="email" placeholder="Your email address">
-        <button>Subscribe <i class="fas fa-arrow-right"></i></button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
-        <p>Connecting global architecture &amp; design brands with the Korean market.</p>
-        <div class="footer-social">
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-pinterest-p"></i></a>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4 data-en="About" data-ko="소개">About</h4>
+                    <a href="#">About ARCHINODE</a>
+                    <a href="#">Our Mission</a>
+                    <a href="#">Team</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="For Brands" data-ko="브랜드를 위해">For Brands</h4>
+                    <a href="#">List Your Brand</a>
+                    <a href="#">Advertise</a>
+                    <a href="#">Partnership</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Resources" data-ko="리소스">Resources</h4>
+                    <a href="#">Blog</a>
+                    <a href="#">Magazine</a>
+                    <a href="#">Market Reports</a>
+                    <a href="#">Design Trends</a>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Legal" data-ko="법적">Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Disclaimer</a>
+                </div>
+                <div class="footer-column">
+                    <h4 data-en="Follow Us" data-ko="팔로우">Follow Us</h4>
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-en="© 2026 ARCHINODE. All rights reserved. | Designed for architects and designers in Korea." data-ko="© 2026 ARCHINODE. 모든 권리 보유. | 한국의 건축가 및 디자이너를 위해 디자인되었습니다.">&copy; 2026 ARCHINODE. All rights reserved. | Designed for architects and designers in Korea.</p>
+            </div>
         </div>
-      </div>
-      <div class="footer-col">
-        <h4>Categories</h4>
-        <ul>
-          <li><a href="categories/furniture.html">Furniture</a></li>
-          <li><a href="categories/bathroom.html">Bathroom</a></li>
-          <li><a href="categories/outdoor.html">Outdoor</a></li>
-          <li><a href="categories/lighting.html">Lighting</a></li>
-          <li><a href="categories/kitchen.html">Kitchen</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>More Categories</h4>
-        <ul>
-          <li><a href="categories/office.html">Office</a></li>
-          <li><a href="categories/finishes.html">Finishes</a></li>
-          <li><a href="categories/wellness.html">Wellness</a></li>
-          <li><a href="categories/decor.html">Decor</a></li>
-          <li><a href="categories/construction.html">Construction</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="list-your-brand.html">Brand Listing</a></li>
-          <li><a href="#">Dealership Screening</a></li>
-          <li><a href="#">Exhibition Support</a></li>
-          <li><a href="#">ARCHINODE Awards</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="about.html">About ARCHINODE</a></li>
-          <li><a href="magazine.html">Magazine</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-business-info" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:40px;margin-bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);line-height:1.8;">
-      상호: 비비들리바이브 (VIVIDELIVIBE) &nbsp;|&nbsp; 대표: 박승리 &nbsp;|&nbsp; 사업자등록번호: 640-03-02879<br>
-      주소: 경기도 의왕시 내손로 13, 103동 804호 &nbsp;|&nbsp; 이메일: office@archinode.org
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
-      <div class="footer-bottom-links">
-        <a href="#">Terms</a>
-        <a href="#">Privacy Policy</a>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
-<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Top">
-  <i class="fas fa-chevron-up"></i>
-</button>
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-<script>
-const header = document.getElementById('header');
-const scrollTopBtn = document.getElementById('scrollTop');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 50);
-  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-});
-function toggleSearch() {
-  const o = document.getElementById('searchOverlay');
-  o.classList.toggle('active');
-  if (o.classList.contains('active')) o.querySelector('input').focus();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('searchOverlay').classList.remove('active'); });
+    <script>
+        // Toggle Search
+        function toggleSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.classList.toggle('active');
+        }
 
-function toggleCatMenu() {
-  const menu = document.getElementById('catMenu');
-  menu.classList.toggle('active');
-}
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-  const dropdown = document.querySelector('.nav-dropdown');
-  if (dropdown && !dropdown.contains(e.target)) {
-    document.getElementById('catMenu').classList.remove('active');
-  }
-});
-function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
-const fadeEls = document.querySelectorAll('.fade-in');
-const fadeObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }});
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-fadeEls.forEach(el => fadeObs.observe(el));
-</script>
-<script>
-function filterArticles(tag, btn) {
-  document.querySelectorAll('.mag-filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const cards = document.querySelectorAll('.mag-card[data-tag], .mag-hero-card[data-tag]');
-  cards.forEach(c => {
-    if (tag === 'all' || c.dataset.tag === tag) {
-      c.style.display = '';
-    } else {
-      c.style.display = 'none';
-    }
-  });
-}
-</script>
+        // Toggle Mobile Nav
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        }
+
+        // Toggle Category Dropdown
+        function toggleDropdown(event) {
+            const dropdown = document.getElementById('categoryDropdown');
+            dropdown.classList.toggle('active');
+            event.stopPropagation();
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('categoryDropdown');
+            if (!event.target.closest('.dropdown')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Handle Newsletter Form
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            alert('Thank you for subscribing with: ' + email);
+            event.target.reset();
+        }
+
+        // List Your Brand CTA
+        function listYourBrand() {
+            alert('Redirecting to brand listing page...');
+        }
+
+        // Scroll to Top
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Fade-in Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // Close mobile nav on link click
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobileNav').classList.remove('active');
+            });
+        });
+    </script>
+    <script src="lang.js"></script>
 </body>
 </html>
