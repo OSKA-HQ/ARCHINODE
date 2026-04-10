@@ -1,7 +1,13 @@
 /* ===== ARCHINODE Language Toggle (KR / EN) ===== */
 (function() {
-  // Default language
-  let currentLang = localStorage.getItem('archinode-lang') || 'en';
+  // Detect language: saved preference > browser/location > default 'en'
+  let currentLang = localStorage.getItem('archinode-lang');
+
+  if (!currentLang) {
+    // Auto-detect: Korean browser or Korean locale → 'ko', else 'en'
+    var browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    currentLang = (browserLang === 'ko' || browserLang.startsWith('ko-')) ? 'ko' : 'en';
+  }
 
   // Apply language on load
   document.addEventListener('DOMContentLoaded', function() {
@@ -21,13 +27,13 @@
   function applyLanguage(lang) {
     // Update all elements with data-en and data-ko attributes
     document.querySelectorAll('[data-en][data-ko]').forEach(function(el) {
-      const text = el.getAttribute('data-' + lang);
+      var text = el.getAttribute('data-' + lang);
       if (text !== null) {
         // Check if element has child elements we should preserve
         if (el.querySelector('i, svg, img, span.logo-sub')) {
           // Replace only the first text node
-          const nodes = el.childNodes;
-          for (let i = 0; i < nodes.length; i++) {
+          var nodes = el.childNodes;
+          for (var i = 0; i < nodes.length; i++) {
             if (nodes[i].nodeType === Node.TEXT_NODE && nodes[i].textContent.trim()) {
               nodes[i].textContent = text;
               break;
@@ -41,7 +47,7 @@
 
     // Update elements with data-en-html and data-ko-html (for innerHTML)
     document.querySelectorAll('[data-en-html][data-ko-html]').forEach(function(el) {
-      const html = el.getAttribute('data-' + lang + '-html');
+      var html = el.getAttribute('data-' + lang + '-html');
       if (html !== null) {
         el.innerHTML = html;
       }
@@ -49,7 +55,7 @@
 
     // Update placeholder attributes
     document.querySelectorAll('[data-en-placeholder][data-ko-placeholder]').forEach(function(el) {
-      const ph = el.getAttribute('data-' + lang + '-placeholder');
+      var ph = el.getAttribute('data-' + lang + '-placeholder');
       if (ph !== null) {
         el.placeholder = ph;
       }

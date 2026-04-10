@@ -28,7 +28,7 @@
     <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
     <nav class="main-nav" id="mainNav">
       <div class="nav-dropdown">
-        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
         <div class="nav-dropdown-menu" id="catMenu">
             <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
             <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
@@ -42,16 +42,16 @@
             <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
         </div>
       </div>
-      <a href="brands.html">Brands</a>
-      <a href="magazine.html">Magazine</a>
-      <a href="about.html" class="active-nav">About</a>
-      <a href="list-your-brand.html" class="nav-cta">List Your Brand</a>
+      <a href="brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="about.html" class="active-nav" data-en="About" data-ko="소개">About</a>
+      <a href="list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
     </nav>
     <div class="header-actions">
-      <a href="brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
+      <a href="brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
       <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
       <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
-      <a href="#" class="lang-switch">KR / EN</a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -71,9 +71,9 @@
   <img class="page-hero-bg" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80" alt="ARCHINODE">
   <div class="page-hero-content">
     <div class="page-hero-inner">
-      <span class="page-hero-tag">About Us</span>
+      <span class="page-hero-tag" data-en="About Us" data-ko="소개">About Us</span>
       <h1>건축을 잇다</h1>
-      <p>Connecting Global Architecture & Design with Korea</p>
+      <p data-en="Connecting Global Architecture & Design with Korea" data-ko="전 세계 건축·디자인과 한국을 잇다">Connecting Global Architecture & Design with Korea</p>
     </div>
   </div>
 </section>
@@ -82,9 +82,9 @@
 <div class="breadcrumb">
   <div class="container">
     <div class="breadcrumb-list">
-      <a href="index.html">Home</a>
+      <a href="index.html" data-en="Home" data-ko="홈">Home</a>
       <span class="sep">/</span>
-      <span class="current">About</span>
+      <span class="current" data-en="About" data-ko="소개">About</span>
     </div>
   </div>
 </div>
@@ -94,10 +94,9 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-text fade-in">
-        <h2>We Bridge the Gap Between Global Brands and Korea</h2>
-        <p>전 세계에는 수천 개의 뛰어난 건축·디자인 브랜드가 있습니다. 하지만 한국 시장에 진출하려는 이들에게 언어, 문화, 유통 구조는 높은 장벽입니다.</p>
-        <p>ARCHINODE는 이 문제를 해결하기 위해 만들어졌습니다. 해외 글로벌 브랜드가 한국의 건축가, 디자이너, 딜러들과 쉽게 연결될 수 있는 플랫폼 — 그것이 우리가 만들고 있는 것입니다.</p>
-        <p>There are thousands of exceptional architecture and design brands worldwide. But for those looking to enter the Korean market, language, culture, and distribution barriers stand in the way. ARCHINODE exists to solve this problem — connecting global brands with Korean architects, designers, and dealers through a single, curated platform.</p>
+        <h2 data-en="We Bridge the Gap Between Global Brands and Korea" data-ko="전 세계 브랜드와 한국을 잇다">We Bridge the Gap Between Global Brands and Korea</h2>
+        <p data-en="There are thousands of exceptional architecture and design brands worldwide. But for those looking to enter the Korean market, language, culture, and distribution barriers stand in the way." data-ko="전 세계에는 수천 개의 뛰어난 건축·디자인 브랜드가 있습니다. 하지만 한국 시장에 진출하려는 이들에게 언어, 문화, 유통 구조는 높은 장벽입니다.">There are thousands of exceptional architecture and design brands worldwide. But for those looking to enter the Korean market, language, culture, and distribution barriers stand in the way.</p>
+        <p data-en="ARCHINODE exists to solve this problem — connecting global brands with Korean architects, designers, and dealers through a single, curated platform." data-ko="ARCHINODE는 이 문제를 해결하기 위해 만들어졌습니다. 해외 글로벌 브랜드가 한국의 건축가, 디자이너, 딜러들과 쉽게 연결될 수 있는 플랫폼 — 그것이 우리가 만들고 있는 것입니다.">ARCHINODE exists to solve this problem — connecting global brands with Korean architects, designers, and dealers through a single, curated platform.</p>
       </div>
       <div class="about-img fade-in">
         <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="Design Space">
@@ -109,11 +108,11 @@
 <!-- MISSION -->
 <section style="padding:80px 0; background:var(--gray-50);">
   <div class="container" style="max-width:800px; text-align:center;">
-    <h2 class="fade-in" style="font-size:1.8rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:24px;">Our Mission</h2>
-    <p class="fade-in" style="font-size:1.1rem; color:var(--gray-600); line-height:1.9; font-weight:300;">
+    <h2 class="fade-in" style="font-size:1.8rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:24px;" data-en="Our Mission" data-ko="우리의 미션">Our Mission</h2>
+    <p class="fade-in" style="font-size:1.1rem; color:var(--gray-600); line-height:1.9; font-weight:300;" data-en="To become the definitive platform that connects global architecture, interior, and design brands with the Korean market — making it effortless for the world's best brands to reach Korean professionals, and for Korean professionals to discover the world's best products." data-ko="전 세계 건축·인테리어·디자인 브랜드와 대한민국을 잇는 궁극의 플랫폼. 세계 최고의 브랜드가 한국 전문가에게 닿고, 한국 전문가가 세계 최고의 제품을 발견하는 것을 당연하게 만드는 것이 우리의 사명입니다.">
       "To become the definitive platform that connects global architecture, interior, and design brands with the Korean market — making it effortless for the world's best brands to reach Korean professionals, and for Korean professionals to discover the world's best products."
     </p>
-    <p class="fade-in" style="font-size:1.1rem; color:var(--gray-600); line-height:1.9; font-weight:300; margin-top:16px;">
+    <p class="fade-in" style="font-size:1.1rem; color:var(--gray-600); line-height:1.9; font-weight:300; margin-top:16px;" data-en="To become the definitive platform that connects global architecture, interior, and design brands with the Korean market — making it effortless for the world's best brands to reach Korean professionals, and for Korean professionals to discover the world's best products." data-ko="전 세계 건축·인테리어·디자인 브랜드와 대한민국을 잇는 궁극의 플랫폼. 세계 최고의 브랜드가 한국 전문가에게 닿고, 한국 전문가가 세계 최고의 제품을 발견하는 것을 당연하게 만드는 것이 우리의 사명입니다.">
       "전 세계 건축·인테리어·디자인 브랜드와 대한민국을 잇는 궁극의 플랫폼. 세계 최고의 브랜드가 한국 전문가에게 닿고, 한국 전문가가 세계 최고의 제품을 발견하는 것을 당연하게 만드는 것이 우리의 사명입니다."
     </p>
   </div>
@@ -125,19 +124,19 @@
     <div class="stats-grid">
       <div class="stat-item fade-in">
         <h3>3,500</h3>
-        <p>Target Brands</p>
+        <p data-en="Target Brands" data-ko="타겟 브랜드">Target Brands</p>
       </div>
       <div class="stat-item fade-in">
         <h3>10</h3>
-        <p>Categories</p>
+        <p data-en="Categories" data-ko="카테고리">Categories</p>
       </div>
       <div class="stat-item fade-in">
         <h3>50+</h3>
-        <p>Countries</p>
+        <p data-en="Countries" data-ko="국가">Countries</p>
       </div>
       <div class="stat-item fade-in">
         <h3>1</h3>
-        <p>Platform</p>
+        <p data-en="Platform" data-ko="플랫폼">Platform</p>
       </div>
     </div>
   </div>
@@ -147,16 +146,16 @@
 <section class="about-intro">
   <div class="container">
     <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
-      <h2 class="section-title" style="font-size:2rem;">What We Do</h2>
+      <h2 class="section-title" style="font-size:2rem;" data-en="What We Do" data-ko="우리가 하는 일">What We Do</h2>
     </div>
     <div class="about-grid">
       <div class="about-img fade-in">
         <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="Platform">
       </div>
       <div class="about-text fade-in">
-        <h2 style="font-size:1.6rem;">For Global Brands<br><span style="color:var(--gray-400);">해외 브랜드를 위한</span></h2>
-        <p>We provide a curated brand directory that showcases your products to the Korean market — architects, interior designers, landscape designers, and dealers who are actively looking for global brands.</p>
-        <p>브랜드 프로필 페이지부터 딜러십 검증, 박람회 지원까지. 한국 시장 진출에 필요한 모든 것을 한 곳에서 제공합니다.</p>
+        <h2 style="font-size:1.6rem;" data-en="For Global Brands" data-ko="해외 브랜드를 위한">For Global Brands<br><span style="color:var(--gray-400);" data-en="For Global Brands" data-ko="해외 브랜드를 위한">해외 브랜드를 위한</span></h2>
+        <p data-en="We provide a curated brand directory that showcases your products to the Korean market — architects, interior designers, landscape designers, and dealers who are actively looking for global brands." data-ko="브랜드 프로필 페이지부터 딜러십 검증, 박람회 지원까지. 한국 시장 진출에 필요한 모든 것을 한 곳에서 제공합니다.">We provide a curated brand directory that showcases your products to the Korean market — architects, interior designers, landscape designers, and dealers who are actively looking for global brands.</p>
+        <p data-en="We provide a curated brand directory that showcases your products to the Korean market — architects, interior designers, landscape designers, and dealers who are actively looking for global brands." data-ko="브랜드 프로필 페이지부터 딜러십 검증, 박람회 지원까지. 한국 시장 진출에 필요한 모든 것을 한 곳에서 제공합니다.">브랜드 프로필 페이지부터 딜러십 검증, 박람회 지원까지. 한국 시장 진출에 필요한 모든 것을 한 곳에서 제공합니다.</p>
       </div>
     </div>
   </div>
@@ -166,9 +165,9 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-text fade-in">
-        <h2 style="font-size:1.6rem;">For Korean Professionals<br><span style="color:var(--gray-400);">대한민국 전문가를 위한</span></h2>
-        <p>대한민국의 건축 설계사, 인테리어 디자이너, 조경 디자이너, 딜러 여러분. 전 세계 3,500개 브랜드의 제품을 한 곳에서 탐색하고, 직접 연결될 수 있습니다.</p>
-        <p>Korean architects, designers, and dealers can explore products from 3,500+ global brands in one place. Discover new brands, request dealership opportunities, and source materials for your projects — all on ARCHINODE.</p>
+        <h2 style="font-size:1.6rem;" data-en="For Korean Professionals" data-ko="대한민국 전문가를 위한">For Korean Professionals<br><span style="color:var(--gray-400);" data-en="For Korean Professionals" data-ko="대한민국 전문가를 위한">대한민국 전문가를 위한</span></h2>
+        <p data-en="Korean architects, designers, and dealers can explore products from 3,500+ global brands in one place. Discover new brands, request dealership opportunities, and source materials for your projects — all on ARCHINODE." data-ko="대한민국의 건축 설계사, 인테리어 디자이너, 조경 디자이너, 딜러 여러분. 전 세계 3,500개 브랜드의 제품을 한 곳에서 탐색하고, 직접 연결될 수 있습니다.">Korean architects, designers, and dealers can explore products from 3,500+ global brands in one place. Discover new brands, request dealership opportunities, and source materials for your projects — all on ARCHINODE.</p>
+        <p data-en="Korean architects, designers, and dealers can explore products from 3,500+ global brands in one place. Discover new brands, request dealership opportunities, and source materials for your projects — all on ARCHINODE." data-ko="대한민국의 건축 설계사, 인테리어 디자이너, 조경 디자이너, 딜러 여러분. 전 세계 3,500개 브랜드의 제품을 한 곳에서 탐색하고, 직접 연결될 수 있습니다.">대한민국의 건축 설계사, 인테리어 디자이너, 조경 디자이너, 딜러 여러분. 전 세계 3,500개 브랜드의 제품을 한 곳에서 탐색하고, 직접 연결될 수 있습니다.</p>
       </div>
       <div class="about-img fade-in">
         <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Korean Market">
@@ -181,38 +180,38 @@
 <section class="services-detail">
   <div class="container">
     <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
-      <h2 class="section-title" style="font-size:2rem;">Our Services</h2>
+      <h2 class="section-title" style="font-size:2rem;" data-en="Our Services" data-ko="우리의 서비스">Our Services</h2>
     </div>
     <div class="services-detail-grid">
       <div class="service-detail-card fade-in">
         <i class="fas fa-globe"></i>
-        <h3>Brand Directory</h3>
-        <p>전 세계 건축·디자인 브랜드를 카테고리별로 큐레이션하여 한국 시장에 소개합니다. 2026년 무료 입점, 2027년부터 월 $10 / 연 $100.</p>
+        <h3 data-en="Brand Directory" data-ko="브랜드 디렉토리">Brand Directory</h3>
+        <p data-en="Curated global architecture and design brands showcased to the Korean market. Free listing in 2026, then $10/month or $100/year from 2027." data-ko="전 세계 건축·디자인 브랜드를 카테고리별로 큐레이션하여 한국 시장에 소개합니다. 2026년 무료 입점, 2027년부터 월 $10 / 연 $100.">전 세계 건축·디자인 브랜드를 카테고리별로 큐레이션하여 한국 시장에 소개합니다. 2026년 무료 입점, 2027년부터 월 $10 / 연 $100.</p>
       </div>
       <div class="service-detail-card fade-in">
         <i class="fas fa-handshake"></i>
-        <h3>Dealership Screening</h3>
-        <p>한국 사업자의 딜러십 의뢰 시, 온라인 서칭($100) 또는 실제 미팅을 통한 상세 리포트($1,000)를 제공합니다.</p>
+        <h3 data-en="Dealership Screening" data-ko="딜러십 검증">Dealership Screening</h3>
+        <p data-en="Online search ($100) or detailed report via in-person meetings ($1,000) for Korean dealership inquiries." data-ko="한국 사업자의 딜러십 의뢰 시, 온라인 서칭($100) 또는 실제 미팅을 통한 상세 리포트($1,000)를 제공합니다.">한국 사업자의 딜러십 의뢰 시, 온라인 서칭($100) 또는 실제 미팅을 통한 상세 리포트($1,000)를 제공합니다.</p>
       </div>
       <div class="service-detail-card fade-in">
         <i class="fas fa-eye"></i>
-        <h3>Dealer Monitoring</h3>
-        <p>딜러십 체결 후, 한국 딜러가 계약 조건과 브랜드 가이드라인을 준수하는지 지속적으로 모니터링합니다.</p>
+        <h3 data-en="Dealer Monitoring" data-ko="딜러 모니터링">Dealer Monitoring</h3>
+        <p data-en="Continuous monitoring of dealer compliance with contract terms and brand guidelines." data-ko="딜러십 체결 후, 한국 딜러가 계약 조건과 브랜드 가이드라인을 준수하는지 지속적으로 모니터링합니다.">딜러십 체결 후, 한국 딜러가 계약 조건과 브랜드 가이드라인을 준수하는지 지속적으로 모니터링합니다.</p>
       </div>
       <div class="service-detail-card fade-in">
         <i class="fas fa-calendar-check"></i>
-        <h3>Exhibition Support</h3>
-        <p>한국 내 박람회 참가를 원스톱 지원합니다 — 부스 예약, 설치, 통역, 물류까지 모든 것을 대행합니다.</p>
+        <h3 data-en="Exhibition Support" data-ko="박람회 지원">Exhibition Support</h3>
+        <p data-en="One-stop support for Korean exhibition participation — booth reservation, setup, interpretation, and logistics." data-ko="한국 내 박람회 참가를 원스톱 지원합니다 — 부스 예약, 설치, 통역, 물류까지 모든 것을 대행합니다.">한국 내 박람회 참가를 원스톱 지원합니다 — 부스 예약, 설치, 통역, 물류까지 모든 것을 대행합니다.</p>
       </div>
       <div class="service-detail-card fade-in">
         <i class="fas fa-shopping-bag"></i>
-        <h3>B2C Shopping (Coming Soon)</h3>
-        <p>브랜드가 충분히 모인 후, 일반 소비자를 위한 이커머스 쇼핑몰을 오픈할 예정입니다.</p>
+        <h3 data-en="B2C Shopping (Coming Soon)" data-ko="B2C 쇼핑 (출시 예정)">B2C Shopping (Coming Soon)</h3>
+        <p data-en="Launching an e-commerce shopping mall for consumers once sufficient brands are onboarded." data-ko="브랜드가 충분히 모인 후, 일반 소비자를 위한 이커머스 쇼핑몰을 오픈할 예정입니다.">브랜드가 충분히 모인 후, 일반 소비자를 위한 이커머스 쇼핑몰을 오픈할 예정입니다.</p>
       </div>
       <div class="service-detail-card fade-in">
         <i class="fas fa-trophy"></i>
-        <h3>ARCHINODE Awards</h3>
-        <p>장르별 연간 인기 제품을 선정하는 자체 어워드 프로그램을 운영합니다. 브랜드 홍보와 플랫폼 권위 확보를 동시에.</p>
+        <h3 data-en="ARCHINODE Awards" data-ko="ARCHINODE 어워드">ARCHINODE Awards</h3>
+        <p data-en="Annual awards program recognizing popular products by category. Boost brand visibility and platform authority." data-ko="장르별 연간 인기 제품을 선정하는 자체 어워드 프로그램을 운영합니다. 브랜드 홍보와 플랫폼 권위 확보를 동시에.">장르별 연간 인기 제품을 선정하는 자체 어워드 프로그램을 운영합니다. 브랜드 홍보와 플랫폼 권위 확보를 동시에.</p>
       </div>
     </div>
   </div>
@@ -222,28 +221,28 @@
 <section class="timeline-section">
   <div class="container">
     <div class="section-header fade-in" style="justify-content:center; text-align:center; display:block; margin-bottom:64px;">
-      <h2 class="section-title" style="font-size:2rem;">Our Roadmap</h2>
+      <h2 class="section-title" style="font-size:2rem;" data-en="Our Roadmap" data-ko="우리의 로드맵">Our Roadmap</h2>
     </div>
     <div class="timeline">
       <div class="timeline-item fade-in">
-        <h4>2026 H1</h4>
-        <h3>Platform Launch & Brand Recruitment</h3>
-        <p>플랫폼 구축 완료 및 무료 입점을 통한 글로벌 브랜드 확보 시작. 브랜드 디렉토리 + 딜러십 스크리닝 서비스 론칭.</p>
+        <h4 data-en="2026 H1" data-ko="2026 H1">2026 H1</h4>
+        <h3 data-en="Platform Launch & Brand Recruitment" data-ko="플랫폼 런칭 & 브랜드 모집">Platform Launch & Brand Recruitment</h3>
+        <p data-en="Complete platform build and begin recruiting global brands through free listing. Launch brand directory and dealership screening services." data-ko="플랫폼 구축 완료 및 무료 입점을 통한 글로벌 브랜드 확보 시작. 브랜드 디렉토리 + 딜러십 스크리닝 서비스 론칭.">플랫폼 구축 완료 및 무료 입점을 통한 글로벌 브랜드 확보 시작. 브랜드 디렉토리 + 딜러십 스크리닝 서비스 론칭.</p>
       </div>
       <div class="timeline-item fade-in">
-        <h4>2026 H2</h4>
-        <h3>Market Penetration</h3>
-        <p>한국 건축·디자인 업계 네트워킹 강화. 박람회 지원 서비스 시작. 매거진 콘텐츠 본격 운영.</p>
+        <h4 data-en="2026 H2" data-ko="2026 H2">2026 H2</h4>
+        <h3 data-en="Market Penetration" data-ko="시장 진출">Market Penetration</h3>
+        <p data-en="Strengthen networking in Korean architecture and design. Launch exhibition support services. Begin full magazine content operations." data-ko="한국 건축·디자인 업계 네트워킹 강화. 박람회 지원 서비스 시작. 매거진 콘텐츠 본격 운영.">한국 건축·디자인 업계 네트워킹 강화. 박람회 지원 서비스 시작. 매거진 콘텐츠 본격 운영.</p>
       </div>
       <div class="timeline-item fade-in">
-        <h4>2027</h4>
-        <h3>Monetization & Growth</h3>
-        <p>유료 전환 ($10/월, $100/년). 딜러 모니터링 서비스 런칭. B2C 쇼핑몰 준비.</p>
+        <h4 data-en="2027" data-ko="2027">2027</h4>
+        <h3 data-en="Monetization & Growth" data-ko="수익화 & 성장">Monetization & Growth</h3>
+        <p data-en="Convert to paid plans ($10/month, $100/year). Launch dealer monitoring service. Prepare B2C shopping mall." data-ko="유료 전환 ($10/월, $100/년). 딜러 모니터링 서비스 런칭. B2C 쇼핑몰 준비.">유료 전환 ($10/월, $100/년). 딜러 모니터링 서비스 런칭. B2C 쇼핑몰 준비.</p>
       </div>
       <div class="timeline-item fade-in">
-        <h4>Long-term</h4>
-        <h3>3,500 Brands & Beyond</h3>
-        <p>전 세계 3,500개 브랜드 입점 달성. ARCHINODE Awards 첫 개최. 아시아 시장 확장 검토.</p>
+        <h4 data-en="Long-term" data-ko="장기 계획">Long-term</h4>
+        <h3 data-en="3,500 Brands & Beyond" data-ko="3,500개 브랜드 & 그 이상">3,500 Brands & Beyond</h3>
+        <p data-en="Achieve 3,500 global brands onboarded. Host first ARCHINODE Awards. Explore Asia market expansion." data-ko="전 세계 3,500개 브랜드 입점 달성. ARCHINODE Awards 첫 개최. 아시아 시장 확장 검토.">전 세계 3,500개 브랜드 입점 달성. ARCHINODE Awards 첫 개최. 아시아 시장 확장 검토.</p>
       </div>
     </div>
   </div>
@@ -252,10 +251,10 @@
 <!-- CTA -->
 <section class="cta-listing">
   <div class="container">
-    <h2 class="fade-in">Join ARCHINODE</h2>
-    <p class="fade-in">Whether you're a global brand looking to enter Korea, or a Korean professional searching for the world's best products — ARCHINODE is your platform.</p>
-    <a href="list-your-brand.html" class="cta-btn fade-in">List Your Brand <i class="fas fa-arrow-right"></i></a>
-    <div class="cta-free-tag fade-in">Free listing through December 2026</div>
+    <h2 class="fade-in" data-en="Join ARCHINODE" data-ko="ARCHINODE에 참여하세요">Join ARCHINODE</h2>
+    <p class="fade-in" data-en="Whether you're a global brand looking to enter Korea, or a Korean professional searching for the world's best products — ARCHINODE is your platform." data-ko="해외 글로벌 브랜드든 한국 전문가든 — ARCHINODE는 당신의 플랫폼입니다.">Whether you're a global brand looking to enter Korea, or a Korean professional searching for the world's best products — ARCHINODE is your platform.</p>
+    <a href="list-your-brand.html" class="cta-btn fade-in" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand <i class="fas fa-arrow-right"></i></a>
+    <div class="cta-free-tag fade-in" data-en="Free listing through December 2026" data-ko="2026년 12월까지 무료 입점">Free listing through December 2026</div>
   </div>
 </section>
 
@@ -274,40 +273,40 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Categories</h4>
+        <h4 data-en="Categories" data-ko="카테고리">Categories</h4>
         <ul>
-          <li><a href="categories/furniture.html">Furniture</a></li>
-          <li><a href="categories/bathroom.html">Bathroom</a></li>
-          <li><a href="categories/outdoor.html">Outdoor</a></li>
-          <li><a href="categories/lighting.html">Lighting</a></li>
-          <li><a href="categories/kitchen.html">Kitchen</a></li>
+          <li><a href="categories/furniture.html" data-en="Furniture" data-ko="가구">Furniture</a></li>
+          <li><a href="categories/bathroom.html" data-en="Bathroom" data-ko="욕실">Bathroom</a></li>
+          <li><a href="categories/outdoor.html" data-en="Outdoor" data-ko="아웃도어">Outdoor</a></li>
+          <li><a href="categories/lighting.html" data-en="Lighting" data-ko="조명">Lighting</a></li>
+          <li><a href="categories/kitchen.html" data-en="Kitchen" data-ko="주방">Kitchen</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>More Categories</h4>
+        <h4 data-en="More Categories" data-ko="더 많은 카테고리">More Categories</h4>
         <ul>
-          <li><a href="categories/office.html">Office</a></li>
-          <li><a href="categories/finishes.html">Finishes</a></li>
-          <li><a href="categories/wellness.html">Wellness</a></li>
-          <li><a href="categories/decor.html">Decor</a></li>
-          <li><a href="categories/construction.html">Construction</a></li>
+          <li><a href="categories/office.html" data-en="Office" data-ko="오피스">Office</a></li>
+          <li><a href="categories/finishes.html" data-en="Finishes" data-ko="마감재">Finishes</a></li>
+          <li><a href="categories/wellness.html" data-en="Wellness" data-ko="웰니스">Wellness</a></li>
+          <li><a href="categories/decor.html" data-en="Decor" data-ko="데코">Decor</a></li>
+          <li><a href="categories/construction.html" data-en="Construction" data-ko="건축자재">Construction</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Services</h4>
+        <h4 data-en="Services" data-ko="서비스">Services</h4>
         <ul>
-          <li><a href="list-your-brand.html">Brand Listing</a></li>
-          <li><a href="#">Dealership Screening</a></li>
-          <li><a href="#">Exhibition Support</a></li>
-          <li><a href="#">ARCHINODE Awards</a></li>
+          <li><a href="list-your-brand.html" data-en="Brand Listing" data-ko="브랜드 입점">Brand Listing</a></li>
+          <li><a href="#" data-en="Dealership Screening" data-ko="딜러십 검증">Dealership Screening</a></li>
+          <li><a href="#" data-en="Exhibition Support" data-ko="박람회 지원">Exhibition Support</a></li>
+          <li><a href="#" data-en="ARCHINODE Awards" data-ko="ARCHINODE 어워드">ARCHINODE Awards</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Company</h4>
+        <h4 data-en="Company" data-ko="회사">Company</h4>
         <ul>
-          <li><a href="about.html">About ARCHINODE</a></li>
-          <li><a href="magazine.html">Magazine</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="about.html" data-en="About ARCHINODE" data-ko="ARCHINODE 소개">About ARCHINODE</a></li>
+          <li><a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a></li>
+          <li><a href="#" data-en="Contact" data-ko="연락처">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -361,5 +360,7 @@ const fadeObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 fadeEls.forEach(el => fadeObs.observe(el));
 </script>
+
+<script src="lang.js"></script>
 </body>
 </html>

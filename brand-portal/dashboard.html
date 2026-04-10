@@ -123,77 +123,77 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
 
 <!-- TOPBAR -->
 <div class="topbar">
-    <a href="../index.html" class="logo">ARCHINODE <span>Brand Portal</span></a>
+    <a href="../index.html" class="logo">ARCHINODE <span data-en="Brand Portal" data-ko="브랜드 포털">Brand Portal</span></a>
     <div class="user-info">
         <span class="user-email" id="userEmail"></span>
-        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> <span data-en="Log Out" data-ko="로그아웃">Log Out</span></button>
     </div>
 </div>
 
 <!-- LOADING -->
 <div class="loading" id="loadingScreen">
     <i class="fas fa-spinner fa-spin"></i>
-    <p>Loading your dashboard...</p>
+    <p data-en="Loading your dashboard..." data-ko="대시보드 로딩 중...">Loading your dashboard...</p>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboardContent" style="display:none;">
 
     <div class="welcome">
-        <h1>Welcome, <span id="brandNameDisplay"></span></h1>
-        <p>Manage your brand presence on ARCHINODE. <span class="status-badge" id="statusBadge"></span></p>
+        <h1 data-en="Welcome," data-ko="환영합니다,"> Welcome, <span id="brandNameDisplay"></span></h1>
+        <p data-en="Manage your brand presence on ARCHINODE." data-ko="ARCHINODE에서 브랜드 존재감을 관리하세요.">Manage your brand presence on ARCHINODE. <span class="status-badge" id="statusBadge"></span></p>
     </div>
 
     <!-- TABS -->
     <div class="tabs">
-        <div class="tab active" data-tab="brand">Brand Info</div>
-        <div class="tab" data-tab="products">Products</div>
-        <div class="tab" data-tab="magazine">Magazine</div>
-        <div class="tab" data-tab="settings">Settings</div>
+        <div class="tab active" data-tab="brand" data-en="Brand Info" data-ko="브랜드 정보">Brand Info</div>
+        <div class="tab" data-tab="products" data-en="Products" data-ko="제품">Products</div>
+        <div class="tab" data-tab="magazine" data-en="Magazine" data-ko="매거진">Magazine</div>
+        <div class="tab" data-tab="settings" data-en="Settings" data-ko="설정">Settings</div>
     </div>
 
     <!-- TAB: BRAND INFO -->
     <div class="tab-content active" id="tab-brand">
         <div class="section-card">
-            <h2><i class="fas fa-building"></i> Brand Profile</h2>
+            <h2><i class="fas fa-building"></i> <span data-en="Brand Profile" data-ko="브랜드 프로필">Brand Profile</span></h2>
             <form id="brandInfoForm">
                 <div class="field-row">
                     <div class="field">
-                        <label>Brand Name</label>
+                        <label data-en="Brand Name" data-ko="브랜드 명">Brand Name</label>
                         <input type="text" id="editBrandName" readonly class="readonly">
                     </div>
                     <div class="field">
-                        <label>Country</label>
+                        <label data-en="Country" data-ko="국가">Country</label>
                         <input type="text" id="editCountry">
                     </div>
                 </div>
                 <div class="field-row">
                     <div class="field">
-                        <label>Category</label>
+                        <label data-en="Category" data-ko="카테고리">Category</label>
                         <select id="editCategory">
-                            <option value="Bathroom">Bathroom</option>
-                            <option value="Construction">Construction</option>
-                            <option value="Decor">Decor</option>
-                            <option value="Finishes">Finishes</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Kitchen">Kitchen</option>
-                            <option value="Lighting">Lighting</option>
-                            <option value="Office">Office</option>
-                            <option value="Outdoor">Outdoor</option>
-                            <option value="Wellness">Wellness</option>
+                            <option value="Bathroom" data-en="Bathroom" data-ko="욕실">Bathroom</option>
+                            <option value="Construction" data-en="Construction" data-ko="건축자재">Construction</option>
+                            <option value="Decor" data-en="Decor" data-ko="데코">Decor</option>
+                            <option value="Finishes" data-en="Finishes" data-ko="마감재">Finishes</option>
+                            <option value="Furniture" data-en="Furniture" data-ko="가구">Furniture</option>
+                            <option value="Kitchen" data-en="Kitchen" data-ko="주방">Kitchen</option>
+                            <option value="Lighting" data-en="Lighting" data-ko="조명">Lighting</option>
+                            <option value="Office" data-en="Office" data-ko="오피스">Office</option>
+                            <option value="Outdoor" data-en="Outdoor" data-ko="아웃도어">Outdoor</option>
+                            <option value="Wellness" data-en="Wellness" data-ko="웰니스">Wellness</option>
                         </select>
                     </div>
                     <div class="field">
-                        <label>Website</label>
+                        <label data-en="Website" data-ko="웹사이트">Website</label>
                         <input type="url" id="editWebsite">
                     </div>
                 </div>
                 <div class="field">
-                    <label>Brand Description / Philosophy</label>
+                    <label data-en="Brand Description / Philosophy" data-ko="브랜드 설명 / 철학">Brand Description / Philosophy</label>
                     <textarea id="editDescription" rows="4" placeholder="Share your brand's story, philosophy, and heritage..."></textarea>
                 </div>
                 <div class="field">
-                    <label>Tagline / Slogan</label>
+                    <label data-en="Tagline / Slogan" data-ko="태그라인 / 슬로건">Tagline / Slogan</label>
                     <input type="text" id="editTagline" placeholder="e.g. 'Designed for life'">
                 </div>
                 <div class="field-row">
@@ -208,8 +208,8 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
                 </div>
 
                 <hr style="border:none;border-top:1px solid #eee;margin:28px 0;">
-                <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:#333;"><i class="fas fa-image" style="margin-right:8px;color:#C8A96E;"></i>Brand Visuals</h3>
-                <p style="font-size:0.8rem;color:#999;margin-bottom:16px;">Add image URLs to make your brand page stand out. You can use links from your website or image hosting services.</p>
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:#333;" data-en="Brand Visuals" data-ko="브랜드 비주얼"><i class="fas fa-image" style="margin-right:8px;color:#C8A96E;"></i>Brand Visuals</h3>
+                <p style="font-size:0.8rem;color:#999;margin-bottom:16px;" data-en="Add image URLs to make your brand page stand out. You can use links from your website or image hosting services." data-ko="이미지 URL을 추가하여 브랜드 페이지를 돋보이게 하세요. 웹사이트 링크 또는 이미지 호스팅 서비스를 사용할 수 있습니다.">Add image URLs to make your brand page stand out. You can use links from your website or image hosting services.</p>
 
                 <div class="field">
                     <label>Logo Image URL</label>
@@ -273,10 +273,10 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
     <!-- TAB: PRODUCTS -->
     <div class="tab-content" id="tab-products">
         <div class="section-card">
-            <h2><i class="fas fa-box-open"></i> Your Products</h2>
-            <p style="font-size:0.88rem;color:#888;margin-bottom:20px;">Upload products to showcase on your ARCHINODE brand page. Products are reviewed before publishing.</p>
+            <h2><i class="fas fa-box-open"></i> <span data-en="Your Products" data-ko="당신의 제품">Your Products</span></h2>
+            <p style="font-size:0.88rem;color:#888;margin-bottom:20px;" data-en="Upload products to showcase on your ARCHINODE brand page. Products are reviewed before publishing." data-ko="ARCHINODE 브랜드 페이지에 선보일 제품을 업로드하세요. 제품은 발행 전에 검토됩니다.">Upload products to showcase on your ARCHINODE brand page. Products are reviewed before publishing.</p>
 
-            <button class="btn btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> Add Product</button>
+            <button class="btn btn-primary" id="addProductBtn"><i class="fas fa-plus"></i> <span data-en="Add Product" data-ko="제품 추가">Add Product</span></button>
 
             <!-- Add Product Form (hidden) -->
             <div id="productForm" style="display:none;margin-top:24px;padding:24px;background:#f9f9f9;border-radius:8px;">
@@ -446,6 +446,7 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
 </div>
 
 <script src="../firebase-config.js"></script>
+<script src="../lang.js"></script>
 <script>
 let currentUser = null;
 let brandData = null;

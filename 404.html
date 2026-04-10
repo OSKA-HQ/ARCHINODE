@@ -31,7 +31,7 @@
     <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
     <nav class="main-nav" id="mainNav">
       <div class="nav-dropdown">
-        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
         <div class="nav-dropdown-menu" id="catMenu">
             <a href="categories/furniture.html"><span>Furniture</span><small>가구</small></a>
             <a href="categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
@@ -45,16 +45,16 @@
             <a href="categories/construction.html"><span>Construction</span><small>건축자재</small></a>
         </div>
       </div>
-      <a href="brands.html">Brands</a>
-      <a href="magazine.html">Magazine</a>
-      <a href="about.html">About</a>
-      <a href="list-your-brand.html" class="nav-cta">List Your Brand</a>
+      <a href="brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="about.html" data-en="About" data-ko="소개">About</a>
+      <a href="list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
     </nav>
     <div class="header-actions">
-      <a href="brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
+      <a href="brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
       <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
       <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
-      <a href="#" class="lang-switch">KR / EN</a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -72,12 +72,12 @@
 <section style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 20px;">
   <div>
     <p style="font-size:8rem;font-weight:900;color:#e5e5e5;line-height:1;margin-bottom:10px;">404</p>
-    <h1 style="font-size:1.8rem;margin-bottom:12px;">Page Not Found</h1>
-    <p style="color:#888;margin-bottom:30px;max-width:400px;">Sorry, the page you're looking for doesn't exist or has been moved.</p>
+    <h1 style="font-size:1.8rem;margin-bottom:12px;" data-en="Page Not Found" data-ko="페이지를 찾을 수 없습니다">Page Not Found</h1>
+    <p style="color:#888;margin-bottom:30px;max-width:400px;" data-en="Sorry, the page you're looking for doesn't exist or has been moved." data-ko="죄송합니다. 찾으신 페이지가 존재하지 않거나 이동되었습니다.">Sorry, the page you're looking for doesn't exist or has been moved.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a href="index.html" style="padding:12px 28px;background:#000;color:#fff;border-radius:4px;font-size:0.9rem;">Go Home</a>
-      <a href="brands.html" style="padding:12px 28px;background:#f5f5f5;color:#000;border-radius:4px;font-size:0.9rem;">Browse Brands</a>
-      <a href="contact.html" style="padding:12px 28px;background:#f5f5f5;color:#000;border-radius:4px;font-size:0.9rem;">Contact Us</a>
+      <a href="index.html" style="padding:12px 28px;background:#000;color:#fff;border-radius:4px;font-size:0.9rem;" data-en="Go Home" data-ko="홈으로 돌아가기">Go Home</a>
+      <a href="brands.html" style="padding:12px 28px;background:#f5f5f5;color:#000;border-radius:4px;font-size:0.9rem;" data-en="Browse Brands" data-ko="브랜드 둘러보기">Browse Brands</a>
+      <a href="contact.html" style="padding:12px 28px;background:#f5f5f5;color:#000;border-radius:4px;font-size:0.9rem;" data-en="Contact Us" data-ko="문의하기">Contact Us</a>
     </div>
   </div>
 </section>
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div class="footer-col">
-        <h4>Categories</h4>
+        <h4 data-en="Categories" data-ko="카테고리">Categories</h4>
         <ul>
           <li><a href="categories/furniture.html">Furniture</a></li>
           <li><a href="categories/bathroom.html">Bathroom</a></li>
@@ -106,7 +106,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>More Categories</h4>
+        <h4 data-en="More Categories" data-ko="더 많은 카테고리">More Categories</h4>
         <ul>
           <li><a href="categories/office.html">Office</a></li>
           <li><a href="categories/finishes.html">Finishes</a></li>
@@ -116,7 +116,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Services</h4>
+        <h4 data-en="Services" data-ko="서비스">Services</h4>
         <ul>
           <li><a href="list-your-brand.html">Brand Listing</a></li>
           <li><a href="#">Dealership Screening</a></li>
@@ -125,7 +125,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Company</h4>
+        <h4 data-en="Company" data-ko="회사">Company</h4>
         <ul>
           <li><a href="about.html">About ARCHINODE</a></li>
           <li><a href="magazine.html">Magazine</a></li>
@@ -140,8 +140,8 @@
     <div class="footer-bottom">
       <p>&copy; 2026 ARCHINODE. All rights reserved.</p>
       <div class="footer-bottom-links">
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html" data-en="Terms" data-ko="이용약관">Terms</a>
+        <a href="privacy.html" data-en="Privacy Policy" data-ko="개인정보처리방침">Privacy Policy</a>
       </div>
     </div>
   </div>
@@ -179,5 +179,6 @@ const fadeObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 fadeEls.forEach(el => fadeObs.observe(el));
 </script>
+<script src="lang.js"></script>
 </body>
 </html>

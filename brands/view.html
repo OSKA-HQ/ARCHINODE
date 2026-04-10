@@ -226,30 +226,30 @@
     <a href="../index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
     <nav class="main-nav" id="mainNav">
       <div class="nav-dropdown">
-        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()">Categories <i class="fas fa-chevron-down"></i></button>
+        <button class="nav-dropdown-trigger" onclick="toggleCatMenu()" data-en="Categories" data-ko="카테고리">Categories <i class="fas fa-chevron-down"></i></button>
         <div class="nav-dropdown-menu" id="catMenu">
-            <a href="../categories/furniture.html"><span>Furniture</span><small>가구</small></a>
-            <a href="../categories/bathroom.html"><span>Bathroom</span><small>욕실</small></a>
-            <a href="../categories/outdoor.html"><span>Outdoor</span><small>아웃도어</small></a>
-            <a href="../categories/lighting.html"><span>Lighting</span><small>조명</small></a>
-            <a href="../categories/kitchen.html"><span>Kitchen</span><small>주방</small></a>
-            <a href="../categories/office.html"><span>Office</span><small>오피스</small></a>
-            <a href="../categories/finishes.html"><span>Finishes</span><small>마감재</small></a>
-            <a href="../categories/wellness.html"><span>Wellness</span><small>웰니스</small></a>
-            <a href="../categories/decor.html"><span>Decor</span><small>데코</small></a>
-            <a href="../categories/construction.html"><span>Construction</span><small>건축자재</small></a>
+            <a href="../categories/furniture.html"><span data-en="Furniture" data-ko="가구">Furniture</span><small>가구</small></a>
+            <a href="../categories/bathroom.html"><span data-en="Bathroom" data-ko="욕실">Bathroom</span><small>욕실</small></a>
+            <a href="../categories/outdoor.html"><span data-en="Outdoor" data-ko="아웃도어">Outdoor</span><small>아웃도어</small></a>
+            <a href="../categories/lighting.html"><span data-en="Lighting" data-ko="조명">Lighting</span><small>조명</small></a>
+            <a href="../categories/kitchen.html"><span data-en="Kitchen" data-ko="주방">Kitchen</span><small>주방</small></a>
+            <a href="../categories/office.html"><span data-en="Office" data-ko="오피스">Office</span><small>오피스</small></a>
+            <a href="../categories/finishes.html"><span data-en="Finishes" data-ko="마감재">Finishes</span><small>마감재</small></a>
+            <a href="../categories/wellness.html"><span data-en="Wellness" data-ko="웰니스">Wellness</span><small>웰니스</small></a>
+            <a href="../categories/decor.html"><span data-en="Decor" data-ko="데코">Decor</span><small>데코</small></a>
+            <a href="../categories/construction.html"><span data-en="Construction" data-ko="건축자재">Construction</span><small>건축자재</small></a>
         </div>
       </div>
-      <a href="../brands.html" class="active-nav">Brands</a>
-      <a href="../magazine.html">Magazine</a>
-      <a href="../about.html">About</a>
-      <a href="../list-your-brand.html" class="nav-cta">List Your Brand</a>
+      <a href="../brands.html" class="active-nav" data-en="Brands" data-ko="브랜드">Brands</a>
+      <a href="../magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="../about.html" data-en="About" data-ko="소개">About</a>
+      <a href="../list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 등록">List Your Brand</a>
     </nav>
     <div class="header-actions">
-      <a href="../brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;">Brand Login</a>
+      <a href="../brand-portal/login.html" style="font-size:0.78rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
       <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
       <a href="#" aria-label="Saved"><i class="far fa-bookmark"></i></a>
-      <a href="#" class="lang-switch">KR / EN</a>
+      <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
   </div>
@@ -321,6 +321,7 @@
 </footer>
 
 <script src="../firebase-config.js"></script>
+<script src="../lang.js"></script>
 <script>
 // ── URL에서 브랜드 slug 가져오기 ──
 const params = new URLSearchParams(window.location.search);
