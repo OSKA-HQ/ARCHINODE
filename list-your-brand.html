@@ -144,7 +144,7 @@
 <header class="header" id="header">
   <div class="container">
     <a href="index.html" class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></a>
-    <nav class="main-nav" id="mainNav">
+      <nav class="main-nav" id="mainNav">
       <a href="brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
       <a href="categories/furniture.html" data-en="Categories" data-ko="카테고리">Categories</a>
       <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
@@ -160,7 +160,7 @@
 
 <!-- HERO -->
 <section class="lyb-hero">
-    <h1><span data-en="List Your Brand on " data-ko="ARCHINODE에 브랜드를 등록하세요">List Your Brand on </span><span class="gold" data-en="ARCHINODE" data-ko="">ARCHINODE</span></h1>
+    <h1><span data-en="List Your Brand on " data-ko=""></span><span class="gold">ARCHINODE</span><span data-en="" data-ko="에 브랜드를 등록하세요"></span></h1>
     <p data-en="Register below and get your own brand page, login portal, and direct access to Korean architects and designers." data-ko="아래 양식을 작성하시면 브랜드 페이지, 로그인 포털, 한국 건축가·디자이너 접근권을 받으실 수 있습니다."></p>
 </section>
 
@@ -478,28 +478,61 @@
 </footer>
 
 <!-- Lang Script -->
-<script src="search.js"></script>
 <script src="lang.js"></script>
-<script src="auth-ui.js"></script>
 
 <!-- Firebase -->
 <script src="firebase-config.js"></script>
 <script>
-// ── 임시 비밀번호 생성 (브랜드명 + 가입일자 YYMMDD) ──
+// ── 임시 비밀번호 생성 (브랜드 slug + 날짜 + 랜덤 4자리) ──
 function generatePassword(brandName) {
     const now = new Date();
     const yy = String(now.getFullYear()).slice(-2);
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const dd = String(now.getDate()).padStart(2, '0');
-    const slug = brandName.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return slug + yy + mm + dd;
+    const base = brandName.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 8);
+    const rand = Math.random().toString(36).substring(2, 6); // 랜덤 4자리
+    return (base || 'brand') + yy + mm + dd + rand;
 }
 
-// ── 브랜드 슬러그 생성 ──
+// ── 브랜드 슬러그 생성 (한국어 지원) ──
 function slugify(text) {
-    return text.toLowerCase().trim()
-        .replace(/[^a-z0-9]+/g, '-')
+    let slug = text.toLowerCase().trim()
+        .replace(/[^a-z0-9가-힣]+/g, '-')  // 한국어 허용
         .replace(/^-+|-+$/g, '');
+    // 한국어만 있는 경우 → 간단한 로마자 변환 대신 랜덤 코드 조합
+    if (!slug || /^[가-힣-]+$/.test(slug)) {
+        const code = Math.random().toString(36).substring(2, 8);
+        slug = slug ? slug + '-' + code : 'brand-' + code;
+    }
+    return slug;
+}
+
+// ── HTML 이스케이프 (XSS 방어) ──
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ── slug 중복 체크 ──
+async function getUniqueSlug(baseSlug) {
+    const snapshot = await db.collection('brands')
+        .where('slug', '==', baseSlug)
+        .limit(1)
+        .get();
+    if (snapshot.empty) return baseSlug;
+    // 중복 시 suffix 추가
+    let suffix = 2;
+    while (true) {
+        const candidate = baseSlug + '-' + suffix;
+        const check = await db.collection('brands')
+            .where('slug', '==', candidate)
+            .limit(1)
+            .get();
+        if (check.empty) return candidate;
+        suffix++;
+        if (suffix > 99) return baseSlug + '-' + Date.now(); // 안전장치
+    }
 }
 
 // ── 폼 제출 처리 ──
@@ -525,24 +558,27 @@ form.addEventListener('submit', async function(e) {
     const email = document.getElementById('email').value.trim();
     const brandName = document.getElementById('brandName').value.trim();
     const tempPassword = generatePassword(brandName);
-    const slug = slugify(brandName);
+    const baseSlug = slugify(brandName);
 
     try {
+        // 0. slug 중복 체크
+        const slug = await getUniqueSlug(baseSlug);
+
         // 1. Firebase Auth 계정 생성
         const userCredential = await auth.createUserWithEmailAndPassword(email, tempPassword);
         const uid = userCredential.user.uid;
 
-        // 2. Firestore에 브랜드 데이터 저장
+        // 2. Firestore에 브랜드 데이터 저장 (XSS 방어: 텍스트 필드 이스케이프)
         await db.collection('brands').doc(uid).set({
-            brandName: brandName,
+            brandName: escapeHtml(brandName),
             slug: slug,
             country: document.getElementById('country').value.trim(),
             website: document.getElementById('website').value.trim(),
             category: Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value),
-            productType: document.getElementById('productType').value.trim(),
-            description: document.getElementById('description').value.trim(),
-            contactName: document.getElementById('contactName').value.trim(),
-            position: document.getElementById('position').value.trim(),
+            productType: escapeHtml(document.getElementById('productType').value.trim()),
+            description: escapeHtml(document.getElementById('description').value.trim()),
+            contactName: escapeHtml(document.getElementById('contactName').value.trim()),
+            position: escapeHtml(document.getElementById('position').value.trim()),
             email: email,
             phone: document.getElementById('phone').value.trim(),
             referral: document.getElementById('referral').value,
@@ -575,6 +611,8 @@ form.addEventListener('submit', async function(e) {
             errorDiv.textContent = 'This email is already registered. If you already have an account, please log in at the Brand Portal.';
         } else if (error.code === 'auth/invalid-email') {
             errorDiv.textContent = 'Please enter a valid email address.';
+        } else if (error.code === 'auth/weak-password') {
+            errorDiv.textContent = 'Password is too weak. Please try again.';
         } else {
             errorDiv.textContent = 'An error occurred: ' + error.message;
         }
