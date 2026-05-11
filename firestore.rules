@@ -162,6 +162,26 @@ service cloud.firestore {
     }
 
     // ────────────────────────────────────────────────────────────────────
+    // trend-submissions 컬렉션 (Trend Report 원고 제출 — 2026-05-10 신설)
+    // 유럽 브랜드가 비로그인 상태로 원고 제출 → 어드민(편집부)이 검토 → 승인/거절
+    // 문서 ID = 자동 생성
+    // ────────────────────────────────────────────────────────────────────
+    match /trend-submissions/{submissionId} {
+      // 생성: 누구나 (방문자 폼 제출). 필수 필드 검증 + status 'pending' 강제
+      allow create: if request.resource.data.brandName is string
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() > 5
+                    && request.resource.data.title is string
+                    && request.resource.data.body is string
+                    && request.resource.data.body.size() >= 200
+                    && request.resource.data.status == 'pending'
+                    && request.resource.data.createdAt == request.time;
+
+      // 읽기·수정·삭제: 어드민만 (편집부 검토 권한)
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ────────────────────────────────────────────────────────────────────
     // 기본 정책: 위에 매칭되지 않는 모든 경로 차단
     // ────────────────────────────────────────────────────────────────────
     match /{document=**} {
