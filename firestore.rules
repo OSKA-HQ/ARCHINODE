@@ -215,6 +215,17 @@ service cloud.firestore {
     }
 
     // ────────────────────────────────────────────────────────────────────
+    // digital-products-notify 컬렉션 (디지털 상품 출시 알림 신청 — 2026-05-13 신설)
+    // 방문자 이메일만 단순 수집. 출시 시 1회 알림 발송용.
+    // ────────────────────────────────────────────────────────────────────
+    match /digital-products-notify/{docId} {
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.size() > 5
+                    && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ────────────────────────────────────────────────────────────────────
     // 기본 정책: 위에 매칭되지 않는 모든 경로 차단
     // ────────────────────────────────────────────────────────────────────
     match /{document=**} {
