@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notify Subscribers | ARCHINODE Admin</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f0f0f0; color: #333; }
+
+.topbar { background: #111; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar .logo { color: #fff; font-size: 1.1rem; font-weight: 800; text-decoration: none; }
+.topbar .logo span { color: #ff6b6b; font-size: 0.7rem; font-weight: 600; margin-left: 8px; background: rgba(255,107,107,0.15); padding: 2px 8px; border-radius: 3px; }
+.topbar .right { display: flex; align-items: center; gap: 16px; }
+.topbar .admin-email { color: #888; font-size: 0.8rem; }
+.topbar .nav-link { color: #aaa; font-size: 0.82rem; font-weight: 500; text-decoration: none; padding: 6px 10px; border-radius: 3px; transition: all 0.2s; }
+.topbar .nav-link:hover { color: #C8A96E; }
+.topbar .nav-link.active { color: #C8A96E; }
+.topbar .logout-btn { background: none; border: 1px solid #444; color: #aaa; padding: 6px 14px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
+.topbar .logout-btn:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+.admin { max-width: 1080px; margin: 0 auto; padding: 32px 24px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.page-head h1 { font-size: 1.4rem; font-weight: 800; }
+.page-head .sub { font-size: 0.82rem; color: #888; margin-top: 4px; }
+.head-actions { display: flex; gap: 8px; }
+.btn { background: #111; color: #fff; border: none; padding: 9px 18px; border-radius: 5px; font-size: 0.85rem; cursor: pointer; font-family: inherit; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { background: #C8A96E; }
+.btn.secondary { background: #fff; color: #111; border: 1px solid #ddd; }
+.btn.secondary:hover { background: #f5f5f5; color: #C8A96E; }
+
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.stat-card .number { font-size: 1.8rem; font-weight: 800; color: #111; }
+.stat-card .label { font-size: 0.75rem; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-card.total { border-left: 4px solid #C8A96E; }
+.stat-card.week { border-left: 4px solid #3b82f6; }
+.stat-card.today { border-left: 4px solid #10b981; }
+
+.section-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 24px; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 10px 12px; font-size: 0.75rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #f0f0f0; }
+td { padding: 14px 12px; font-size: 0.88rem; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+tr:hover { background: #fafafa; }
+td a { color: #3b82f6; text-decoration: none; }
+td a:hover { text-decoration: underline; }
+.del-btn { background: #fef2f2; color: #991b1b; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.del-btn:hover { background: #fee2e2; }
+
+.empty-state { background: #fff; border-radius: 10px; padding: 60px 24px; text-align: center; color: #999; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.empty-state i { font-size: 3rem; color: #e5e5e5; margin-bottom: 16px; }
+.empty-state p { font-size: 0.95rem; }
+
+.loading { text-align: center; padding: 60px; color: #999; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #111; color: #fff; padding: 12px 22px; border-radius: 6px; font-size: 0.88rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 2000; }
+.toast.show { opacity: 1; }
+.toast.error { background: #ef4444; }
+.toast.success { background: #10b981; }
+
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: 1fr; }
+  table { font-size: 0.8rem; }
+  th, td { padding: 8px 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="../index.html" class="logo">ARCHINODE <span>ADMIN</span></a>
+  <div class="right">
+    <a href="dashboard.html" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+    <a href="trend-submissions.html" class="nav-link"><i class="fas fa-inbox"></i> Trend Submissions</a>
+    <a href="consultations.html" class="nav-link"><i class="fas fa-comments"></i> Consultations</a>
+    <a href="notify-subscribers.html" class="nav-link active"><i class="fas fa-bell"></i> Notify Subscribers</a>
+    <span class="admin-email" id="adminEmail"></span>
+    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+  </div>
+</div>
+
+<div class="loading" id="loadingScreen">
+  <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#C8A96E;"></i>
+  <p style="margin-top:12px;">Authenticating...</p>
+</div>
+
+<div class="admin" id="adminContent" style="display:none;">
+
+  <div class="page-head">
+    <div>
+      <h1>Digital Products Notify Subscribers</h1>
+      <div class="sub">디지털 상품 출시 알림을 신청한 이메일 목록입니다. 첫 상품(M1 Flagship 플레이북) 출시 시 일괄 알림 메일 발송 대상.</div>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" id="refreshBtn"><i class="fas fa-sync"></i> Refresh</button>
+      <button class="btn" id="csvBtn"><i class="fas fa-download"></i> Download CSV</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card total"><div class="number" id="statTotal">0</div><div class="label">Total Subscribers</div></div>
+    <div class="stat-card week"><div class="number" id="statWeek">0</div><div class="label">Last 7 Days</div></div>
+    <div class="stat-card today"><div class="number" id="statToday">0</div><div class="label">Today</div></div>
+  </div>
+
+  <div id="contentArea">
+    <div class="loading"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;color:#C8A96E;"></i><p style="margin-top:12px;">Loading subscribers...</p></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../firebase-config.js"></script>
+<script>
+// firebase-config.js 가 ADMIN_EMAILS, isAdmin(), auth, db 제공 — 재선언 금지
+let allDocs = [];
+
+auth.onAuthStateChanged(function(user) {
+  if (!user) {
+    location.replace('../auth/login.html?next=/admin/notify-subscribers.html');
+    return;
+  }
+  if (!isAdmin(user.email)) {
+    document.body.innerHTML = '<div style="text-align:center;padding:80px 24px;font-family:Inter,sans-serif;"><h1 style="font-size:1.5rem;margin-bottom:12px;">Access Denied</h1><p style="color:#888;">This page is restricted to ARCHINODE editorial team.</p><p style="margin-top:18px;"><a href="/" style="color:#C8A96E;">Return to homepage</a></p></div>';
+    return;
+  }
+  document.getElementById('adminEmail').textContent = user.email;
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('adminContent').style.display = 'block';
+  loadSubscribers();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  auth.signOut().then(function() { location.replace('../auth/login.html'); });
+});
+
+document.getElementById('refreshBtn').addEventListener('click', loadSubscribers);
+document.getElementById('csvBtn').addEventListener('click', downloadCSV);
+
+function loadSubscribers() {
+  const container = document.getElementById('contentArea');
+  container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin" style="font-size:1.5rem;color:#C8A96E;"></i><p style="margin-top:12px;">Loading subscribers...</p></div>';
+
+  db.collection('digital-products-notify').orderBy('createdAt', 'desc').get()
+    .then(function(snap) {
+      allDocs = [];
+      snap.forEach(function(doc) {
+        allDocs.push(Object.assign({ id: doc.id }, doc.data()));
+      });
+      updateStats();
+      render();
+    })
+    .catch(function(err) {
+      console.error(err);
+      container.innerHTML = '<div class="empty-state"><i class="fas fa-circle-exclamation"></i><p>Failed to load: ' + escapeHtml(err.message) + '</p></div>';
+    });
+}
+
+function updateStats() {
+  var now = Date.now();
+  var weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+  var todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+  var weekCount = 0, todayCount = 0;
+  allDocs.forEach(function(d) {
+    var t = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().getTime() : null;
+    if (t === null) return;
+    if (t >= weekAgo) weekCount++;
+    if (t >= todayStart.getTime()) todayCount++;
+  });
+  document.getElementById('statTotal').textContent = allDocs.length;
+  document.getElementById('statWeek').textContent = weekCount;
+  document.getElementById('statToday').textContent = todayCount;
+}
+
+function render() {
+  var container = document.getElementById('contentArea');
+  if (allDocs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><p>아직 등록자가 없습니다. 디지털 상품 페이지에서 "Notify Me" 폼 제출이 발생하면 여기 표시됩니다.</p></div>';
+    return;
+  }
+  var html = '<div class="section-card"><table><thead><tr>'
+    + '<th>Email</th><th style="width:200px;">Registered</th><th style="width:120px;text-align:right;">Actions</th>'
+    + '</tr></thead><tbody>';
+  allDocs.forEach(function(d) {
+    html += '<tr>'
+      + '<td><a href="mailto:' + escapeAttr(d.email || '') + '">' + escapeHtml(d.email || '—') + '</a></td>'
+      + '<td>' + formatDate(d.createdAt) + '</td>'
+      + '<td style="text-align:right;"><button class="del-btn" onclick="deleteSubscriber(\'' + d.id + '\', \'' + escapeAttr(d.email || '') + '\')">Delete</button></td>'
+      + '</tr>';
+  });
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+}
+
+window.deleteSubscriber = function(id, email) {
+  if (!confirm('정말 ' + email + ' 를 목록에서 삭제하시겠습니까?')) return;
+  db.collection('digital-products-notify').doc(id).delete()
+    .then(function() {
+      showToast('삭제 완료', 'success');
+      loadSubscribers();
+    })
+    .catch(function(err) {
+      console.error(err);
+      showToast('실패: ' + err.message, 'error');
+    });
+};
+
+function downloadCSV() {
+  if (allDocs.length === 0) {
+    showToast('등록자가 없습니다.', 'error');
+    return;
+  }
+  var rows = [['Email', 'Registered At']];
+  allDocs.forEach(function(d) {
+    rows.push([d.email || '', formatDate(d.createdAt)]);
+  });
+  var csv = rows.map(function(r) {
+    return r.map(function(cell) {
+      var s = String(cell == null ? '' : cell);
+      if (s.indexOf(',') !== -1 || s.indexOf('"') !== -1 || s.indexOf('\n') !== -1) {
+        s = '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }).join(',');
+  }).join('\n');
+  var bom = '﻿'; // UTF-8 BOM for Excel
+  var blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  var today = new Date();
+  var fname = 'archinode-notify-subscribers-' + today.getFullYear() + pad(today.getMonth()+1) + pad(today.getDate()) + '.csv';
+  a.download = fname;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('CSV 다운로드 완료 (' + allDocs.length + '명)', 'success');
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+function escapeAttr(s) { return escapeHtml(s).replace(/\n/g, ' '); }
+function formatDate(ts) {
+  if (!ts) return '—';
+  var d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+</script>
+</body>
+</html>
