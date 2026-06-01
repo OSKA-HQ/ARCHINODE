@@ -435,7 +435,7 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
 
             <button class="btn btn-primary" id="addArticleBtn"><i class="fas fa-plus"></i> Write Article</button>
 
-            <!-- Article Form (hidden) -->
+            <!-- Article Form (hidden) — Block Editor (logic: brand-portal/article-editor.js) -->
             <div id="articleForm" style="display:none;margin-top:24px;padding:24px;background:#f9f9f9;border-radius:8px;">
                 <h3 style="font-size:1rem;margin-bottom:16px;">New Article</h3>
                 <div class="field">
@@ -454,15 +454,24 @@ body { font-family: 'Inter', 'Noto Sans KR', sans-serif; background: #f5f5f5; co
                         </select>
                     </div>
                     <div class="field">
-                        <label>Cover Image</label>
-                        <input type="file" id="artImage" accept="image/*">
+                        <label>Original Language</label>
+                        <select id="artLang">
+                            <option value="en">English</option>
+                            <option value="ko">Korean</option>
+                        </select>
                     </div>
                 </div>
                 <div class="field">
-                    <label>Article Content *</label>
-                    <textarea id="artContent" rows="10" placeholder="Write your article here. You can use basic formatting."></textarea>
+                    <label>Article Body *</label>
+                    <p style="font-size:0.78rem;color:#888;margin:4px 0 12px;">Build your article by adding text and image blocks in any order. Drag an image into an image block to upload it.</p>
+                    <div id="artBlocks" style="display:flex;flex-direction:column;gap:12px;"></div>
+                    <div style="display:flex;gap:8px;margin-top:12px;">
+                        <button type="button" class="btn btn-secondary" id="addTextBlockBtn"><i class="fas fa-paragraph"></i> Add Text</button>
+                        <button type="button" class="btn btn-secondary" id="addImageBlockBtn"><i class="fas fa-image"></i> Add Image</button>
+                    </div>
                 </div>
-                <div style="display:flex;gap:12px;">
+                <div id="artFormMsg" style="margin-top:14px;font-size:0.85rem;"></div>
+                <div style="display:flex;gap:12px;margin-top:16px;">
                     <button type="button" class="btn btn-primary" id="submitArticle">Submit for Review</button>
                     <button type="button" class="btn btn-secondary" id="cancelArticle">Cancel</button>
                 </div>
@@ -646,6 +655,7 @@ auth.onAuthStateChanged(async (user) => {
         return;
     }
     currentUser = user;
+    window.currentUser = currentUser;
     document.getElementById('userEmail').textContent = user.email;
     await loadBrandData(user.uid);
 });
@@ -659,6 +669,7 @@ async function loadBrandData(uid) {
             return;
         }
         brandData = doc.data();
+        window.brandData = brandData;
         populateDashboard();
         loadStats();
         document.getElementById('loadingScreen').style.display = 'none';
@@ -919,58 +930,9 @@ async function loadProducts() {
     });
 }
 
-// ── 매거진 아티클 ──
-document.getElementById('addArticleBtn').addEventListener('click', () => {
-    document.getElementById('articleForm').style.display = 'block';
-    document.getElementById('addArticleBtn').style.display = 'none';
-});
-document.getElementById('cancelArticle').addEventListener('click', () => {
-    document.getElementById('articleForm').style.display = 'none';
-    document.getElementById('addArticleBtn').style.display = 'inline-block';
-});
-
-document.getElementById('submitArticle').addEventListener('click', async () => {
-    const title = document.getElementById('artTitle').value.trim();
-    const content = document.getElementById('artContent').value.trim();
-    if (!title || !content) { alert('Title and content are required'); return; }
-
-    const btn = document.getElementById('submitArticle');
-    btn.disabled = true;
-    btn.textContent = 'Submitting...';
-
-    let imageUrl = '';
-    const imageFile = document.getElementById('artImage').files[0];
-    if (imageFile) {
-        const ref = storage.ref(`articles/${currentUser.uid}/${Date.now()}_${imageFile.name}`);
-        await ref.put(imageFile);
-        imageUrl = await ref.getDownloadURL();
-    }
-
-    await db.collection('articles').add({
-        brandId: currentUser.uid,
-        brandName: brandData.brandName,
-        brandSlug: brandData.slug || generateSlug(brandData.brandName),
-        title: title,
-        slug: generateSlug(title),
-        tag: document.getElementById('artTag').value,
-        content: content,
-        excerpt: content.substring(0, 200) + (content.length > 200 ? '...' : ''),
-        imageUrl: imageUrl,
-        status: 'pending',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    btn.disabled = false;
-    btn.textContent = 'Submit for Review';
-    document.getElementById('articleForm').style.display = 'none';
-    document.getElementById('addArticleBtn').style.display = 'inline-block';
-    document.getElementById('artTitle').value = '';
-    document.getElementById('artContent').value = '';
-    document.getElementById('artTag').value = 'Brand Spotlight';
-    document.getElementById('artImage').value = '';
-
-    loadArticles();
-});
+// ── 매거진 아티클 — 블록 에디터 + 이미지 업로드 + 저장은 brand-portal/article-editor.js에서 처리 ──
+// (addArticleBtn / cancelArticle / submitArticle / addTextBlockBtn / addImageBlockBtn 핸들러는
+//  brandData가 로드된 후 article-editor.js의 init()이 바인딩. window.brandData를 참조하므로 노출 필요.)
 
 async function loadArticles() {
     const snap = await db.collection('articles').where('brandId', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
@@ -1009,5 +971,7 @@ function showSaveMsg(id) {
     setTimeout(() => el.classList.remove('show'), 2500);
 }
 </script>
+<script src="article-editor.js"></script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
