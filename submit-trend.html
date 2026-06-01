@@ -3,233 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Submit Trend Report | ARCHINODE — 유럽 브랜드 트렌드 리포트 제출</title>
-<meta name="description" content="유럽 디자인 브랜드를 위한 트렌드 리포트 제출 페이지. 박람회 인사이트, 신제품 컬렉션, 브랜드 스피릿을 한국 건축가·디자이너에게 직접 전하세요.">
+<title>Publish Your Article | ARCHINODE Brand Magazine</title>
+<meta name="description" content="Publish your brand story on ARCHINODE Brand Magazine via the Brand Portal.">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="style.css">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; font-size: 16px; }
-body {
-  font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #1a1a1a;
-  background: #ffffff;
-  line-height: 1.6;
-}
-a { text-decoration: none; color: inherit; transition: color 0.3s; }
-img { max-width: 100%; height: auto; display: block; }
-ul { list-style: none; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
-
-:root {
-  --black: #000000;
-  --white: #ffffff;
-  --gray-50: #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-200: #e5e5e5;
-  --gray-300: #d4d4d4;
-  --gray-400: #a3a3a3;
-  --gray-500: #737373;
-  --gray-600: #525252;
-  --gray-700: #404040;
-  --gray-800: #262626;
-  --gray-900: #171717;
-  --max-width: 1440px;
-  --header-height: 64px;
-  --accent-gold: #C8A96E;
-}
-
-.container { max-width: var(--max-width); margin: 0 auto; padding: 0 40px; }
-@media (max-width: 768px) { .container { padding: 0 20px; } }
-
-/* HERO */
-.submit-hero {
-  background: var(--gray-900);
-  color: var(--white);
-  padding: 100px 0 60px;
-  text-align: center;
-}
-.submit-hero .hero-tag {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent-gold);
-  margin-bottom: 20px;
-}
-.submit-hero h1 {
-  font-size: 2.6rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 16px;
-}
-.submit-hero p {
-  font-size: 1rem;
-  font-weight: 300;
-  color: rgba(255,255,255,0.7);
-  max-width: 640px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
-
-/* GUIDELINES */
-.guidelines {
-  padding: 56px 0 24px;
-  background: var(--gray-50);
-}
-.guidelines h2 {
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 20px;
-}
-.guidelines-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.guideline-card {
-  padding: 24px;
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: 4px;
-}
-.guideline-card .num {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--accent-gold);
-  letter-spacing: 0.15em;
-  margin-bottom: 10px;
-}
-.guideline-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  letter-spacing: -0.01em;
-}
-.guideline-card p {
-  font-size: 0.85rem;
-  color: var(--gray-600);
-  line-height: 1.65;
-}
-@media (max-width: 768px) {
-  .guidelines-grid { grid-template-columns: 1fr; }
-}
-
-/* FORM */
-.form-section {
-  padding: 56px 0 100px;
-}
-.form-wrap {
-  max-width: 720px;
-  margin: 0 auto;
-}
-.form-group {
-  margin-bottom: 22px;
-}
-.form-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gray-800);
-  margin-bottom: 8px;
-}
-.form-group label .req { color: #d33; margin-left: 4px; }
-.form-group label .hint { font-weight: 400; color: var(--gray-500); margin-left: 8px; font-size: 0.78rem; }
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--gray-300);
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s;
-  font-family: inherit;
-  background: var(--white);
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--black);
-}
-.form-group textarea {
-  min-height: 200px;
-  resize: vertical;
-  line-height: 1.7;
-}
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-@media (max-width: 768px) {
-  .form-row { grid-template-columns: 1fr; }
-}
-
-.submit-btn {
-  width: 100%;
-  background: var(--black);
-  color: var(--white);
-  padding: 16px 24px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  border: 1px solid var(--black);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-.submit-btn:hover { background: var(--gray-800); }
-.submit-btn:disabled { background: var(--gray-400); border-color: var(--gray-400); cursor: not-allowed; }
-
-.form-success {
-  display: none;
-  padding: 48px 32px;
-  text-align: center;
-  background: #f5f9f0;
-  border: 1px solid #c5dba8;
-  border-radius: 6px;
-}
-.form-success i { font-size: 2.4rem; color: #5a8a2e; margin-bottom: 16px; }
-.form-success h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
-.form-success p { font-size: 0.95rem; color: var(--gray-600); line-height: 1.7; }
-
-.form-error {
-  display: none;
-  padding: 14px 18px;
-  margin-bottom: 18px;
-  background: #fdf0f0;
-  border: 1px solid #f3c5c5;
-  color: #a33;
-  font-size: 0.88rem;
-  border-radius: 4px;
-}
-
-/* HEADER & FOOTER (reuse from style.css patterns) */
-.announcement-bar { background: var(--black); color: var(--white); text-align: center; padding: 10px 20px; font-size: 0.8rem; }
-.announcement-bar a { color: var(--white); text-decoration: underline; }
-
-@media (max-width: 768px) {
-  .submit-hero h1 { font-size: 1.8rem; }
-  .submit-hero { padding: 60px 0 40px; }
-}
-</style>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://archinodekr.com/submit-trend.html">
+<meta property="og:title" content="Publish Your Article | ARCHINODE Brand Magazine">
+<meta property="og:description" content="Publish your brand story through the Brand Portal.">
 </head>
 <body>
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announcement-bar">
-  <span data-en="2026 Brand Listing —" data-ko="2026 브랜드 입점 —">2026 Brand Listing —</span> <strong data-en="Now Free" data-ko="무료">Now Free</strong> &nbsp;|&nbsp; <span data-en="List your brand on ARCHINODE at no cost." data-ko="ARCHINODE에 무료로 브랜드를 등록하세요.">List your brand on ARCHINODE at no cost.</span> <a href="list-your-brand.html" data-en="Learn more →" data-ko="자세히 보기 →">Learn more &rarr;</a>
+  2026 Brand Listing — <strong>Now Free</strong> &nbsp;|&nbsp; List your brand on ARCHINODE at no cost. <a href="list-your-brand.html">Learn more &rarr;</a>
 </div>
 
 <!-- HEADER -->
@@ -253,15 +46,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         </div>
       </div>
       <a href="brands.html" data-en="Brands" data-ko="브랜드">Brands</a>
-      <a href="trend-report.html" data-en="Trend Report" data-ko="트렌드 리포트">Trend Report</a>
-      <a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a>
+      <a href="magazine.html" data-en="Brand Magazine" data-ko="브랜드 매거진">Brand Magazine</a>
       <a href="about.html" data-en="About" data-ko="소개">About</a>
       <a href="list-your-brand.html" class="nav-cta" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a>
     </nav>
     <div class="header-actions">
       <a href="brand-portal/login.html" style="font-size:0.82rem;color:#C8A96E;font-weight:600;" data-en="Brand Login" data-ko="브랜드 로그인">Brand Login</a>
-      <button class="search-toggle" onclick="toggleSearch()" aria-label="Search"><i class="fas fa-search"></i></button>
-      <a href="auth/profile.html" aria-label="Saved"><i class="far fa-bookmark"></i></a>
       <a href="#" class="lang-switch" onclick="toggleLang(event)">KR / EN</a>
       <button class="mobile-toggle" onclick="toggleMobile()" aria-label="Menu"><i class="fas fa-bars"></i></button>
     </div>
@@ -269,154 +59,53 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 </header>
 
 <!-- HERO -->
-<section class="submit-hero">
-  <div class="container">
-    <span class="hero-tag" data-en="FOR EUROPEAN BRANDS" data-ko="유럽 브랜드 대상">FOR EUROPEAN BRANDS</span>
-    <h1 data-en="Submit Your Trend Report" data-ko="트렌드 리포트 제출">Submit Your Trend Report</h1>
-    <p data-en="Speak directly to Korean architects, designers, and specifiers. Editorial format only — no advertising. ARCHINODE editors will review your submission within 5 business days." data-ko="한국 건축가·디자이너·스펙라이터에게 직접 말을 거십시오. 광고가 아닌 에디토리얼 형식으로. ARCHINODE 편집부가 5영업일 안에 검토합니다.">Speak directly to Korean architects, designers, and specifiers. Editorial format only — no advertising. ARCHINODE editors will review your submission within 5 business days.</p>
+<section style="padding:120px 24px 60px; background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 100%); text-align:center;">
+  <div style="max-width:780px; margin:0 auto;">
+    <span style="display:inline-block; font-size:0.78rem; color:#C8A96E; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px;" data-en="Brand Magazine" data-ko="브랜드 매거진">Brand Magazine</span>
+    <h1 style="font-family:'Georgia',serif; font-size:2.6rem; color:#fff; margin-bottom:18px; letter-spacing:-0.02em;" data-en="Publish Your Brand Story" data-ko="브랜드 이야기를 게재하세요">Publish Your Brand Story</h1>
+    <p style="font-size:1.1rem; color:#bbb; line-height:1.7; font-weight:300;" data-en="Articles are now published through the Brand Portal. Only approved brands can publish — this keeps the Brand Magazine focused and trustworthy." data-ko="이제 매거진 글은 브랜드 포털에서 발행됩니다. 승인된 브랜드만 발행할 수 있어 브랜드 매거진의 신뢰도가 유지됩니다.">Articles are now published through the Brand Portal. Only approved brands can publish — this keeps the Brand Magazine focused and trustworthy.</p>
   </div>
 </section>
 
-<!-- GUIDELINES -->
-<section class="guidelines">
-  <div class="container">
-    <h2 data-en="Editorial Guidelines" data-ko="에디토리얼 가이드라인">Editorial Guidelines</h2>
-    <div class="guidelines-grid">
-      <div class="guideline-card">
-        <span class="num">01</span>
-        <h3 data-en="Inspiration over advertisement" data-ko="광고 아닌 영감">Inspiration over advertisement</h3>
-        <p data-en="Tell the story behind a collection, the materials, the design philosophy. Avoid &lsquo;our product is the best&rsquo; framing — Korean readers respond to context and craft." data-ko="컬렉션 뒤의 이야기, 소재, 디자인 철학을 들려주세요. &lsquo;우리 제품이 최고&rsquo;라는 톤은 피해주세요. 한국 독자는 맥락과 장인정신에 반응합니다.">Tell the story behind a collection, the materials, the design philosophy. Avoid 'our product is the best' framing — Korean readers respond to context and craft.</p>
+<!-- STEPS -->
+<section style="padding:80px 24px; background:#fff;">
+  <div style="max-width:880px; margin:0 auto;">
+    <h2 style="font-family:'Georgia',serif; font-size:1.8rem; text-align:center; margin-bottom:48px; color:#111;" data-en="How to Publish" data-ko="발행 방법">How to Publish</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px;">
+      <div style="text-align:center;">
+        <div style="width:48px; height:48px; background:#C8A96E; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; margin-bottom:14px;">1</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#111; margin-bottom:8px;" data-en="List Your Brand" data-ko="브랜드 입점 신청">List Your Brand</h3>
+        <p style="font-size:0.88rem; color:#666; line-height:1.6;" data-en="Free brand registration in 2026." data-ko="2026년 무료 입점.">Free brand registration in 2026.</p>
       </div>
-      <div class="guideline-card">
-        <span class="num">02</span>
-        <h3 data-en="Original content only" data-ko="오리지널 콘텐츠">Original content only</h3>
-        <p data-en="No press release reprints. Submit content created specifically for the Korean audience or freshly translated from your editorial team. Image rights must be cleared." data-ko="보도자료 재게재는 받지 않습니다. 한국 독자를 위해 새로 쓴 글, 또는 자체 에디토리얼팀이 새로 번역한 글만 제출해주세요. 이미지 저작권은 확보된 상태여야 합니다.">No press release reprints. Submit content created specifically for the Korean audience or freshly translated from your editorial team. Image rights must be cleared.</p>
+      <div style="text-align:center;">
+        <div style="width:48px; height:48px; background:#C8A96E; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; margin-bottom:14px;">2</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#111; margin-bottom:8px;" data-en="Get Approved" data-ko="승인 대기">Get Approved</h3>
+        <p style="font-size:0.88rem; color:#666; line-height:1.6;" data-en="Reviewed within 1–3 business days." data-ko="1~3 영업일 내 검토.">Reviewed within 1–3 business days.</p>
       </div>
-      <div class="guideline-card">
-        <span class="num">03</span>
-        <h3 data-en="Korean translation provided" data-ko="한국어 번역 제공">Korean translation provided</h3>
-        <p data-en="Submit in English or Italian. ARCHINODE editorial provides Korean translation as part of the review process. You may also submit your own Korean version for editor verification." data-ko="영문 또는 이탈리아어로 제출 가능합니다. 한국어 번역은 ARCHINODE 편집부가 검토 과정에서 제공합니다. 자체 한국어 버전을 함께 제출하셔도 됩니다 — 편집부가 검수합니다.">Submit in English or Italian. ARCHINODE editorial provides Korean translation as part of the review process. You may also submit your own Korean version for editor verification.</p>
+      <div style="text-align:center;">
+        <div style="width:48px; height:48px; background:#C8A96E; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; margin-bottom:14px;">3</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#111; margin-bottom:8px;" data-en="Log In to Brand Portal" data-ko="브랜드 포털 로그인">Log In to Brand Portal</h3>
+        <p style="font-size:0.88rem; color:#666; line-height:1.6;" data-en="Use the credentials from your approval email." data-ko="승인 이메일에 안내된 계정으로 로그인.">Use the credentials from your approval email.</p>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:48px; height:48px; background:#C8A96E; color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; margin-bottom:14px;">4</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#111; margin-bottom:8px;" data-en="Write & Publish" data-ko="글 작성 후 발행">Write & Publish</h3>
+        <p style="font-size:0.88rem; color:#666; line-height:1.6;" data-en="Open the Magazine tab → Write Article. Drop images directly into image blocks." data-ko="매거진 탭 → Write Article 클릭. 이미지는 블록에 바로 드롭.">Open the Magazine tab → Write Article. Drop images directly into image blocks.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FORM -->
-<section class="form-section">
-  <div class="container">
-    <div class="form-wrap">
-
-      <div class="form-error" id="formError"></div>
-
-      <form id="trendForm" onsubmit="return submitTrend(event)">
-
-        <h2 style="font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:24px;" data-en="Brand &amp; Contact" data-ko="브랜드 · 담당자">Brand &amp; Contact</h2>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="brandName" data-en="Brand Name" data-ko="브랜드명">Brand Name <span class="req">*</span></label>
-            <input type="text" id="brandName" required placeholder="e.g. Ethimo" data-en-placeholder="e.g. Ethimo" data-ko-placeholder="예: Ethimo">
-          </div>
-          <div class="form-group">
-            <label for="contactName" data-en="Contact Name" data-ko="담당자명">Contact Name <span class="req">*</span></label>
-            <input type="text" id="contactName" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="email" data-en="Email" data-ko="이메일">Email <span class="req">*</span></label>
-            <input type="email" id="email" required>
-          </div>
-          <div class="form-group">
-            <label for="country" data-en="Country" data-ko="국가">Country <span class="req">*</span></label>
-            <input type="text" id="country" required placeholder="e.g. Italy" data-en-placeholder="e.g. Italy" data-ko-placeholder="예: 이탈리아">
-          </div>
-        </div>
-
-        <h2 style="font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin:32px 0 24px;" data-en="Report Content" data-ko="리포트 내용">Report Content</h2>
-
-        <div class="form-group">
-          <label for="title" data-en="Title" data-ko="제목">Title <span class="req">*</span></label>
-          <input type="text" id="title" required placeholder="e.g. Salone del Mobile 2026 — Our Collection's Story" data-en-placeholder="e.g. Salone del Mobile 2026 — Our Collection's Story" data-ko-placeholder="예: Salone del Mobile 2026 — 우리 컬렉션의 이야기">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="category" data-en="Category" data-ko="카테고리">Category <span class="req">*</span></label>
-            <select id="category" required>
-              <option value="">— Select —</option>
-              <option value="furniture">Furniture</option>
-              <option value="lighting">Lighting</option>
-              <option value="bathroom">Bathroom</option>
-              <option value="kitchen">Kitchen</option>
-              <option value="outdoor">Outdoor</option>
-              <option value="finishes">Finishes</option>
-              <option value="wellness">Wellness</option>
-              <option value="decor">Decor</option>
-              <option value="construction">Construction</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="language" data-en="Original Language" data-ko="원본 언어">Original Language <span class="req">*</span> <span class="hint" data-en="the language your body text is written in" data-ko="본문이 작성된 언어">the language your body text is written in</span></label>
-            <select id="language" required>
-              <option value="">— Select —</option>
-              <option value="en">English</option>
-              <option value="it">Italiano</option>
-              <option value="de">Deutsch</option>
-              <option value="fr">Français</option>
-              <option value="es">Español</option>
-              <option value="nl">Nederlands</option>
-              <option value="da">Dansk</option>
-              <option value="ko">한국어</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="source" data-en="Source / Context" data-ko="출처 · 맥락">Source / Context <span class="hint" data-en="optional" data-ko="선택">optional</span></label>
-          <input type="text" id="source" placeholder="e.g. Salone del Mobile 2026 / New Collection X / Studio Visit" data-en-placeholder="e.g. Salone del Mobile 2026 / New Collection X / Studio Visit" data-ko-placeholder="예: 살로네 델 모빌 2026 / 신컬렉션 X / 스튜디오 방문기">
-        </div>
-
-        <div class="form-group">
-          <label for="body" data-en="Body (in your original language)" data-ko="본문 (원본 언어로)">Body (in your original language) <span class="req">*</span> <span class="hint" data-en="600 words minimum recommended — write in the language you selected above" data-ko="권장 600단어 이상 — 위에서 선택한 원본 언어로 작성">600 words minimum recommended — write in the language you selected above</span></label>
-          <textarea id="body" required placeholder="Tell the story. What did you show, why, and what does it mean for designers and architects?" data-en-placeholder="Tell the story. What did you show, why, and what does it mean for designers and architects?" data-ko-placeholder="이야기를 들려주세요. 무엇을 어떻게 선보이셨고, 왜, 그리고 이것이 디자이너·건축가에게 어떤 의미인지."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="englishBody" data-en="English Translation" data-ko="영어 번역">English Translation <span class="hint" data-en="optional — leave blank if your Body is already in English or to have ARCHINODE editorial translate it" data-ko="선택 — 위 본문이 이미 영어이거나 ARCHINODE 편집부가 번역해도 되면 비워두세요">optional — leave blank if your Body is already in English or to have ARCHINODE editorial translate it</span></label>
-          <textarea id="englishBody" placeholder="English version of your body text (optional)" data-en-placeholder="English version of your body text (optional)" data-ko-placeholder="본문의 영어 버전 (선택)"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="imageUrl" data-en="Header Image URL" data-ko="대표 이미지 URL">Header Image URL <span class="hint" data-en="must be cleared for editorial use" data-ko="에디토리얼 사용권 확보 필수">must be cleared for editorial use</span></label>
-          <input type="url" id="imageUrl" placeholder="https://...">
-        </div>
-
-        <div class="form-group">
-          <label for="extraImages" data-en="Additional Image URLs" data-ko="추가 이미지 URL">Additional Image URLs <span class="hint" data-en="one URL per line, optional" data-ko="줄바꿈으로 구분, 선택">one URL per line, optional</span></label>
-          <textarea id="extraImages" style="min-height:80px;" placeholder="https://...&#10;https://..."></textarea>
-        </div>
-
-        <div class="form-group" style="margin-top:32px;">
-          <label style="display:flex;align-items:flex-start;gap:10px;font-weight:400;color:var(--gray-600);">
-            <input type="checkbox" id="agreeRights" required style="width:auto;margin-top:4px;">
-            <span data-en="I confirm that I have rights to all submitted content and images, and grant ARCHINODE the right to edit and publish the report on archinodekr.com." data-ko="제출하는 모든 콘텐츠와 이미지에 대한 권리를 보유하고 있으며, ARCHINODE에 archinodekr.com 게시 및 편집을 위한 권한을 부여합니다.">I confirm that I have rights to all submitted content and images, and grant ARCHINODE the right to edit and publish the report on archinodekr.com.</span>
-          </label>
-        </div>
-
-        <button type="submit" class="submit-btn" id="submitBtn" data-en="Submit for Editorial Review" data-ko="편집부 검토 요청 보내기">Submit for Editorial Review</button>
-
-      </form>
-
-      <div class="form-success" id="formSuccess">
-        <i class="fas fa-check-circle"></i>
-        <h3 data-en="Submission received" data-ko="제출 완료">Submission received</h3>
-        <p data-en="ARCHINODE editorial will review your trend report within 5 business days. We will reach out by email — accept, request edits, or decline. Thank you for trusting our editorial channel." data-ko="ARCHINODE 편집부가 5영업일 이내에 검토합니다. 결과(승인 · 수정 요청 · 거절)는 이메일로 연락드립니다. 우리 에디토리얼 채널을 신뢰해주셔서 감사합니다.">ARCHINODE editorial will review your trend report within 5 business days. We will reach out by email — accept, request edits, or decline. Thank you for trusting our editorial channel.</p>
-      </div>
-
+<!-- CTA -->
+<section style="padding:80px 24px; background:#f8f8f8; text-align:center;">
+  <div style="max-width:640px; margin:0 auto;">
+    <h2 style="font-family:'Georgia',serif; font-size:1.6rem; color:#111; margin-bottom:18px;" data-en="Ready to Start?" data-ko="시작할 준비가 되셨나요?">Ready to Start?</h2>
+    <p style="color:#666; line-height:1.7; margin-bottom:32px;" data-en="If your brand is not yet listed, register first. If you are already approved, log in to the Brand Portal." data-ko="아직 입점 전이라면 먼저 신청하세요. 이미 승인된 브랜드라면 포털에 로그인하세요.">If your brand is not yet listed, register first. If you are already approved, log in to the Brand Portal.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <a href="list-your-brand.html" style="display:inline-block; padding:14px 32px; background:#111; color:#fff; font-size:0.9rem; font-weight:600; text-decoration:none; border-radius:6px;" data-en="List Your Brand →" data-ko="브랜드 입점 신청 →">List Your Brand →</a>
+      <a href="brand-portal/login.html" style="display:inline-block; padding:14px 32px; background:#C8A96E; color:#fff; font-size:0.9rem; font-weight:600; text-decoration:none; border-radius:6px;" data-en="Brand Portal Login" data-ko="브랜드 포털 로그인">Brand Portal Login</a>
     </div>
+    <p style="margin-top:32px; font-size:0.84rem; color:#999;"><a href="magazine.html" style="color:#666; text-decoration:underline;" data-en="Browse existing articles at the Brand Magazine." data-ko="브랜드 매거진에서 기존 글 둘러보기">Browse existing articles at the Brand Magazine.</a></p>
   </div>
 </section>
 
@@ -426,29 +115,22 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="logo">ARCHINODE <span class="logo-sub">건축을 잇다</span></div>
-        <p data-en="Connecting global architecture &amp; design brands with the Korean market. Discover, connect, and grow with ARCHINODE." data-ko="글로벌 건축·디자인 브랜드를 한국 시장과 연결합니다.">Connecting global architecture &amp; design brands with the Korean market.</p>
+        <p>Connecting global architecture &amp; design brands with the Korean market.</p>
       </div>
       <div class="footer-col">
-        <h4 data-en="Editorial" data-ko="에디토리얼">Editorial</h4>
+        <h4 data-en="Services" data-ko="서비스">Services</h4>
         <ul>
-          <li><a href="trend-report.html" data-en="Trend Report" data-ko="트렌드 리포트">Trend Report</a></li>
-          <li><a href="magazine.html" data-en="Magazine" data-ko="매거진">Magazine</a></li>
-          <li><a href="submit-trend.html" data-en="Submit Trend Report" data-ko="트렌드 리포트 제출">Submit Trend Report</a></li>
+          <li><a href="magazine.html" data-en="Brand Magazine" data-ko="브랜드 매거진">Brand Magazine</a></li>
+          <li><a href="request-consultation.html" data-en="Consulting" data-ko="컨설팅">Consulting</a></li>
+          <li><a href="list-your-brand.html" data-en="Brand Listing" data-ko="브랜드 입점">Brand Listing</a></li>
+          <li><a href="digital-products.html" data-en="Digital Products" data-ko="디지털 상품">Digital Products</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4 data-en="Company" data-ko="회사">Company</h4>
         <ul>
           <li><a href="about.html" data-en="About ARCHINODE" data-ko="ARCHINODE 소개">About ARCHINODE</a></li>
-          <li><a href="about.html" data-en="Contact" data-ko="문의">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 data-en="Services" data-ko="서비스">Services</h4>
-        <ul>
-          <li><a href="digital-products.html" data-en="Digital Products" data-ko="디지털 상품">Digital Products</a></li>
-          <li><a href="request-consultation.html" data-en="Consulting" data-ko="컨설팅">Consulting</a></li>
-          <li><a href="list-your-brand.html" data-en="List Your Brand" data-ko="브랜드 입점">List Your Brand</a></li>
+          <li><a href="contact.html" data-en="Contact" data-ko="연락처">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -462,90 +144,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   </div>
 </footer>
 
-<script src="firebase-config.js"></script>
-<script src="search.js"></script>
-<script src="lang.js"></script>
-<script src="auth-ui.js"></script>
 <script>
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+function toggleCatMenu() {
+  const menu = document.getElementById('catMenu');
+  menu.classList.toggle('active');
 }
-
-async function submitTrend(e) {
-  e.preventDefault();
-  const submitBtn = document.getElementById('submitBtn');
-  const errorDiv = document.getElementById('formError');
-  errorDiv.style.display = 'none';
-
-  const brandName = document.getElementById('brandName').value.trim();
-  const contactName = document.getElementById('contactName').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const country = document.getElementById('country').value.trim();
-  const title = document.getElementById('title').value.trim();
-  const category = document.getElementById('category').value;
-  const originalLang = document.getElementById('language').value;
-  const source = document.getElementById('source').value.trim();
-  const originalBody = document.getElementById('body').value.trim();
-  const englishBody = document.getElementById('englishBody').value.trim();
-  const imageUrl = document.getElementById('imageUrl').value.trim();
-  const extraImages = document.getElementById('extraImages').value.trim();
-  const agreeRights = document.getElementById('agreeRights').checked;
-
-  if (!agreeRights) {
-    errorDiv.textContent = 'Please confirm content rights to submit.';
-    errorDiv.style.display = 'block';
-    return false;
+document.addEventListener('click', function(e) {
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    document.getElementById('catMenu').classList.remove('active');
   }
-
-  if (originalBody.length < 200) {
-    errorDiv.textContent = 'Body is too short. Please provide a substantive editorial piece (recommended 600+ words).';
-    errorDiv.style.display = 'block';
-    return false;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Submitting...';
-
-  try {
-    const db = firebase.firestore();
-    await db.collection('trend-submissions').add({
-      brandName: escapeHtml(brandName),
-      contactName: escapeHtml(contactName),
-      email: email,
-      country: escapeHtml(country),
-      title: escapeHtml(title),
-      category: category,
-      originalLang: originalLang,
-      source: escapeHtml(source),
-      originalBody: originalBody,
-      englishBody: englishBody,
-      imageUrl: imageUrl,
-      extraImages: extraImages.split('\n').map(s => s.trim()).filter(Boolean),
-      status: 'pending',
-      reviewerNote: null,
-      reviewedAt: null,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    document.getElementById('trendForm').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-    document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth' });
-  } catch (err) {
-    console.error(err);
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit for Editorial Review';
-    errorDiv.textContent = 'Submission failed. Please email us at office@archinode.org instead. Error: ' + (err.message || err.code || 'unknown');
-    errorDiv.style.display = 'block';
-  }
-  return false;
-}
+});
+function toggleMobile() { document.getElementById('mainNav').classList.toggle('active'); }
 </script>
-
+<script src="lang.js"></script>
 </body>
 </html>
